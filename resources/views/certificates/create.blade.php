@@ -73,6 +73,7 @@
 
         <label for="text">Text:</label>
         <input type="text" id="text">
+        <!-- <textarea name="" id="" style="height: 20px"></textarea> -->
         <br>
         
         <label for="font-size">Font Size (px):</label>
@@ -91,6 +92,10 @@
         <input type="number" id="y-pos">
         <br>
         
+        <label for="letter-spacing">Letter Spacing</label>
+        <input type="text" id="letter-spacing" value="0">
+        <br>
+
         <label for="have-text-box">Have text box?</label>
         <input type="checkbox" id="have-text-box">
         <br>
@@ -99,6 +104,10 @@
         <div id="box-width-container" style="display: none;">
             <label for="box-width">Box Width (mm):</label>
             <input type="number" id="box-width">
+            <br>
+            <label for="text-align">Text align</label>
+            <input id="text-align" type="text">
+            <br>
         </div>
         <br>
 
@@ -109,9 +118,7 @@
         </select>
         <br>
 
-        <label for="letter-spacing">Letter Spacing</label>
-        <input type="text" id="letter-spacing">
-        <br>
+
 
         <!-- <label for="text-align">Text Align</label>
         <select id="text-align">
@@ -119,8 +126,6 @@
             <option value="center">center</option>
             <option value="right">right</option>
         </select> -->
-        <input id="text-align" type="text">
-        <br>
 
         <button type="button" onclick="addParagraph()">Add Paragraph</button>
     </div>
@@ -199,7 +204,7 @@
             yPos: yPos * mmToPx,  // Convert to pixels
             boxWidth: boxWidth * mmToPx,  // Convert to pixels
             // haveTextBox: haveTextBox,
-            // letterSpacing: letterSpacing,
+            letterSpacing: letterSpacing,
             // fontFamily: fontFamily,
             textAlign: textAlign
         };
@@ -333,7 +338,7 @@
     function generateJSON() {
         const jsonOutput = JSON.stringify(pages, null, 2);
         document.getElementById('data').value = jsonOutput;
-        alert("JSON generated successfully! Ready to save.");
+        // alert("JSON generated successfully! Ready to save.");
     }
 
     redrawCanvas(); // Redraw the initial page
