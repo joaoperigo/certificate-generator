@@ -68,14 +68,36 @@
         <label for="font-color">Font Color:</label>
         <input type="color" id="font-color">
         
-        <label for="x-pos">Position X:</label>
+        <label for="x-pos">Position X (mm):</label>
         <input type="number" id="x-pos">
         
-        <label for="y-pos">Position Y:</label>
+        <label for="y-pos">Position Y (mm):</label>
         <input type="number" id="y-pos">
         
-        <label for="box-width">Box Width (px):</label>
-        <input type="number" id="box-width">
+        <label for="have-text-box">Have text box?</label>
+        <input type="checkbox" id="have-text-box">
+
+        <!-- Campo "Box Width" que será exibido/ocultado -->
+        <div id="box-width-container" style="display: none;">
+            <label for="box-width">Box Width (mm):</label>
+            <input type="number" id="box-width">
+        </div>
+
+        <label for="font-famil">Font Family</label>
+        <select id="font-family">
+            <option value="0">Mangueira Regular</option>
+            <option value="1">Mangueira Bold</option>
+        </select>
+
+        <label for="letter-spacing">Letter Spacing</label>
+        <input type="text" id="letter-spacing">
+
+        <label for="text-align">Text Align</label>
+        <select id="text-align">
+            <option value="0">left</option>
+            <option value="1">center</option>
+            <option value="2">right</option>
+        </select>
 
         <button type="button" onclick="addParagraph()">Add Paragraph</button>
         <button type="button" onclick="generateJSON()">Generate JSON</button>
@@ -108,7 +130,7 @@
             backgroundImage: null,
             objects: []
         }
-    ]; // Array of pages, each with its own background image and objects
+    ];
 
     function setBackground() {
         const bgImage = document.getElementById('bg-image').value;
@@ -123,19 +145,15 @@
     function redrawCanvas() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw the background image if defined
         const backgroundImage = pages[currentPage].backgroundImage;
         if (backgroundImage) {
             const image = new Image();
             image.src = backgroundImage;
             image.onload = function() {
                 ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-                
-                // Redraw all objects of the current page after the image is loaded
                 pages[currentPage].objects.forEach(drawText);
             }
         } else {
-            // If there's no background image, draw only the objects
             pages[currentPage].objects.forEach(drawText);
         }
     }
@@ -143,18 +161,19 @@
     function addParagraph() {
         const text = document.getElementById('text').value;
         const fontSize = document.getElementById('font-size').value || 20;
-        const fontColor = document.getElementById('font-color').value || '#000000';
+        const fontColor = document.getElementById('font-color').value || '#2c2c2c';
         const xPos = parseInt(document.getElementById('x-pos').value) || 0;
         const yPos = parseInt(document.getElementById('y-pos').value) || 0;
-        const boxWidth = parseInt(document.getElementById('box-width').value) || 200;
+        const boxWidth = parseInt(document.getElementById('box-width').value) || 0;
+        const haveTextBox = parseInt(document.getElementById('have-text-box').value) || 0;
 
         const obj = {
             text: text,
             fontSize: fontSize,
             fontColor: fontColor,
-            xPos: xPos,
-            yPos: yPos,
-            boxWidth: boxWidth
+            xPos: xPos * mmToPx,  // Convert to pixels
+            yPos: yPos * mmToPx,  // Convert to pixels
+            boxWidth: boxWidth * mmToPx  // Convert to pixels
         };
 
         pages[currentPage].objects.push(obj);
@@ -185,7 +204,7 @@
             }
         }
 
-        ctx.fillText(line, obj.xPos*mmToPx, y*mmToPx);
+        ctx.fillText(line, obj.xPos, y);
     }
 
     function addObjectControls(obj) {
@@ -204,14 +223,14 @@
             <label>Font Color:</label>
             <input type="color" value="${obj.fontColor}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'fontColor')">
             <br>
-            <label>Position X:</label>
-            <input type="number" value="${obj.xPos}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'xPos')">
+            <label>Position X (mm):</label>
+            <input type="number" value="${obj.xPos / mmToPx}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'xPos')">
             <br>
-            <label>Position Y:</label>
-            <input type="number" value="${obj.yPos}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'yPos')">
+            <label>Position Y (mm):</label>
+            <input type="number" value="${obj.yPos / mmToPx}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'yPos')">
             <br>
-            <label>Box Width (px):</label>
-            <input type="number" value="${obj.boxWidth}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'boxWidth')">
+            <label>Box Width (mm):</label>
+            <input type="number" value="${obj.boxWidth / mmToPx}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'boxWidth')">
             <br>
             <button type="button" onclick="deleteObject('${pages[currentPage].objects.indexOf(obj)}')">Delete</button>
         `;
@@ -220,15 +239,15 @@
     }
 
     function updateObject(input, index, property) {
-        pages[currentPage].objects[index][property] = input.value;
+        pages[currentPage].objects[index][property] = property.includes('xPos') || property.includes('yPos') || property.includes('boxWidth') ? input.value * mmToPx : input.value;
         redrawCanvas();
     }
 
     function deleteObject(index) {
         pages[currentPage].objects.splice(index, 1);
         redrawCanvas();
-        document.getElementById('object-list').innerHTML = ''; // Clear the object list
-        pages[currentPage].objects.forEach(addObjectControls); // Recreate the object list
+        document.getElementById('object-list').innerHTML = ''; 
+        pages[currentPage].objects.forEach(addObjectControls); 
     }
 
     function addPage() {
@@ -252,6 +271,20 @@
         document.getElementById('object-list').innerHTML = '';
         pages[currentPage].objects.forEach(addObjectControls);
     }
+
+    document.getElementById('have-text-box').addEventListener('change', function() {
+            // Obtém o estado atual do checkbox
+            const isChecked = this.checked;
+            // Obtém o container do campo Box Width
+            const boxWidthContainer = document.getElementById('box-width-container');
+
+            // Mostra ou oculta o campo "Box Width" baseado no estado do checkbox
+            if (isChecked) {
+                boxWidthContainer.style.display = 'block';
+            } else {
+                boxWidthContainer.style.display = 'none';
+            }
+    });
 
     function generateJSON() {
         const jsonOutput = JSON.stringify(pages, null, 2);
