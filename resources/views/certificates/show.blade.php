@@ -63,11 +63,17 @@
 
                     page.objects.forEach((object, objectIndex) => {
                         const inputValue = document.getElementById(`input-${pageIndex}-${objectIndex}`).value;
-                        const { xPos, yPos, fontSize, fontColor } = object;
+                        const { xPos, yPos, fontSize, fontColor, boxWidth } = object;
 
                         doc.setFontSize(fontSize);
                         doc.setTextColor(fontColor);
-                        doc.text(inputValue, xPos, yPos);
+
+                        // Verifica se boxWidth é maior que 0 para aplicar o parâmetro maxWidth
+                        if (boxWidth > 0) {
+                            doc.text(inputValue, xPos/3.77, yPos/3.77, { maxWidth: boxWidth/3.77 });
+                        } else {
+                            doc.text(inputValue, xPos/3.77, yPos/3.77);
+                        }
                     });
                 }
 
