@@ -16,7 +16,18 @@
             margin-bottom: 20px;
         }
 
+        form {
+            width: 33vw;
+            left:0;
+            top: 0;
+            position: absolute;
+        }
         canvas {
+            width: 60vw;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 33vw;
+            position: fixed;
             border: 1px solid black;
         }
 
@@ -38,10 +49,11 @@
 </head>
 <body>
 
-<h1>Create Certificate</h1>
+
 
 <form id="certificate-form" action="{{ route('certificates.store') }}" method="POST">
     @csrf
+    <h1>Create Certificate</h1>
     <div id="controls">
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required>
@@ -61,60 +73,71 @@
 
         <label for="text">Text:</label>
         <input type="text" id="text">
+        <br>
         
         <label for="font-size">Font Size (px):</label>
         <input type="number" id="font-size">
+        <br>
         
         <label for="font-color">Font Color:</label>
         <input type="color" id="font-color">
+        <br>
         
         <label for="x-pos">Position X (mm):</label>
         <input type="number" id="x-pos">
+        <br>
         
         <label for="y-pos">Position Y (mm):</label>
         <input type="number" id="y-pos">
+        <br>
         
         <label for="have-text-box">Have text box?</label>
         <input type="checkbox" id="have-text-box">
+        <br>
 
         <!-- Campo "Box Width" que será exibido/ocultado -->
         <div id="box-width-container" style="display: none;">
             <label for="box-width">Box Width (mm):</label>
             <input type="number" id="box-width">
         </div>
+        <br>
 
         <label for="font-famil">Font Family</label>
         <select id="font-family">
             <option value="0">Mangueira Regular</option>
             <option value="1">Mangueira Bold</option>
         </select>
+        <br>
 
         <label for="letter-spacing">Letter Spacing</label>
         <input type="text" id="letter-spacing">
+        <br>
 
-        <label for="text-align">Text Align</label>
+        <!-- <label for="text-align">Text Align</label>
         <select id="text-align">
-            <option value="0">left</option>
-            <option value="1">center</option>
-            <option value="2">right</option>
-        </select>
+            <option value="left">left</option>
+            <option value="center">center</option>
+            <option value="right">right</option>
+        </select> -->
+        <input id="text-align" type="text">
+        <br>
 
         <button type="button" onclick="addParagraph()">Add Paragraph</button>
-        <button type="button" onclick="generateJSON()">Generate JSON</button>
     </div>
 
     <div id="object-list">
         <!-- The list of created objects will appear here -->
     </div>
 
-    <canvas id="myCanvas" width="1142" height="814"></canvas>
+    
 
     <input type="hidden" id="data" name="data">
 
     <br><br>
+    <button type="button" onclick="generateJSON()">Generate JSON</button>
     <button type="submit">Save Certificate</button>
 </form>
-
+<canvas id="myCanvas" width="1142" height="814"></canvas>
 <script>
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -166,6 +189,7 @@
         const yPos = parseInt(document.getElementById('y-pos').value) || 0;
         const boxWidth = parseInt(document.getElementById('box-width').value) || 0;
         const haveTextBox = parseInt(document.getElementById('have-text-box').value) || 0;
+        const textAlign = document.getElementById('text-align').value || 'left';
 
         const obj = {
             text: text,
@@ -173,7 +197,11 @@
             fontColor: fontColor,
             xPos: xPos * mmToPx,  // Convert to pixels
             yPos: yPos * mmToPx,  // Convert to pixels
-            boxWidth: boxWidth * mmToPx  // Convert to pixels
+            boxWidth: boxWidth * mmToPx,  // Convert to pixels
+            // haveTextBox: haveTextBox,
+            // letterSpacing: letterSpacing,
+            // fontFamily: fontFamily,
+            textAlign: textAlign
         };
 
         pages[currentPage].objects.push(obj);
@@ -185,6 +213,9 @@
         ctx.font = `${obj.fontSize}px Arial`;
         ctx.fillStyle = obj.fontColor;
 
+        // Definir o alinhamento do texto conforme a opção escolhida
+        ctx.textAlign = obj.textAlign || 'left'; // valor padrão é 'left' se não for especificado
+
         const words = obj.text.split(' ');
         let line = '';
         const lineHeight = obj.fontSize * 1.2;
@@ -195,8 +226,8 @@
             const metrics = ctx.measureText(testLine);
             const testWidth = metrics.width;
 
-            if (testWidth > obj.boxWidth && i > 0) {
-                ctx.fillText(line, obj.xPos, y);
+            if (testWidth > obj.boxWidth && i > 0 && obj.boxWidth > 0) {
+                drawAlignedText(line, obj.xPos, y, obj);
                 line = words[i] + ' ';
                 y += lineHeight;
             } else {
@@ -204,7 +235,20 @@
             }
         }
 
-        ctx.fillText(line, obj.xPos, y);
+        drawAlignedText(line, obj.xPos, y, obj);
+    }
+
+    // Função auxiliar para desenhar o texto com alinhamento
+    function drawAlignedText(text, x, y, obj) {
+        let adjustedX = x;
+
+        if (obj.textAlign === 'center') {
+            adjustedX = x + obj.boxWidth / 2; // centraliza o texto
+        } else if (obj.textAlign === 'right') {
+            adjustedX = x + obj.boxWidth; // alinha o texto à direita
+        }
+
+        ctx.fillText(text, adjustedX, y);
     }
 
     function addObjectControls(obj) {
