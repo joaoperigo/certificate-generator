@@ -22,10 +22,26 @@
         <button type="button" id="download-btn">Download PDF</button>
     </form>
 
-    <script>
+    <script type="module">
+        import {mangueiraRegular} from '../fonts/mangueiraRegular.js';
+        import {mangueiraMedium} from '../fonts/mangueiraMedium.js';
+
         // Acesse o jsPDF usando o namespace correto
         document.getElementById('download-btn').addEventListener('click', async function() {
             const { jsPDF } = window.jspdf; // Corrige a definição de jsPDF
+
+            // FONTS
+            const callAddFontMangueiraRegular = function () {
+            this.addFileToVFS('Fontspring-DEMO-mangueiraalt-semibold-normal.ttf', mangueiraRegular);
+            this.addFont('Fontspring-DEMO-mangueiraalt-semibold-normal.ttf', 'Mangueira-Semibold', 'normal');
+            };
+            jsPDF.API.events.push(['addFonts', callAddFontMangueiraRegular])
+
+            const callAddFontMangueiraMedium = function () {
+            this.addFileToVFS('Mangueira-Medium-normal.ttf', mangueiraMedium);
+            this.addFont('Mangueira-Medium-normal.ttf', 'Mangueira-Medium', 'normal');
+            };
+            jsPDF.API.events.push(['addFonts', callAddFontMangueiraMedium])
 
             const doc = new jsPDF({
                 orientation: "landscape", // paisagem
@@ -79,6 +95,7 @@
 
             doc.setFontSize(fontSize);
             doc.setTextColor(fontColor);
+            doc.setFont('Mangueira-Semibold', 'normal');
 
             let adjustedX = xPos / 3.77;
             if (textAlign === 'center') {
