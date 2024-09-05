@@ -54,44 +54,50 @@
             };
 
             const generatePDF = async () => {
-                for (let pageIndex = 0; pageIndex < certificateData.length; pageIndex++) {
-                    const page = certificateData[pageIndex];
-                    
-                    if (pageIndex > 0) {
-                        doc.addPage();
-                    }
+    for (let pageIndex = 0; pageIndex < certificateData.length; pageIndex++) {
+        const page = certificateData[pageIndex];
+        
+        if (pageIndex > 0) {
+            doc.addPage();
+        }
 
-                    try {
-                        const backgroundBase64 = await loadImageAsBase64(page.backgroundImage);
-                        doc.addImage(backgroundBase64, 'PNG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
-                    } catch (error) {
-                        console.error(`Error loading background image for page ${pageIndex + 1}:`, error);
-                    }
+        // Verifique se a URL da imagem de fundo é válida
+        if (page.backgroundImage) {
+            try {
+                const backgroundBase64 = await loadImageAsBase64(page.backgroundImage);
+                doc.addImage(backgroundBase64, 'PNG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
+            } catch (error) {
+                console.error(`Error loading background image for page ${pageIndex + 1}:`, error);
+            }
+        } else {
+            console.warn(`No background image found for page ${pageIndex + 1}`);
+        }
 
-                    page.objects.forEach((object, objectIndex) => {
-                        const inputValue = document.getElementById(`input-${pageIndex}-${objectIndex}`).value;
-                        const { xPos, yPos, fontSize, fontColor, boxWidth, letterSpacing, textAlign } = object;
+        page.objects.forEach((object, objectIndex) => {
+            const inputValue = document.getElementById(`input-${pageIndex}-${objectIndex}`).value;
+            const { xPos, yPos, fontSize, fontColor, boxWidth, letterSpacing, textAlign } = object;
 
-                        doc.setFontSize(fontSize);
-                        doc.setTextColor(fontColor);
+            doc.setFontSize(fontSize);
+            doc.setTextColor(fontColor);
 
-                        let adjustedX = xPos / 3.77;
-                        if (textAlign === 'center') {
-                            adjustedX = xPos / 3.77 + (boxWidth / 3.77) / 2;
-                        } else if (textAlign === 'right') {
-                            adjustedX = xPos / 3.77 + boxWidth / 3.77;
-                        }
+            let adjustedX = xPos / 3.77;
+            if (textAlign === 'center') {
+                adjustedX = xPos / 3.77 + (boxWidth / 3.77) / 2;
+            } else if (textAlign === 'right') {
+                adjustedX = xPos / 3.77 + boxWidth / 3.77;
+            }
 
-                        if (boxWidth > 0) {
-                            doc.text(inputValue, adjustedX, yPos / 3.77, { maxWidth: boxWidth / 3.77, charSpace: letterSpacing, align: textAlign });
-                        } else {
-                            doc.text(inputValue, adjustedX, yPos / 3.77, { charSpace: letterSpacing, align: textAlign });
-                        }
-                    });
-                }
+            if (boxWidth > 0) {
+                doc.text(inputValue, adjustedX, yPos / 3.77, { maxWidth: boxWidth / 3.77, charSpace: letterSpacing, align: textAlign });
+            } else {
+                doc.text(inputValue, adjustedX, yPos / 3.77, { charSpace: letterSpacing, align: textAlign });
+            }
+        });
+    }
 
-                doc.save('{{ $title }}.pdf');
-            };
+    doc.save('{{ $title }}.pdf');
+};
+
 
             await generatePDF();
         });
