@@ -195,6 +195,7 @@
         const boxWidth = parseInt(document.getElementById('box-width').value) || 0;
         const haveTextBox = parseInt(document.getElementById('have-text-box').value) || 0;
         const textAlign = document.getElementById('text-align').value || 'left';
+        const letterSpacing = document.getElementById('letter-spacing').value || 0;
 
         const obj = {
             text: text,
