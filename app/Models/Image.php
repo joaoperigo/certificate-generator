@@ -13,4 +13,5 @@ class Image extends Model
     {
         return $this->belongsTo(Certificate::class);
     }
+    protected $fillable = ['name', 'file_path']; // Adicione as colunas que podem ser preenchidas
 }
