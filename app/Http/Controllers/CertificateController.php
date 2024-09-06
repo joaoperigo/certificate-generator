@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificate;
+use App\Models\Image;
 use Illuminate\Http\Request;
 
 class CertificateController extends Controller
@@ -24,7 +25,9 @@ class CertificateController extends Controller
 
     public function create()
     {
-        return view('certificates.create');
+        $images = Image::all();
+        // return view('certificates.create', compact('images'));
+        return view('certificates.create', compact('images'));
     }
 
     public function store(Request $request)
