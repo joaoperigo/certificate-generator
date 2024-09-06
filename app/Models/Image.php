@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Certificate extends Model
+class Image extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['title', 'data'];
-
-    public function images()
+    
+    public function certificate()
     {
-        return $this->hasMany(Image::class);
+        return $this->belongsTo(Certificate::class);
     }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +23,7 @@ Route::get('/', function () {
 
 
 Route::resource('certificates', CertificateController::class);
+
+Route::resource('images', ImageController::class);
+Route::post('/images/upload', [ImageController::class, 'upload'])->name('images.upload');
 

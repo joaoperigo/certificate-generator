@@ -15,15 +15,20 @@
         #controls {
             margin-bottom: 20px;
         }
-
-        form {
+        #img-upload-form {
+            width: 10vw;
+            right:0;
+            top: 0;
+            position: absolute;
+        }
+        #certificate-form {
             width: 33vw;
             left:0;
             top: 0;
             position: absolute;
         }
         canvas {
-            width: 60vw;
+            width: 50vw;
             top: 50%;
             transform: translateY(-50%);
             left: 33vw;
@@ -51,6 +56,15 @@
 
 
 
+
+<form id="img-upload-form" action="{{ route('images.upload') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <label for="image-upload">Upload Image:</label>
+    <input type="file" name="image" id="image-upload">
+    <button type="submit">Upload</button>
+</form>
+
+
 <form id="certificate-form" action="{{ route('certificates.store') }}" method="POST">
     @csrf
     <h1>Create Certificate</h1>
@@ -67,7 +81,22 @@
         <br><br>
 
         <label for="bg-image">Background Image URL:</label>
+        <!-- <input type="text" id="bg-image"> -->
+        <label for="bg-image">Select Background Image:</label>
+        <select  onchange="setImagePath(this)">
+            @foreach($images as $image)
+                <option value="{{ asset( $image->file_path) }}">{{ $image->name }}</option>
+            @endforeach
+        </select>
         <input type="text" id="bg-image">
+        <img id="bg-image-src" width="100" height="80">
+
+        <script>
+            function setImagePath(select) {
+                document.getElementById('bg-image').value = select.value;
+                document.getElementById('bg-image-src').src = select.value;
+            }
+        </script>
         <button type="button" onclick="setBackground()">Load Image</button>
         <br><br>
 
