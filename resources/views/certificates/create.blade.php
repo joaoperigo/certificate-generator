@@ -105,16 +105,21 @@
             <label for="box-width">Box Width (mm):</label>
             <input type="number" id="box-width">
             <br>
-            <label for="text-align">Text align</label>
-            <input id="text-align" type="text">
+            <label for="text-align">Font Family</label>
+            <select id="text-align">
+                <option value="left">left</option>
+                <option value="center">center</option>
+                <option value="right">right</option>
+            </select>
             <br>
         </div>
         <br>
 
-        <label for="font-famil">Font Family</label>
+        <label for="font-family">Font Family</label>
         <select id="font-family">
-            <option value="0">Mangueira Regular</option>
-            <option value="1">Mangueira Bold</option>
+            <option value="Mangueira-Semibold">Mangueira Regular</option>
+            <option value="Mangueira-Medium">Mangueira Bold</option>
+            <option value="Myriad-Medium">Myriad Medium</option>
         </select>
         <br>
 
@@ -126,7 +131,7 @@
             <option value="center">center</option>
             <option value="right">right</option>
         </select> -->
-
+        <br>
         <button type="button" onclick="addParagraph()">Add Paragraph</button>
     </div>
 
@@ -142,7 +147,9 @@
     <button type="button" onclick="generateJSON()">Generate JSON</button>
     <button type="submit">Save Certificate</button>
 </form>
+
 <canvas id="myCanvas" width="1142" height="814"></canvas>
+
 <script>
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -196,6 +203,7 @@
         const haveTextBox = parseInt(document.getElementById('have-text-box').value) || 0;
         const textAlign = document.getElementById('text-align').value || 'left';
         const letterSpacing = document.getElementById('letter-spacing').value || 0;
+        const fontFamily = document.getElementById('font-family').value || 'Mangueira-Semibold';
 
         const obj = {
             text: text,
@@ -206,7 +214,7 @@
             boxWidth: boxWidth * mmToPx,  // Convert to pixels
             // haveTextBox: haveTextBox,
             letterSpacing: letterSpacing,
-            // fontFamily: fontFamily,
+            fontFamily: fontFamily,
             textAlign: textAlign
         };
 
@@ -343,6 +351,13 @@
     }
 
     redrawCanvas(); // Redraw the initial page
+
+    document.getElementById('certificate-form').addEventListener('keydown', function(event) {
+        // Verifica se a tecla pressionada é Enter
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Impede o comportamento padrão de submissão do formulário
+        }
+    });
 </script>
 
 </body>

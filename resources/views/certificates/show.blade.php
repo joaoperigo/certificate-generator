@@ -25,6 +25,7 @@
     <script type="module">
         import {mangueiraRegular} from '../fonts/mangueiraRegular.js';
         import {mangueiraMedium} from '../fonts/mangueiraMedium.js';
+        import {myriadRegular} from '../fonts/myriadRegular.js';
 
         // Acesse o jsPDF usando o namespace correto
         document.getElementById('download-btn').addEventListener('click', async function() {
@@ -32,16 +33,22 @@
 
             // FONTS
             const callAddFontMangueiraRegular = function () {
-            this.addFileToVFS('Fontspring-DEMO-mangueiraalt-semibold-normal.ttf', mangueiraRegular);
-            this.addFont('Fontspring-DEMO-mangueiraalt-semibold-normal.ttf', 'Mangueira-Semibold', 'normal');
+                this.addFileToVFS('Fontspring-DEMO-mangueiraalt-semibold-normal.ttf', mangueiraRegular);
+                this.addFont('Fontspring-DEMO-mangueiraalt-semibold-normal.ttf', 'Mangueira-Semibold', 'normal');
             };
             jsPDF.API.events.push(['addFonts', callAddFontMangueiraRegular])
 
             const callAddFontMangueiraMedium = function () {
-            this.addFileToVFS('Mangueira-Medium-normal.ttf', mangueiraMedium);
-            this.addFont('Mangueira-Medium-normal.ttf', 'Mangueira-Medium', 'normal');
+                this.addFileToVFS('Mangueira-Medium-normal.ttf', mangueiraMedium);
+                this.addFont('Mangueira-Medium-normal.ttf', 'Mangueira-Medium', 'normal');
             };
             jsPDF.API.events.push(['addFonts', callAddFontMangueiraMedium])
+
+            const callAddFontMyriadRegular = function () {
+                this.addFileToVFS('Myriad-Regular-normal.ttf', myriadRegular);
+                this.addFont('Myriad-Regular-normal.ttf', 'Myriad-Medium', 'normal');
+            };
+            jsPDF.API.events.push(['addFonts', callAddFontMyriadRegular])
 
             const doc = new jsPDF({
                 orientation: "landscape", // paisagem
@@ -91,11 +98,11 @@
 
         page.objects.forEach((object, objectIndex) => {
             const inputValue = document.getElementById(`input-${pageIndex}-${objectIndex}`).value;
-            const { xPos, yPos, fontSize, fontColor, boxWidth, letterSpacing, textAlign } = object;
+            const { xPos, yPos, fontSize, fontColor, boxWidth, letterSpacing, textAlign, fontFamily } = object;
 
             doc.setFontSize(fontSize);
             doc.setTextColor(fontColor);
-            doc.setFont('Mangueira-Semibold', 'normal');
+            doc.setFont(fontFamily, 'normal');
 
             let adjustedX = xPos / 3.77;
             if (textAlign === 'center') {
