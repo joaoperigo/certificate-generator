@@ -33,9 +33,9 @@ class ImageController extends Controller
 
         return redirect()->back()->with('success', 'Image uploaded successfully');
     }
-    public function create()
-    {
-        $images = Image::all();
-        return view('certificates.create', compact('images'));
-    }
+    // public function create()
+    // {
+    //     $images = Image::all();
+    //     return view('certificates.create', compact('images'));
+    // }
 }

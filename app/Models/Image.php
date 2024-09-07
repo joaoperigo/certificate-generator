@@ -9,6 +9,8 @@ class Image extends Model
 {
     use HasFactory;
     
+    protected $fillable = ['name', 'file_path'];
+
     public function certificate()
     {
         return $this->belongsTo(Certificate::class);

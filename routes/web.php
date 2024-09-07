@@ -27,3 +27,13 @@ Route::resource('certificates', CertificateController::class);
 Route::resource('images', ImageController::class);
 Route::post('/images/upload', [ImageController::class, 'upload'])->name('images.upload');
 
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
