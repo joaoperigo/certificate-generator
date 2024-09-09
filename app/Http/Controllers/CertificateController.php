@@ -26,6 +26,7 @@ class CertificateController extends Controller
     public function create()
     {
         $images = Image::all();
+        // return view('certificates.create', compact('images'));
         return view('certificates.create', compact('images'));
     }
 
