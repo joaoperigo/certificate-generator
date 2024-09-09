@@ -15,27 +15,33 @@
         #controls {
             margin-bottom: 20px;
         }
-        #img-upload-form {
+        /* #img-upload-form {
             width: 10vw;
             right:0;
             top: 0;
             position: absolute;
-        }
+        } */
         #certificate-form {
-            width: 33vw;
+            width: 25vw;
             left:0;
             top: 0;
             position: absolute;
         }
         canvas {
             width: 50vw;
+            height: auto;
             top: 50%;
-            transform: translateY(-50%);
-            left: 33vw;
+            transform: translate(-50%, -50%);
+            left: 50%;
             position: fixed;
             border: 1px solid black;
         }
-
+        .sidebar-2 {
+            width: 25vw;
+            position: absolute;
+            right: 0;
+            top:0;
+        }
         .object-controls {
             margin-top: 10px;
             border: 1px solid #ccc;
@@ -54,15 +60,6 @@
 </head>
 <body>
 
-
-
-
-<form id="img-upload-form" action="{{ route('images.upload') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <label for="image-upload">Upload Image:</label>
-    <input type="file" name="image" id="image-upload">
-    <button type="submit">Upload</button>
-</form>
 
 
 <form id="certificate-form" action="{{ route('certificates.store') }}" method="POST">
@@ -164,12 +161,6 @@
         <button type="button" onclick="addParagraph()">Add Paragraph</button>
     </div>
 
-    <div id="object-list">
-        <!-- The list of created objects will appear here -->
-    </div>
-
-    
-
     <input type="hidden" id="data" name="data">
 
     <br><br>
@@ -177,7 +168,19 @@
     <button type="submit">Save Certificate</button>
 </form>
 
-<canvas id="myCanvas" width="1142" height="814"></canvas>
+<canvas id="myCanvas"></canvas>
+
+<div class="sidebar-2">
+    <form id="img-upload-form" action="{{ route('images.upload') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <label for="image-upload">Upload Image:</label>
+        <input type="file" name="image" id="image-upload">
+        <button type="submit">Upload</button>
+    </form>
+    <div id="object-list">
+            <!-- The list of created objects will appear here -->
+    </div>
+</div>
 
 <script>
     const canvas = document.getElementById('myCanvas');
