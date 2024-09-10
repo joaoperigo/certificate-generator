@@ -23,9 +23,9 @@
     </form>
 
     <script type="module">
-        import {mangueiraRegular} from '../fonts/mangueiraRegular.js';
-        import {mangueiraMedium} from '../fonts/mangueiraMedium.js';
-        import {myriadRegular} from '../fonts/myriadRegular.js';
+   import { mangueiraRegular } from '{{ asset("fonts/mangueiraRegular.js") }}';
+    import { mangueiraMedium } from '{{ asset("fonts/mangueiraMedium.js") }}';
+    import { myriadRegular } from '{{ asset("fonts/myriadRegular.js") }}';
 
         // Acesse o jsPDF usando o namespace correto
         document.getElementById('download-btn').addEventListener('click', async function() {
