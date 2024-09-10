@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Certificate</title>
-   
+    @vite('resources/css/app.css')
     <style>
         body {
             display: flex;
@@ -47,7 +47,7 @@
             margin-top: 10px;
             border: 1px solid #ccc;
             padding: 10px;
-            width: 300px;
+            /* width: 300px; */
         }
 
         .object-controls label {
@@ -58,44 +58,55 @@
             margin-top: 5px;
         }
     </style>
+
 </head>
 <body>
 
 
 
-<form id="certificate-form" action="{{ route('certificates.store') }}" method="POST">
+<form class="px-6" id="certificate-form" action="{{ route('certificates.store') }}" method="POST">
     @csrf
-    <h1>Create Certificate</h1>
+    <h1 class="text-3xl font-bold pt-8 mb-8">Create Certificate</h1>
     <div id="controls">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
-        <br><br>
 
-        <label for="page-select">Page:</label>
-        <select id="page-select" onchange="switchPage()">
-            <option value="0">Page 1</option>
-        </select>
-        <button type="button" onclick="addPage()">Add Page</button>
-        <br><br>
-
-        
-        <div id="app">
-            <image-uploader></image-uploader>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-base font-bold mb-2" for="title">Certificate title:</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="title" name="title" placeholder="Certificate title here" required>
         </div>
-        <button type="button" onclick="setBackground()">Load Image</button>
+        <hr>
+        <div class="pt-8 pb-4">
+            <label class="block text-gray-700 text-base font-bold mb-2" for="page-select">Certificate Page(s):</label>
+            <select id="page-select" onchange="switchPage()">
+                <option value="0">Page 1</option>
+            </select>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="button" onclick="addPage()">Add Page</button>
+        </div>
+        <hr>
+        
+        <div class="mt-8 mb-4" id="app">
+            <image-uploader></image-uploader>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="button" onclick="setBackground()">Load Image</button>
+        </div>
+        
+        <hr>
+        <h2 class="text-xl mt-8 font-bold mb-2" >Create object</h2>
+        <div class="">
+            <label class="block text-gray-700 text-base font-bold mb-2" for="text">Text:</label>
+            <!-- <input type="text" id="text"> -->
+            <textarea class="w-full" id="text"></textarea>
+        </div>
+        
+        <div>
+            <label for="font-size">Font Size (px):</label>
+            <input type="number" id="font-size">
+        </div>
 
-        <label for="text">Text:</label>
-        <input type="text" id="text">
-        <!-- <textarea name="" id="" style="height: 20px"></textarea> -->
-        <br>
         
-        <label for="font-size">Font Size (px):</label>
-        <input type="number" id="font-size">
-        <br>
-        
-        <label for="font-color">Font Color:</label>
-        <input type="color" id="font-color">
-        <br>
+        <div>
+            <label for="font-color">Font Color:</label>
+            <input type="color" id="font-color">
+        </div>
+
         
         <label for="x-pos">Position X (mm):</label>
         <input type="number" id="x-pos">
@@ -159,7 +170,7 @@
 
 <div class="sidebar-2">
 
-    <div id="object-list">
+    <div class="w-full px-5 py-10" id="object-list">
             <!-- The list of created objects will appear here -->
     </div>
 </div>

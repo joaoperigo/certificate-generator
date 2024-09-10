@@ -1,13 +1,15 @@
 <template>
   <div>
+    <label class="block text-gray-700 text-base font-bold mb-2" for="image-upload">Select image to upload</label>
     <!-- Input para selecionar arquivo -->
-    <input type="file" @change="handleFileChange" />
+    <input class="pb-4" id="image-upload" type="file" @change="handleFileChange" />
     <!-- Botão para upload de imagem -->
-    <button @click.prevent="uploadImage">Upload Image</button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click.prevent="uploadImage">Upload Image</button>
 
     <!-- Lista de Imagens Disponíveis -->
-    <select v-model="selectedImage" id="bg-image">
-      <option v-for="image in images" :key="image.id" :value="getFullImageUrl(image.file_path)">
+    <label class="block text-gray-700 text-base font-bold mt-6 pb-4" for="bg-image">Select page's background image</label>
+    <select v-model="selectedImage" id="bg-image" class="w-full mb-4">
+      <option class="w-full" v-for="image in images" :key="image.id" :value="getFullImageUrl(image.file_path)">
         {{ getFullImageUrl(image.file_path) }}
       </option>
     </select>
