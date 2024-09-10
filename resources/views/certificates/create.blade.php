@@ -26,7 +26,10 @@
             width: 25vw;
             left:0;
             top: 0;
-            position: absolute;
+            position: fixed;
+            height: 100vh; /* viewport height */
+            overflow-y: scroll;
+            overflow-x: hidden;
         }
         canvas {
             width: 50vw;
@@ -39,9 +42,12 @@
         }
         .sidebar-2 {
             width: 25vw;
-            position: absolute;
+            position: fixed;
             right: 0;
             top:0;
+            height: 100vh; /* viewport height */
+            overflow-y: scroll;
+            overflow-x: hidden;
         }
         .object-controls {
             margin-top: 10px;
@@ -85,7 +91,9 @@
         
         <div class="mt-8 mb-4" id="app">
             <image-uploader></image-uploader>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="button" onclick="setBackground()">Load Image</button>
+            <div class="text-end">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="button" onclick="setBackground()">Insert image >></button>
+            </div>
         </div>
         
         <hr>
@@ -162,8 +170,8 @@
     <input type="hidden" id="data" name="data">
 
     <br><br>
-    <button type="button" onclick="generateJSON()">Generate JSON</button>
-    <button type="submit">Save Certificate</button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mb-4" type="button" onclick="generateJSON()">Generate JSON</button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mb-16" type="submit">Save Certificate</button>
 </form>
 
 <canvas id="myCanvas"></canvas>
