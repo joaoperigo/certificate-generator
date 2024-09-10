@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue'; // Importe o plugin Vue
 
 export default defineConfig({
     plugins: [
@@ -10,5 +11,11 @@ export default defineConfig({
             ],
             refresh: true,
         }),
+        vue(),
     ],
+    resolve: {
+        alias: {
+          'vue': 'vue/dist/vue.esm-bundler.js' //tempo de execução, DESATIVAR NO DEPLOY
+        }
+    }
 });

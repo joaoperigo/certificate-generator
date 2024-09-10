@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Certificate</title>
+   
     <style>
         body {
             display: flex;
@@ -77,25 +78,11 @@
         <button type="button" onclick="addPage()">Add Page</button>
         <br><br>
 
-        <label for="bg-image">Background Image URL:</label>
-        <!-- <input type="text" id="bg-image"> -->
-        <label for="bg-image">Select Background Image:</label>
-        <select  onchange="setImagePath(this)">
-            @foreach($images as $image)
-                <option value="{{ asset( $image->file_path) }}">{{ $image->name }}</option>
-            @endforeach
-        </select>
-        <input type="text" id="bg-image">
-        <img id="bg-image-src" width="100" height="80">
-
-        <script>
-            function setImagePath(select) {
-                document.getElementById('bg-image').value = select.value;
-                document.getElementById('bg-image-src').src = select.value;
-            }
-        </script>
+        
+        <div id="app">
+            <image-uploader></image-uploader>
+        </div>
         <button type="button" onclick="setBackground()">Load Image</button>
-        <br><br>
 
         <label for="text">Text:</label>
         <input type="text" id="text">
@@ -171,12 +158,7 @@
 <canvas id="myCanvas"></canvas>
 
 <div class="sidebar-2">
-    <form id="img-upload-form" action="{{ route('images.upload') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="image-upload">Upload Image:</label>
-        <input type="file" name="image" id="image-upload">
-        <button type="submit">Upload</button>
-    </form>
+
     <div id="object-list">
             <!-- The list of created objects will appear here -->
     </div>
@@ -390,7 +372,18 @@
             event.preventDefault(); // Impede o comportamento padrão de submissão do formulário
         }
     });
-</script>
 
+    // Evitar submissão do form por clicar em qualquer botão
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('certificate-form');
+        form.addEventListener('submit', function(event) {
+            // Verifica se o botão clicado é o botão de submit do formulário
+            if (event.submitter && event.submitter.getAttribute('type') !== 'submit') {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+@vite('resources/js/app.js')
 </body>
 </html>

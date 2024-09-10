@@ -24,9 +24,10 @@ Route::get('/', function () {
 
 Route::resource('certificates', CertificateController::class);
 
-Route::resource('images', ImageController::class);
+// Route::resource('images', ImageController::class);
+// Route::post('/images/upload', [ImageController::class, 'upload'])->name('images.upload');
 Route::post('/images/upload', [ImageController::class, 'upload'])->name('images.upload');
-
+Route::get('/images/list', [ImageController::class, 'indexJson']);
 
 Route::middleware([
     'auth:sanctum',
@@ -36,4 +37,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+
+
+
+Route::get('/test', function () {
+    return '{"file_path": "12354123"}';
 });
