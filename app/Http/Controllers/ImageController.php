@@ -8,34 +8,64 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
-    public function upload(Request $request)
-    {
-        // Validação do arquivo de imagem
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
-
-        // Obtenha o arquivo da requisição
-        $file = $request->file('image');
-        
-        // Defina o caminho de destino para o diretório 'public/images'
-        $destinationPath = public_path('images'); // Este caminho irá salvar diretamente na pasta 'public/images'
-
-        // Mova o arquivo para a pasta 'public/images' com seu nome original
-        $fileName = time() . '_' . $file->getClientOriginalName(); // Nomeia o arquivo com timestamp para evitar conflitos
-        $file->move($destinationPath, $fileName);
-
-        // Salva a imagem no banco de dados
-        $image = new Image();
-        $image->file_path = 'images/' . $fileName; // Caminho relativo para a pasta 'public/images'
-        $image->name = $fileName;
-        $image->save();
-
-        return redirect()->back()->with('success', 'Image uploaded successfully');
-    }
-    // public function create()
+    // public function index()
     // {
+    //     // Retorna todas as imagens, com o caminho do arquivo
     //     $images = Image::all();
-    //     return view('certificates.create', compact('images'));
+    //     return response()->json($images);
     // }
+
+    // public function store(Request $request)
+    // {
+    //     // Valida o request para garantir que um arquivo de imagem é enviado
+    //     $request->validate([
+    //         'image' => 'required|image|mimes:jpg,jpeg,png|max:2048', // Ajuste conforme necessário
+    //     ]);
+
+    //     // Processa o upload da imagem
+    //     if ($request->hasFile('image')) {
+    //         $file = $request->file('image');
+    //         $path = $file->store('public/images'); // Armazena a imagem na pasta public/images
+    //         $filePath = str_replace('public/', '', $path); // Remove a parte 'public/' para o armazenamento no banco
+
+    //         // Cria um novo registro no banco de dados
+    //         $image = new Image();
+    //         $image->file_path = $filePath;
+    //         $image->save();
+
+    //         return response()->json(['message' => 'Image uploaded successfully', 'image' => $image]);
+    //     }
+
+    //     return response()->json(['message' => 'No image uploaded'], 400);
+    // }
+     // Método para lidar com o upload de imagens
+     public function upload(Request $request)
+     {
+         // Valida o arquivo de imagem enviado
+         $request->validate([
+             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+         ]);
+     
+         // Armazena o arquivo no diretório de uploads
+         $file = $request->file('image');
+         $path = $file->storeAs('public/images', $file->getClientOriginalName());
+     
+         // Cria um registro da imagem no banco de dados
+         $image = Image::create([
+             'file_path' => str_replace('public/', '', $path), // Corrige o caminho do arquivo para armazenar no banco
+         ]);
+     
+         // Retorna a resposta com a lista de imagens
+         return response()->json([
+             'message' => 'Image uploaded successfully',
+             'images' => Image::all(), // Retorna todas as imagens
+         ], 201);
+     }
+ 
+     // Método para listar todas as imagens
+     public function indexJson()
+     {
+         $images = Image::all();
+         return response()->json($images);
+     }
 }
