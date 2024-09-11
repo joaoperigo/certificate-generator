@@ -1,6 +1,11 @@
-
-    <div class="container">
-        <h1>Certificates</h1>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Certificates') }}
+        </h2>
+    </x-slot>
+    <div>
+        <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
         <a href="{{ route('certificates.create') }}" class="btn btn-primary">Create Certificate</a>
 
         @if ($message = Session::get('success'))
@@ -35,4 +40,5 @@
             </tbody>
         </table>
     </div>
-
+</div>
+</x-app-layout>

@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Certificate</title>
-    @vite('resources/css/app.css')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Profile') }}
+        </h2>
+    </x-slot>
     <style>
         body {
             display: flex;
@@ -65,8 +64,7 @@
         }
     </style>
 
-</head>
-<body>
+
 
 
 
@@ -93,78 +91,12 @@
             <image-uploader></image-uploader>
             <div class="text-end">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="button" onclick="setBackground()">Insert image >></button>
+                <p class="text-small">Choose the background image of the certificate page</p>
             </div>
         </div>
         
-        <hr>
-        <h2 class="text-xl mt-8 font-bold mb-2" >Create object</h2>
-        <div class="">
-            <label class="block text-gray-700 text-base font-bold mb-2" for="text">Text:</label>
-            <!-- <input type="text" id="text"> -->
-            <textarea class="w-full" id="text"></textarea>
-        </div>
-        
-        <div>
-            <label for="font-size">Font Size (px):</label>
-            <input type="number" id="font-size">
-        </div>
+ 
 
-        
-        <div>
-            <label for="font-color">Font Color:</label>
-            <input type="color" id="font-color">
-        </div>
-
-        
-        <label for="x-pos">Position X (mm):</label>
-        <input type="number" id="x-pos">
-        <br>
-        
-        <label for="y-pos">Position Y (mm):</label>
-        <input type="number" id="y-pos">
-        <br>
-        
-        <label for="letter-spacing">Letter Spacing</label>
-        <input type="text" id="letter-spacing" value="0">
-        <br>
-
-        <label for="have-text-box">Have text box?</label>
-        <input type="checkbox" id="have-text-box">
-        <br>
-
-        <!-- Campo "Box Width" que será exibido/ocultado -->
-        <div id="box-width-container" style="display: none;">
-            <label for="box-width">Box Width (mm):</label>
-            <input type="number" id="box-width">
-            <br>
-            <label for="text-align">Font Family</label>
-            <select id="text-align">
-                <option value="left">left</option>
-                <option value="center">center</option>
-                <option value="right">right</option>
-            </select>
-            <br>
-        </div>
-        <br>
-
-        <label for="font-family">Font Family</label>
-        <select id="font-family">
-            <option value="Mangueira-Semibold">Mangueira Regular</option>
-            <option value="Mangueira-Medium">Mangueira Bold</option>
-            <option value="Myriad-Medium">Myriad Medium</option>
-        </select>
-        <br>
-
-
-
-        <!-- <label for="text-align">Text Align</label>
-        <select id="text-align">
-            <option value="left">left</option>
-            <option value="center">center</option>
-            <option value="right">right</option>
-        </select> -->
-        <br>
-        <button type="button" onclick="addParagraph()">Add Paragraph</button>
     </div>
 
     <input type="hidden" id="data" name="data">
@@ -177,7 +109,95 @@
 <canvas id="myCanvas"></canvas>
 
 <div class="sidebar-2">
+       <!-- // begin create object -->
+       <hr>
+        <h2 class="text-xl mt-8 font-bold mb-2" >Create object</h2>
+        <div class="">
+            <label class="block text-gray-700 text-base font-bold mb-2" for="object-name">Name of the object:</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="object-name">
+        </div>
+        <div class="">
+            <label class="block text-gray-700 text-base font-bold mb-2" for="text">Default text:</label>
+            <!-- <input type="text" id="text"> -->
+            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="text"></textarea>
+        </div>
+        
+        <div class="columns-2">
+            <div>
+                <label class="w-full" for="font-size">Font Size (px):</label>
+                <input class="w-full" type="number" id="font-size">
+            </div>
 
+            
+            <div>
+                <label class="w-full" for="font-color">Font Color:</label>
+                <input class="w-full" type="color" id="font-color">
+            </div>
+        </div>
+
+        <div class="columns-2">
+            <div>
+                <label class="w-full" for="x-pos">Position X (mm):</label>
+                <input class="w-full" type="number" id="x-pos">
+            </div>
+    
+            <div>
+                <label class="w-full" for="y-pos">Position Y (mm):</label>
+                <input class="w-full" type="number" id="y-pos">
+            </div>        
+  
+        </div>
+
+        <div class="columns-2">
+            <div>
+                <label class="w-full" for="letter-spacing">Letter Spacing</label>
+                <input class="w-full" type="text" id="letter-spacing" value="0">
+            </div>
+            <div>
+                <label class="w-full" for="text-align">Text Align</label>
+                <select class="w-full" id="text-align">
+                    <option value="left">left</option>
+                    <option value="center">center</option>
+                    <option value="right">right</option>
+                </select>
+            </div>
+        </div> 
+
+        <div class="columns-2">
+            <div>
+                <label class="w-full" for="have-text-box">Have text box?</label>
+                <div class="text-start w-full">
+                    <input type="checkbox" id="have-text-box">
+                </div>
+            </div>
+
+            <!-- Campo "Box Width" que será exibido/ocultado -->
+            <div id="box-width-container" style="display: none;">
+                <label class="w-full" for="box-width">Box Width (mm):</label>
+                <input class="w-full" type="number" id="box-width">
+            </div>
+        </div>
+
+        <div>
+            <label class="w-full" for="font-family">Font Family</label>
+            <select class="w-full" id="font-family">
+                <option value="Mangueira-Semibold">Mangueira Regular</option>
+                <option value="Mangueira-Medium">Mangueira Bold</option>
+                <option value="Myriad-Medium">Myriad Medium</option>
+            </select>
+        </div>
+
+
+        <!-- <label for="text-align">Text Align</label>
+        <select id="text-align">
+            <option value="left">left</option>
+            <option value="center">center</option>
+            <option value="right">right</option>
+        </select> -->
+        <br>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="button" onclick="addParagraph()">+ Add Paragraph</button>
+        <!-- // end create object -->
+         <div class="w-full bg-blue-900 h-10 sticky top-0"></div>
     <div class="w-full px-5 py-10" id="object-list">
             <!-- The list of created objects will appear here -->
     </div>
@@ -227,6 +247,7 @@
     }
 
     function addParagraph() {
+        const objectName = document.getElementById('object-name').value;
         const text = document.getElementById('text').value;
         const fontSize = document.getElementById('font-size').value || 20;
         const fontColor = document.getElementById('font-color').value || '#2c2c2c';
@@ -239,6 +260,7 @@
         const fontFamily = document.getElementById('font-family').value || 'Mangueira-Semibold';
 
         const obj = {
+            objectName: objectName,
             text: text,
             fontSize: fontSize,
             fontColor: fontColor,
@@ -305,6 +327,9 @@
         objectDiv.className = 'object-controls';
 
         objectDiv.innerHTML = `
+            <label>Object name:</label>
+            <input type="text" value="${obj.objectName}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'text')">
+            <br>
             <label>Text:</label>
             <input type="text" value="${obj.text}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'text')">
             <br>
@@ -399,10 +424,11 @@
             // Verifica se o botão clicado é o botão de submit do formulário
             if (event.submitter && event.submitter.getAttribute('type') !== 'submit') {
                 event.preventDefault();
+            } else {
+                generateJSON(); // salva o json antes de submeter
             }
         });
     });
 </script>
 @vite('resources/js/app.js')
-</body>
-</html>
+</x-app-layout>
