@@ -1,20 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Certificate</title>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Profile') }}
+        </h2>
+    </x-slot>
     <!-- Certifique-se de que o jsPDF seja carregado corretamente -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body>
+    
+    <div>
+    <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
     <h1>{{ $title }}</h1>
 
     <form id="certificate-form">
         @foreach ($certificateData as $pageIndex => $page)
             @foreach ($page['objects'] as $objectIndex => $object)
                 <div>
-                    <label for="input-{{ $pageIndex }}-{{ $objectIndex }}">Text Object {{ $pageIndex + 1 }}-{{ $objectIndex + 1 }}</label>
+                    <label for="input-{{ $pageIndex }}-{{ $objectIndex }}">{{ $object['objectName'] }}</label>
                     <input type="text" id="input-{{ $pageIndex }}-{{ $objectIndex }}" name="inputs[]" value="{{ $object['text'] }}">
                 </div>
             @endforeach
@@ -126,5 +127,6 @@
             await generatePDF();
         });
     </script>
-</body>
-</html>
+    </div>
+</div>
+</x-app-layout>
