@@ -108,7 +108,7 @@
 
 <canvas id="myCanvas"></canvas>
 
-<div class="sidebar-2">
+<div class="sidebar-2 px-5">
        <!-- // begin create object -->
        <hr>
         <h2 class="text-xl mt-8 font-bold mb-2" >Create object</h2>
@@ -195,10 +195,10 @@
             <option value="right">right</option>
         </select> -->
         <br>
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="button" onclick="addParagraph()">+ Add Paragraph</button>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6" type="button" onclick="addParagraph()">+ Add Paragraph</button>
         <!-- // end create object -->
          <div class="w-full bg-blue-900 h-10 sticky top-0"></div>
-    <div class="w-full px-5 py-10" id="object-list">
+    <div class="w-full py-10" id="object-list">
             <!-- The list of created objects will appear here -->
     </div>
 </div>
@@ -328,17 +328,21 @@
 
         objectDiv.innerHTML = `
             <label>Object name:</label>
-            <input type="text" value="${obj.objectName}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'text')">
-            <br>
-            <label>Text:</label>
-            <input type="text" value="${obj.text}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'text')">
-            <br>
-            <label>Font Size (px):</label>
-            <input type="number" value="${obj.fontSize}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'fontSize')">
-            <br>
-            <label>Font Color:</label>
-            <input type="color" value="${obj.fontColor}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'fontColor')">
-            <br>
+                <input class="w-full" type="text" value="${obj.objectName}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'text')">
+            </label>
+            <label>Text:
+                <textarea class="w-full" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'text')">${obj.text}</textarea>
+            </label>
+            <div class="columns-2">
+                <div>
+                    <label class="w-full">Font Size (px):</label>
+                    <input class="w-full" type="number" value="${obj.fontSize}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'fontSize')">
+                </div>
+                <div>
+                    <label>Font Color:</label>
+                    <input type="color" value="${obj.fontColor}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'fontColor')">
+                </div>
+            </div>
             <label>Position X (mm):</label>
             <input type="number" value="${obj.xPos / mmToPx}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'xPos')">
             <br>
@@ -347,7 +351,13 @@
             <br>
             <label>Box Width (mm):</label>
             <input type="number" value="${obj.boxWidth / mmToPx}" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'boxWidth')">
-            <br>
+            <label class="w-full" for="font-family">Font Family
+                <select class="w-full" onchange="updateObject(this, '${pages[currentPage].objects.indexOf(obj)}', 'fontFamily')">
+                    <option value="Mangueira-Semibold">Mangueira Regular</option>
+                    <option value="Mangueira-Medium">Mangueira Bold</option>
+                    <option value="Myriad-Medium">Myriad Medium</option>
+                </select>
+            </label>
             <button type="button" onclick="deleteObject('${pages[currentPage].objects.indexOf(obj)}')">Delete</button>
         `;
 
