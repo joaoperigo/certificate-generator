@@ -32,15 +32,17 @@ class CertificateController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'data' => 'required|json',
         ]);
 
-        Certificate::create($request->only('title', 'data'));
+        $certificate = Certificate::create([
+            'title' => $validatedData['title'],
+            'data' => $validatedData['data'],
+        ]);
 
-        return redirect()->route('certificates.index')
-            ->with('success', 'Certificate created successfully.');
+        return response()->json($certificate, 201);
     }
 
     public function edit(Certificate $certificate)

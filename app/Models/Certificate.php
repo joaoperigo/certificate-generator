@@ -11,6 +11,10 @@ class Certificate extends Model
 
     protected $fillable = ['title', 'data'];
 
+    protected $casts = [
+        'data' => 'json',
+    ];
+
     public function images()
     {
         return $this->hasMany(Image::class);
