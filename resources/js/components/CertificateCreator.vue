@@ -2,7 +2,7 @@
 <template>
     <div class="certificate-creator flex h-screen">
       <!-- Left Sidebar -->
-      <div class="w-1/5 bg-gray-100 p-4 overflow-y-auto">
+      <div class="w-96 bg-gray-100 p-4 overflow-y-auto">
         
         <div class="mb-4">
           <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Certificate title:</label>
@@ -47,7 +47,7 @@
     </div>
       
       <!-- Main Content -->
-      <div class="w-3/5 bg-white p-4 ">
+      <div class=" bg-white p-4 ">
         <canvas-editor 
           :current-page="currentPage" 
           :pages="pages"
@@ -56,7 +56,7 @@
       </div>
       
       <!-- Right Sidebar -->
-      <div class="w-1/5 bg-gray-100 p-4 overflow-y-auto">
+      <div class="w-96 bg-gray-100 p-4 overflow-y-auto">
         <add-paragraph 
           @add-paragraph="addObject"
           class="mb-6"
@@ -145,7 +145,7 @@
       addObject(object) {
         if (!this.pages[this.currentPage].objects) {
           this.pages[this.currentPage].objects = []
-        }
+        } 
         this.pages[this.currentPage].objects.push(object)
       },
       updateObject(index, updatedObject) {
