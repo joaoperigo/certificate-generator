@@ -94,28 +94,30 @@
       }
     },
     methods: {
-      addParagraph() {
-        const newParagraph = { ...this.paragraph }
-        // Convert mm to pixels for position and box width
-        newParagraph.xPos *= 3.779528
-        newParagraph.yPos *= 3.779528
+        addParagraph() {
+      const newParagraph = { ...this.paragraph }
+      // Aplicar a conversão aqui
+      newParagraph.xPos *= 3.779528
+      newParagraph.yPos *= 3.779528
+      if (newParagraph.boxWidth) {
         newParagraph.boxWidth *= 3.779528
-        this.$emit('add-paragraph', newParagraph)
-        // Reset form after adding
-        this.paragraph = {
-          objectName: '',
-          text: '',
-          fontSize: 20,
-          fontColor: '#2c2c2c',
-          xPos: 0,
-          yPos: 0,
-          boxWidth: 0,
-          haveTextBox: false,
-          letterSpacing: 0,
-          fontFamily: 'Mangueira-Semibold',
-          textAlign: 'left'
-        }
       }
+      this.$emit('add-paragraph', newParagraph)
+      // Reset form after adding
+      this.paragraph = {
+        objectName: '',
+        text: '',
+        fontSize: 20,
+        fontColor: '#2c2c2c',
+        xPos: 0,
+        yPos: 0,
+        boxWidth: 0,
+        haveTextBox: false,
+        letterSpacing: 0,
+        fontFamily: 'Mangueira-Semibold',
+        textAlign: 'left'
+      }
+    }
     }
   }
   </script>

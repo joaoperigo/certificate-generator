@@ -47,7 +47,7 @@
               doc.setTextColor(obj.fontColor || '#000000');
   
               const lines = doc.splitTextToSize(obj.text, obj.boxWidth || 100);
-              doc.text(lines, obj.xPos || 0, obj.yPos || 0, {
+              doc.text(lines, obj.xPos/3.779528 || 0, obj.yPos/3.779528 || 0, {
                 align: obj.textAlign || 'left',
                 maxWidth: obj.boxWidth || 100
               });

@@ -85,7 +85,13 @@ export default {
   },
   data() {
     return {
-      editedParagraph: { ...this.paragraph }
+      editedParagraph: {
+        ...this.paragraph,
+        // Converter de volta para pixels se os valores vierem em mm
+        xPos: this.paragraph.xPos / 3.779528,
+        yPos: this.paragraph.yPos / 3.779528,
+        boxWidth: this.paragraph.boxWidth ? this.paragraph.boxWidth * 3.779528 : undefined
+      }
     }
   },
   methods: {
