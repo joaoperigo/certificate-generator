@@ -19,8 +19,9 @@
     </head>
     <body class="font-sans antialiased">
         <x-banner />
-
-        <div class="min-h-screen bg-gray-100 fixed">
+        <!-- w-full was added for certificates.blade -->
+        <div class="min-h-screen bg-gray-100 fixed w-full">
+            
             @livewire('navigation-menu')
 
             <!-- Page Heading -->
