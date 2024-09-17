@@ -14,14 +14,14 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           >
         </div>
-        
+        <hr>
         <page-selector 
         :pages="pages" 
         :currentPage="currentPage"
         @add-page="addPage" 
         @switch-page="switchPage"
         @delete-page="deletePage"
-        class="mb-4"
+        class="my-4"
       ></page-selector>
         
       <image-uploader 
@@ -43,9 +43,9 @@
             </div>
             <div>
                 <certificate-download 
-          v-if="isCertificateDataReady"
-          :certificate-data="certificateData"
-        ></certificate-download>
+                v-if="isCertificateDataReady"
+                :certificate-data="certificateData"
+                ></certificate-download>
             </div>
         </div>
         <button 
@@ -191,7 +191,7 @@
         this.pages[this.currentPage].objects = []
       } 
       this.pages[this.currentPage].objects.push(object)
-      console.log('Objeto adicionado:', object) // Para depuração
+      console.log('Object Added:', object) // Para depuração
       this.updateCertificateData() // Atualiza o certificateData após adicionar um objeto
     },
       updateObject(index, updatedObject) {
