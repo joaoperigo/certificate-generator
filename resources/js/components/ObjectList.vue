@@ -1,6 +1,6 @@
 <!-- ObjectList.vue -->
 <template>
-    <div class="object-list">
+    <div class="object-list pb-96">
       <h2 class="text-xl mt-8 font-bold mb-2">Objects</h2>
       <ul v-if="!editingObject">
         <li v-for="(object, index) in objects" :key="index" class="mb-4 p-4 border rounded">

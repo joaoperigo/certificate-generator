@@ -2,8 +2,8 @@
 <template>
     <div class="certificate-creator flex h-screen">
       <!-- Left Sidebar -->
-      <div class="w-96 bg-gray-100 p-4 overflow-y-auto">
-        
+      <div class="w-[300px] flex-shrink-0 bg-dark-100 p-4 overflow-y-auto pb-40">
+        <!-- Left sidebar content remains the same -->
         <div class="mb-4">
           <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Certificate title:</label>
           <input 
@@ -16,47 +16,57 @@
         </div>
         
         <page-selector 
-          :pages="pages" 
-          @add-page="addPage" 
-          @switch-page="switchPage"
-          class="mb-4"
-        ></page-selector>
+        :pages="pages" 
+        :currentPage="currentPage"
+        @add-page="addPage" 
+        @switch-page="switchPage"
+        @delete-page="deletePage"
+        class="mb-4"
+      ></page-selector>
         
-        <image-uploader 
-          @image-selected="setBackgroundImage"
-          class="mb-4"
+      <image-uploader 
+            :currentImageUrl="currentPageBackgroundImage"
+            @image-preview="previewBackgroundImage"
+            @remove-image="removeBackgroundImage"
+            @image-selected="setBackgroundImage"
+            class="mb-4"
         ></image-uploader>
         
-        <button 
-          @click="generateJSON" 
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
-        >
-          Generate JSON
-        </button>
-        
+        <div class="columns-2">
+            <div>
+                <button 
+                @click="generateJSON" 
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                >
+                Generate JSON
+                </button>
+            </div>
+            <div>
+                <certificate-download 
+          v-if="isCertificateDataReady"
+          :certificate-data="certificateData"
+        ></certificate-download>
+            </div>
+        </div>
         <button 
           @click="saveCertificate" 
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
         >
           Save Certificate
         </button>
-        <certificate-download 
-            v-if="isCertificateDataReady"
-            :certificate-data="certificateData"
-        ></certificate-download>
-    </div>
+      </div>
       
       <!-- Main Content -->
-      <div class=" bg-white p-4 ">
+      <div class="flex-grow bg-white p-4 overflow-hidden">
         <canvas-editor 
           :current-page="currentPage" 
           :pages="pages"
-          class="w-full h-full"
+          class="h-full w-full"
         ></canvas-editor>
       </div>
       
       <!-- Right Sidebar -->
-      <div class="w-96 bg-gray-100 p-4 overflow-y-auto">
+      <div class="w-[300px] flex-shrink-0 bg-gray-100 p-4 overflow-y-auto">
         <add-paragraph 
           @add-paragraph="addObject"
           class="mb-6"
@@ -105,13 +115,14 @@
         ],
         currentPage: 0,
         jsonOutput: null,
-        certificateData: null
+        certificateData: null,
+        previewBackgroundImage: null,
       }
     },
     computed: {
-      currentPageObjects() {
-        return this.pages[this.currentPage]?.objects || []
-      },
+        currentPageBackgroundImage() {
+            return this.pages[this.currentPage]?.backgroundImage || this.previewBackgroundImage;
+        },
       isCertificateDataReady() {
       return this.certificateData && this.certificateData.pages && this.certificateData.pages.length > 0;
         }
@@ -135,13 +146,43 @@
           backgroundImage: null,
           objects: []
         })
+        // Seleciona automaticamente a nova página
+        this.currentPage = this.pages.length - 1
       },
       switchPage(pageIndex) {
         this.currentPage = pageIndex
       },
+      deletePage(index) {
+      if (this.pages.length > 1) {
+        this.pages.splice(index, 1)
+        
+        // Ajustar a página atual se necessário
+        if (index <= this.currentPage) {
+          this.currentPage = Math.max(0, this.currentPage - 1)
+        }
+        
+        // Atualizar o certificateData
+        this.updateCertificateData()
+      } else {
+        alert('Não é possível deletar a última página.')
+      }
+    },
       setBackgroundImage(imageUrl) {
         this.pages[this.currentPage].backgroundImage = imageUrl
       },
+      previewBackgroundImage(imageUrl) {
+      this.previewBackgroundImage = imageUrl;
+    },
+    
+    removeBackgroundImage() {
+      this.pages[this.currentPage].backgroundImage = null;
+      this.previewBackgroundImage = null;
+    },
+    
+    setBackgroundImage(imageUrl) {
+      this.pages[this.currentPage].backgroundImage = imageUrl;
+      this.previewBackgroundImage = null;
+    },
       addObject(object) {
         if (!this.pages[this.currentPage].objects) {
           this.pages[this.currentPage].objects = []
