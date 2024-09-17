@@ -1,7 +1,7 @@
 <!-- CanvasEditor.vue -->
 <template>
     <div class="canvas-editor overflow-y p-4">
-      <canvas class="w-full h-auto shadow-xl" ref="canvas"></canvas>
+      <canvas class="w-full h-auto shadow-xl bg-stone-100" ref="canvas"></canvas>
     </div>
   </template>
   

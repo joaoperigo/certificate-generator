@@ -1,16 +1,16 @@
 <!-- CertificateCreator.vue -->
 <template>
-    <div class="certificate-creator flex h-screen relative overflow-hidden">
+    <div class="certificate-creator h-screen flex relative overflow-hidden w-full">
       <!-- Left Sidebar -->
       <div 
-        :class="['absolute left-0 top-0 w-[300px] h-full transition-transform duration-300 bg-gray-100 overflow-y-auto pb-48', 
+        :class="['absolute left-0 top-0 h-full w-[300px] bg-gray-100 transition-transform duration-300 overflow-y-auto', 
                  {'transform -translate-x-[calc(100%-3rem)]': isLeftSidebarCollapsed}]"
       >
         <sidebar-toggle 
           position="left" 
           :is-collapsed="isLeftSidebarCollapsed" 
           @toggle="toggleLeftSidebar"
-          class="absolute right-2 top-2"
+          class="absolute right-2 top-2 z-10"
         />
         
         <!-- Left sidebar content -->
@@ -75,7 +75,9 @@
       </div>
       
       <!-- Main Content -->
-      <div class="flex-grow bg-white p-4 overflow-hidden ml-[300px] mr-[300px]">
+      <div 
+        :class="['flex-grow bg-stone-900 p-4 overflow-auto transition-all duration-300 px-12', mainContentClass]"
+      >
         <canvas-editor 
           :current-page="currentPage" 
           :pages="pages"
@@ -85,14 +87,14 @@
       
       <!-- Right Sidebar -->
       <div 
-        :class="['absolute right-0 top-0 w-[300px] h-full transition-transform duration-300 bg-gray-100 overflow-y-auto',
+        :class="['absolute right-0 top-0 h-full w-[300px] bg-gray-100 transition-transform duration-300 overflow-y-auto', 
                  {'transform translate-x-[calc(100%-3rem)]': isRightSidebarCollapsed}]"
       >
         <sidebar-toggle 
           position="right" 
           :is-collapsed="isRightSidebarCollapsed" 
           @toggle="toggleRightSidebar"
-          class="absolute left-2 top-2"
+          class="absolute left-2 top-2 z-10"
         />
         
         <!-- Right sidebar content -->
@@ -165,6 +167,11 @@
       },
       isCertificateDataReady() {
         return this.certificateData && this.certificateData.pages && this.certificateData.pages.length > 0
+      },
+      mainContentClass() {
+        let marginLeft = this.isLeftSidebarCollapsed ? 'ml-12' : 'ml-[300px]'
+        let marginRight = this.isRightSidebarCollapsed ? 'mr-12' : 'mr-[300px]'
+        return `${marginLeft} ${marginRight}`
       }
     },
     watch: {
