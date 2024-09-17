@@ -1,6 +1,6 @@
 <!-- ImageUploader.vue -->
 <template>
-  <div class="image-uploader" @dragover.prevent @drop.prevent="onDrop">
+  <div class="image-uploader bg-white" @dragover.prevent @drop.prevent="onDrop">
     <div class="upload-area" :class="{ 'drag-over': isDragging }">
       <div v-if="!previewUrl && !currentImageUrl" class="upload-prompt">
         <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
@@ -12,12 +12,11 @@
       </div>
       <div v-else class="image-preview">
         <img :src="previewUrl || currentImageUrl" alt="Preview" class="preview-image">
-        <button @click="removeImage" class="remove-button">
-          <i class="fas fa-times"></i>
+        <button @click="removeImage" class="remove-button p-0">
+          <XCircleIcon class="h-7 w-7 text-blue-500"/>
         </button>
       </div>
       <button @click="uploadImage" :disabled="!selectedFile && !currentImageUrl" class="mt-6 upload-button">
-        <i class="fas fa-upload mr-2"></i>
         Add Image to page >>
       </button>
     </div>
@@ -25,7 +24,12 @@
 </template>
 
 <script>
+import { XCircleIcon } from '@heroicons/vue/24/solid'
+
 export default {
+  components: {
+    XCircleIcon
+  },
   props: {
     currentImageUrl: {
       type: String,
@@ -120,7 +124,7 @@ export default {
 }
 
 .remove-button {
-  @apply absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition-colors duration-300;
+  @apply absolute top-2 right-2 bg-stone-50 text-white rounded-full hover:bg-stone-500 transition-colors duration-300;
 }
 
 .upload-button {
