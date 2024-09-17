@@ -2,7 +2,7 @@
 <template>
     <div class="certificate-creator flex h-screen">
       <!-- Left Sidebar -->
-      <div class="w-[300px] flex-shrink-0 bg-dark-100 p-4 overflow-y-auto pb-40">
+      <div class="w-[300px] flex-shrink-0 bg-gray-100 p-4 overflow-y-auto pb-40">
         <!-- Left sidebar content remains the same -->
         <div class="mb-4">
           <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Certificate title:</label>
@@ -120,6 +120,9 @@
       }
     },
     computed: {
+        currentPageObjects() {
+      return this.pages[this.currentPage]?.objects || []
+    },
         currentPageBackgroundImage() {
             return this.pages[this.currentPage]?.backgroundImage || this.previewBackgroundImage;
         },
@@ -183,12 +186,14 @@
       this.pages[this.currentPage].backgroundImage = imageUrl;
       this.previewBackgroundImage = null;
     },
-      addObject(object) {
-        if (!this.pages[this.currentPage].objects) {
-          this.pages[this.currentPage].objects = []
-        } 
-        this.pages[this.currentPage].objects.push(object)
-      },
+    addObject(object) {
+      if (!this.pages[this.currentPage].objects) {
+        this.pages[this.currentPage].objects = []
+      } 
+      this.pages[this.currentPage].objects.push(object)
+      console.log('Objeto adicionado:', object) // Para depuração
+      this.updateCertificateData() // Atualiza o certificateData após adicionar um objeto
+    },
       updateObject(index, updatedObject) {
         // Converter mm para pixels para posição e largura da caixa
         updatedObject.xPos *= 3.779528

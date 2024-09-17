@@ -7,14 +7,14 @@
           +
         </button>
       </div>
-      <div class="grid grid-cols-4 gap-4">
+      <div class="grid grid-cols-3 text-center gap-4">
         <div v-for="(page, index) in pages" :key="index" 
              class="relative p-4 border rounded cursor-pointer transition-all duration-200"
              :class="{ 'bg-blue-100 border-blue-500': currentPage === index, 'hover:bg-gray-100': currentPage !== index }"
              @click="selectPage(index)">
-          <span class="font-medium text-4xl"> {{ index + 1 }}</span>
+          <span class="font-medium text-2xl"> {{ index + 1 }}</span>
           <button @click.stop="deletePage(index)" 
-                  class="absolute top-1 right-1 text-red-500 hover:text-red-700"
+                  class="absolute top-[-6px] right-1 text-red-500 hover:text-red-700 text-3xl"
                   title="Delete Page">
             &times;
           </button>
