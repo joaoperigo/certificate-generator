@@ -1,14 +1,21 @@
 <!-- CertificateDownload.vue -->
 <template>
-    <button @click="downloadCertificate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      Download Certificate
+    <button @click="downloadCertificate" class="bg-stone-500 hover:bg-stone-700 text-white font-bold pt-2 px-4 pb-3 rounded-xl">
+        <DocumentArrowDownIcon class="h-7 w-7 text-blue-100 mx-auto"/>
+        Download Preview
     </button>
   </template>
   
   <script>
+
+import { DocumentArrowDownIcon } from '@heroicons/vue/24/solid'
+
   import { jsPDF } from "jspdf";
   
   export default {
+    components: {
+        DocumentArrowDownIcon
+    },
     name: 'CertificateDownload',
     props: {
       certificateData: {

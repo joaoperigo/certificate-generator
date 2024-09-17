@@ -3,8 +3,8 @@
     <div class="page-selector">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-gray-700 text-lg font-bold">Pages:</h2>
-        <button @click="addPage" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" title="Add Page to Certificate">
-          +
+        <button @click="addPage" class="text-4xl font-bold py-2 px-4 rounded" title="Add Page to Certificate">
+          <PlusCircleIcon class="w-7 h-7 text-blue-500 hover:text-blue-900"/>
         </button>
       </div>
       <div class="grid grid-cols-3 text-center gap-4">
@@ -24,7 +24,12 @@
   </template>
   
   <script>
+  import { PlusCircleIcon } from '@heroicons/vue/24/solid'
+
   export default {
+    components: {
+        PlusCircleIcon
+    },
     props: {
       pages: {
         type: Array,

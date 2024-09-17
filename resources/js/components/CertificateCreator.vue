@@ -2,10 +2,10 @@
 <template>
     <div class="certificate-creator flex h-screen">
       <!-- Left Sidebar -->
-      <div class="w-[300px] flex-shrink-0 bg-gray-100 p-4 overflow-y-auto pb-40">
+      <div class="w-[300px] flex-shrink-0 bg-gray-100 p-4 overflow-y-auto pb-48">
         <!-- Left sidebar content remains the same -->
-        <div class="mb-4">
-          <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Certificate title:</label>
+        <div class="mb-8">
+          <label for="title" class="block text-gray-700 text-2xl font-bold mb-2">Certificate title:</label>
           <input 
             v-model="certificate.title" 
             type="text" 
@@ -14,7 +14,8 @@
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           >
         </div>
-        <hr>
+        
+        <hr class="mt-8 mb-0">
         <page-selector 
         :pages="pages" 
         :currentPage="currentPage"
@@ -23,7 +24,7 @@
         @delete-page="deletePage"
         class="my-4"
       ></page-selector>
-        
+      <hr class="my-8">
       <image-uploader 
             :currentImageUrl="currentPageBackgroundImage"
             @image-preview="previewBackgroundImage"
@@ -32,12 +33,23 @@
             class="mb-4"
         ></image-uploader>
         
-        <div class="columns-2">
+        <hr class="my-8">
+        
+        <button 
+          @click="saveCertificate" 
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-5 px-4 rounded-2xl  fixed w-64 bottom-4 start-4"
+        >
+        <BookmarkIcon class="mx-auto w-7 h-7 mb-4"/>
+          <div>Save Certificate</div>
+        </button>
+
+        <div class="columns-2  pb-4">
             <div>
                 <button 
                 @click="generateJSON" 
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                class="bg-stone-500 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded-xl w-full mb-2"
                 >
+                <span class="text-2xl">{ ... }</span>
                 Generate JSON
                 </button>
             </div>
@@ -48,12 +60,6 @@
                 ></certificate-download>
             </div>
         </div>
-        <button 
-          @click="saveCertificate" 
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-        >
-          Save Certificate
-        </button>
       </div>
       
       <!-- Main Content -->
@@ -89,7 +95,10 @@
   import ObjectList from './ObjectList.vue'
   import CertificateDownload from './CertificateDownload.vue'
 
+  import { BookmarkIcon } from '@heroicons/vue/24/solid'
+
   import axios from 'axios' // Certifique-se de ter o axios instalado e importado
+
 //   axios.defaults.baseURL = 'http://127.0.0.1:8000';
   
   export default {
@@ -99,7 +108,8 @@
       CanvasEditor,
       AddParagraph,
       ObjectList,
-      CertificateDownload
+      CertificateDownload,
+      BookmarkIcon
     },
     data() {
       return {
