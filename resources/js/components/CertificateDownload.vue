@@ -1,6 +1,6 @@
 <!-- CertificateDownload.vue -->
 <template>
-    <button @click="downloadCertificate" class="bg-stone-500 hover:bg-stone-700 text-white font-bold pt-2 px-4 pb-3 rounded-xl">
+    <button @click="downloadCertificate" class="border border-b-4 border-stone-300 hover:bg-stone-700 text-white font-bold pt-2 px-4 pb-3 rounded-xl">
         <DocumentArrowDownIcon class="h-7 w-7 text-blue-100 mx-auto"/>
         Download Preview
     </button>
