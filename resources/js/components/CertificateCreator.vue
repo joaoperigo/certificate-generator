@@ -1,10 +1,10 @@
 <!-- CertificateCreator.vue -->
 <template>
-    <div class="certificate-creator h-screen flex relative overflow-hidden w-full">
+    <div class="certificate-creator h-screen flex relative overflow-hidden w-full bg-stone-900">
       <!-- Left Sidebar -->
       <div 
-        :class="['absolute left-0 top-0 h-full w-[300px] bg-gray-100 transition-transform duration-300 overflow-y-auto', 
-                 {'transform -translate-x-[calc(100%-3rem)]': isLeftSidebarCollapsed}]"
+        :class="['absolute left-0 top-0 rounded-lg h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto custom-scrollbar pb-20', 
+                 {'transform -translate-x-[calc(100%-3rem)] overflow-y-hidden bg-transparent disappear-sidebar': isLeftSidebarCollapsed}]"
       >
         <sidebar-toggle 
           position="left" 
@@ -12,59 +12,60 @@
           @toggle="toggleLeftSidebar"
           class="absolute right-2 top-2 z-10"
         />
-        
+        <div>
         <!-- Left sidebar content -->
-        <div class="p-4">
-          <div class="mb-8">
-            <label for="title" class="block text-gray-700 text-2xl font-bold mb-2">Certificate title:</label>
+        <div>
+          <div class="mt-10 mb-0 p-4 border-b border-b-stone-600">
+            <label for="title" class="block text-stone-200 text-base font-bold mb-2">Certificate title:</label>
             <input 
               v-model="certificate.title" 
               type="text" 
               id="title" 
               required
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              class="shadow appearance-none  rounded w-full py-2 px-3 text-stone-900 bg-stone-100 border-b-4 border-stone-600 leading-tight focus:outline-none focus:shadow-outline text-xl"
+              placeholder="title:"
             >
           </div>
           
-          <hr class="mt-8 mb-2">
+          <!-- <hr class="mt-8 mb-2 border-b-2 border-b-stone-700"> -->
           <page-selector 
             :pages="pages" 
             :currentPage="currentPage"
             @add-page="addPage" 
             @switch-page="switchPage"
             @delete-page="deletePage"
-            class="my-4"
+            class="p-4 border-b border-stone-600"
           ></page-selector>
-          <hr class="my-8">
+          <!-- <hr class="my-8"> -->
           <image-uploader 
             :currentImageUrl="currentPageBackgroundImage"
             @image-preview="previewBackgroundImage"
             @remove-image="removeBackgroundImage"
             @image-selected="setBackgroundImage"
-            class="mb-4"
+            class="p-4 border-b border-stone-600"
           ></image-uploader>
           
-          <hr class="my-8">
+          <!-- <hr class="my-8"> -->
           
           <button 
             @click="saveCertificate" 
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-5 px-4 rounded-2xl fixed w-64 bottom-4 start-4"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-3 rounded-full fixed w-64 bottom-4 start-4 flex content-center items-center gap-4 bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 border border-b-4 border-stone-300"
           >
-            <BookmarkIcon class="mx-auto w-7 h-7 mb-4"/>
-            <div>Save Certificate</div>
+            <BookmarkIcon class="w-7 h-7 ms-2"/>
+            <div class="text-xl">Save Certificate</div>
           </button>
   
-          <div class="columns-2 pb-4">
-            <div>
+          <div class="columns-2 pb-4 px-4">
+            <div class="border-e border-stone-700 pt-4 pe-4">
               <button 
                 @click="generateJSON" 
-                class="bg-stone-500 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded-xl w-full mb-2"
+                class="border border-b-4 border-stone-300 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded-xl w-full mb-2"
               >
                 <span class="text-2xl">{ ... }</span>
                 Generate JSON
               </button>
             </div>
-            <div>
+            <div class="pt-4 ps-4">
               <certificate-download 
                 v-if="isCertificateDataReady"
                 :certificate-data="certificateData"
@@ -72,6 +73,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
       
       <!-- Main Content -->
@@ -87,8 +89,8 @@
       
       <!-- Right Sidebar -->
       <div 
-        :class="['absolute right-0 top-0 h-full w-[300px] bg-gray-100 transition-transform duration-300 overflow-y-auto', 
-                 {'transform translate-x-[calc(100%-3rem)]': isRightSidebarCollapsed}]"
+        :class="['absolute right-0 top-0 h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto', 
+                 {'transform translate-x-[calc(100%-3rem)] overflow-y-hidden': isRightSidebarCollapsed}]"
       >
         <sidebar-toggle 
           position="right" 
@@ -288,5 +290,37 @@
   </script>
   
   <style scoped>
-  /* Add any additional styles here if needed */
+/* Estilo para a barra de rolagem */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #666666 rgba(0,0,0,0);
+}
+
+/* Para navegadores WebKit (Chrome, Safari, etc.) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #ff00cc;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #ffc000;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #FF0000;
+}
+/* Disappear sidebar on press */
+ .disappear-sidebar > div {
+  @apply opacity-0 pointer-events-none;
+}
+/* .disappear-sidebar .not-disappear-toggle {
+  opacity: 1!important
+}
+.disappear-sidebar .not-disappear-toggle path {
+  opacity: 1!important
+} */
   </style>

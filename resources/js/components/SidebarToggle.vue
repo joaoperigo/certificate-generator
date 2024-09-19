@@ -1,22 +1,22 @@
 <template>
     <button
       @click="$emit('toggle')"
-      class="z-10 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-all duration-300"
+      class="z-10 p-2 rounded-xl  hover:bg-stone-700 transition-all duration-300 "
     >
-      <ChevronLeftIcon v-if="!isCollapsed && position === 'left'" class="h-6 w-6" />
-      <ChevronRightIcon v-if="isCollapsed && position === 'left'" class="h-6 w-6" />
-      <ChevronRightIcon v-if="!isCollapsed && position === 'right'" class="h-6 w-6" />
-      <ChevronLeftIcon v-if="isCollapsed && position === 'right'" class="h-6 w-6" />
+      <ChevronDoubleLeftIcon v-if="!isCollapsed && position === 'left'" class="h-4 w-4 text-stone-100" />
+      <ChevronDoubleRightIcon v-if="isCollapsed && position === 'left'" class="h-4 w-4 text-stone-100" />
+      <ChevronDoubleRightIcon v-if="!isCollapsed && position === 'right'" class="h-4 w-4 text-stone-100" />
+      <ChevronDoubleLeftIcon v-if="isCollapsed && position === 'right'" class="h-4 w-4 text-stone-100" />
     </button>
   </template>
   
   <script>
-  import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid'
+  import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from '@heroicons/vue/24/solid'
   
   export default {
     components: {
-      ChevronLeftIcon,
-      ChevronRightIcon
+      ChevronDoubleLeftIcon,
+      ChevronDoubleRightIcon,
     },
     props: {
       position: {
