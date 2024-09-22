@@ -1,9 +1,9 @@
-<!-- ObjectList.vue -->
 <template>
-    <div class="object-list pb-96">
-      <h2 class="text-xl mt-8 font-bold mb-2">Objects</h2>
-      <ul v-if="!editingObject">
-        <li v-for="(object, index) in objects" :key="index" class="mb-4 p-4 border rounded bg-stone-900 text-stone-300">
+  <div class="object-list pb-96">
+    <h2 class="text-xl mt-8 font-bold mb-2">Objects</h2>
+    <ul>
+      <li v-for="(object, index) in objects" :key="index" class="mb-4 p-4 border rounded bg-stone-900 text-stone-300">
+        <div v-if="editingIndex !== index">
           <h3 class="font-bold">{{ object.objectName }}</h3>
           <p>{{ object.text }}</p>
           <div class="mt-2">
@@ -14,58 +14,61 @@
               Delete
             </button>
           </div>
-        </li>
-      </ul>
-      
-      <edit-paragraph 
-        v-if="editingObject"
-        :paragraph="editingObject"
-        @update-paragraph="updateParagraph"
-        @save-paragraph="saveParagraph"
-        @cancel-edit="cancelEdit"
-      ></edit-paragraph>
-    </div>
-  </template>
-  
-  <script>
-  import EditParagraph from './EditParagraph.vue'
-  
-  export default {
-    components: {
-      EditParagraph
+        </div>
+        <edit-paragraph 
+          v-else
+          :paragraph="object"
+          @update-paragraph="updateParagraph($event, index)"
+          @save-paragraph="saveParagraph($event, index)"
+          @cancel-edit="cancelEdit"
+        ></edit-paragraph>
+      </li>
+    </ul>
+    
+    <add-paragraph @add-paragraph="addObject"></add-paragraph>
+  </div>
+</template>
+
+<script>
+import EditParagraph from './EditParagraph.vue'
+import AddParagraph from './AddParagraph.vue'
+
+export default {
+  components: {
+    EditParagraph,
+    AddParagraph
+  },
+  props: {
+    objects: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      editingIndex: -1
+    }
+  },
+  methods: {
+    startEdit(index) {
+      this.editingIndex = index
     },
-    props: {
-      objects: {
-        type: Array,
-        required: true
-      }
+    updateParagraph(updatedObject, index) {
+      this.$emit('update-object', index, updatedObject)
     },
-    data() {
-      return {
-        editingObject: null,
-        editingIndex: -1
-      }
+    saveParagraph(updatedObject, index) {
+      this.$emit('update-object', index, updatedObject)
+      this.editingIndex = -1
     },
-    methods: {
-      startEdit(index) {
-        this.editingObject = { ...this.objects[index] }
-        this.editingIndex = index
-      },
-      updateParagraph(updatedObject) {
-        this.$emit('update-object', this.editingIndex, updatedObject)
-      },
-      saveParagraph(updatedObject) {
-        this.$emit('update-object', this.editingIndex, updatedObject)
-        this.editingObject = null
-        this.editingIndex = -1
-      },
-      cancelEdit() {
-        this.editingObject = null
-        this.editingIndex = -1
-      },
-      deleteObject(index) {
-        this.$emit('delete-object', index)
-      }
+    cancelEdit() {
+      this.editingIndex = -1
+    },
+    deleteObject(index) {
+      this.$emit('delete-object', index)
+    },
+    addObject(newObject) {
+      this.$emit('add-object', newObject)
     }
   }
-  </script>
+}
+</script>
