@@ -1,18 +1,17 @@
 <template>
-  <button @click="downloadCertificate" class="border border-b-4 border-stone-300 hover:bg-stone-700 text-white font-bold pt-2 px-4 pb-3 rounded-xl">
-    <DocumentArrowDownIcon class="h-7 w-7 text-blue-100 mx-auto"/>
-    Download Preview
+  <button @click="downloadCertificate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    Download Certificate
   </button>
 </template>
 
 <script>
-import { DocumentArrowDownIcon } from '@heroicons/vue/24/solid'
 import { jsPDF } from "jspdf";
+import { mangueiraRegular } from '@/fonts/mangueiraRegular.js';
+import { mangueiraMedium } from '@/fonts/mangueiraMedium.js';
+import { myriadRegular } from '@/fonts/myriadRegular.js';
 
 export default {
-  components: {
-    DocumentArrowDownIcon
-  },
+  name: 'CertificateDownload',
   props: {
     certificateData: {
       type: Object,
@@ -21,16 +20,27 @@ export default {
   },
   methods: {
     downloadCertificate() {
-      if (!this.certificateData || !this.certificateData.pages) {
+      if (!this.certificateData || !this.certificateData.pages || this.certificateData.pages.length === 0) {
         console.error('Certificate data is not available');
+        alert('Certificate data is not available for download.');
         return;
       }
 
       const doc = new jsPDF({
-        unit: 'mm',
-        orientation: 'landscape',
-        format: [303.02, 215.98]
+        orientation: "landscape",
+        unit: "mm",
+        format: [215.9, 279.4] // Tamanho de uma folha A4 em paisagem
       });
+
+      // Adicionar fontes personalizadas
+      doc.addFileToVFS('Fontspring-DEMO-mangueiraalt-semibold-normal.ttf', mangueiraRegular);
+      doc.addFont('Fontspring-DEMO-mangueiraalt-semibold-normal.ttf', 'Mangueira-Semibold', 'normal');
+
+      doc.addFileToVFS('Mangueira-Medium-normal.ttf', mangueiraMedium);
+      doc.addFont('Mangueira-Medium-normal.ttf', 'Mangueira-Medium', 'normal');
+
+      doc.addFileToVFS('Myriad-Regular-normal.ttf', myriadRegular);
+      doc.addFont('Myriad-Regular-normal.ttf', 'Myriad-Medium', 'normal');
 
       this.certificateData.pages.forEach((page, index) => {
         if (index > 0) {
@@ -39,30 +49,25 @@ export default {
 
         // Adicionar imagem de fundo
         if (page.backgroundImage) {
-          doc.addImage(page.backgroundImage, 'JPEG', 0, 0, 303.02, 215.98);
+          doc.addImage(page.backgroundImage, 'JPEG', 0, 0, 279.4, 215.9);
         }
 
-        // Adicionar objetos (parágrafos, etc.)
+        // Adicionar objetos (textos)
         if (page.objects && Array.isArray(page.objects)) {
           page.objects.forEach(obj => {
-            doc.setFont(obj.fontFamily || 'Helvetica');
+            doc.setFont(obj.fontFamily || "helvetica", "normal");
             doc.setFontSize(obj.fontSize || 12);
-            doc.setTextColor(obj.fontColor || '#000000');
-
-            let xPos = obj.xPos / 3.779528; // Convertendo de px para mm
-            let yPos = obj.yPos / 3.779528;
-            let boxWidth = obj.boxWidth ? obj.boxWidth / 3.779528 : undefined;
-
-            const lines = doc.splitTextToSize(obj.text, boxWidth || 100);
-            doc.text(lines, xPos, yPos, {
+            doc.setTextColor(obj.fontColor || "#000000");
+            
+            doc.text(obj.text, obj.xPos, obj.yPos, {
               align: obj.textAlign || 'left',
-              maxWidth: boxWidth
+              maxWidth: obj.boxWidth
             });
           });
         }
       });
 
-      doc.save(this.certificateData.title || "certificate.pdf");
+      doc.save(`${this.certificateData.title || 'certificate'}.pdf`);
     }
   }
 }
