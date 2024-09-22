@@ -1,4 +1,3 @@
-<!-- AddParagraph.vue -->
 <template>
   <div class="add-paragraph w-full">
     <h2 class="text-base text-stone-200 mt-12 font-bold mb-2">Create object</h2>
@@ -49,7 +48,6 @@
         <input v-model="paragraph.letterSpacing" class="w-full bg-stone-700 rounded-xl h-10" type="number" id="letter-spacing" step="0.1">
       </div>
       <div>
-        <!-- <label class="w-full block text-stone-200 text-sm font-bold mb-2">Text Align</label> -->
         <div class="flex justify-between">
           <button
             @click="setTextAlign('left')"
@@ -74,32 +72,66 @@
     </div> 
 
     <div class="grid grid-cols-2 gap-4 mb-4">
-      <div class="flex items-start">
-        <label class="text-stone-200 text-end" for="have-text-box">
-          Have text <br>box?
+      <div class="flex items-center justify-between">
+        <label class="text-stone-200" for="have-text-box">
+          Have text box?
         </label>
-        <div class="flex justify-center items-center ps-6 h-full">
-          <input v-model="paragraph.haveTextBox" type="checkbox" id="have-text-box">
-        </div>
+        <Switch
+          v-model="paragraph.haveTextBox"
+          :class="[
+            paragraph.haveTextBox ? 'bg-blue-600' : 'bg-stone-700',
+            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2'
+          ]"
+        >
+          <span
+            :class="[
+              paragraph.haveTextBox ? 'translate-x-5' : 'translate-x-0',
+              'pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+            ]"
+          >
+            <span
+              :class="[
+                paragraph.haveTextBox ? 'opacity-0 duration-100 ease-out' : 'opacity-100 duration-200 ease-in',
+                'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
+              ]"
+              aria-hidden="true"
+            >
+              <svg class="h-3 w-3 text-stone-400" fill="none" viewBox="0 0 12 12">
+                <path d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span
+              :class="[
+                paragraph.haveTextBox ? 'opacity-100 duration-200 ease-in' : 'opacity-0 duration-100 ease-out',
+                'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
+              ]"
+              aria-hidden="true"
+            >
+              <svg class="h-3 w-3 text-blue-600" fill="currentColor" viewBox="0 0 12 12">
+                <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
+              </svg>
+            </span>
+          </span>
+        </Switch>
       </div>
-    <div 
-      :class="[
-        'flex items-center text-stone-200 border rounded-xl transition-all duration-300 bg-stone-800',
-        paragraph.haveTextBox ? 'border-b-4 border-blue-500 bg-stone-700' : 'border-stone-500 bg-stone-800 opacity-50'
-      ]"
-    >
-      <div class="mx-2">
-        <span class="border border-stone-200 text-stone-200 px-1 text-sm">A</span>
-      </div>
-      <input 
-        v-model.number="paragraph.boxWidth" 
-        class="w-full bg-stone-700 rounded-xl focus:outline-none" 
-        type="number" 
-        id="box-width"
-        :disabled="!paragraph.haveTextBox"
+      <div 
+        :class="[
+          'flex items-center text-stone-200 border rounded-xl transition-all duration-300 bg-stone-800',
+          paragraph.haveTextBox ? 'border-b-4 border-blue-500 bg-stone-700' : 'border-stone-500 bg-stone-800 opacity-50'
+        ]"
       >
+        <div class="mx-2">
+          <span class="border border-stone-200 text-stone-200 px-1 text-sm">A</span>
+        </div>
+        <input 
+          v-model.number="paragraph.boxWidth" 
+          class="w-full bg-stone-700 rounded-xl focus:outline-none" 
+          type="number" 
+          id="box-width"
+          :disabled="!paragraph.haveTextBox"
+        >
+      </div>
     </div>
-  </div>
 
     <div class="text-start">
       <button @click="addParagraph" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-6 rounded-full mt-4" type="button"><< Add Paragraph</button>
@@ -108,45 +140,44 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import { Switch } from '@headlessui/vue'
 import { PhArrowsHorizontal, PhArrowsVertical, PhTextAlignLeft, PhTextAlignCenter, PhTextAlignRight } from '@phosphor-icons/vue';
 
 export default {
   components: {
+    Switch,
     PhArrowsVertical,
     PhArrowsHorizontal,
     PhTextAlignLeft,
     PhTextAlignCenter,
     PhTextAlignRight
   },
-  data() {
-    return {
-      paragraph: {
-        objectName: '',
-        text: '',
-        fontSize: 20,
-        fontColor: '#2c2c2c',
-        xPos: 0,
-        yPos: 0,
-        boxWidth: 0,
-        haveTextBox: false,
-        letterSpacing: 0,
-        fontFamily: 'Mangueira-Semibold',
-        textAlign: 'left'
-      }
-    }
-  },
-  methods: {
-    addParagraph() {
-      const newParagraph = { ...this.paragraph }
-      // Aplicar a conversão aqui
+  setup(props, { emit }) {
+    const paragraph = ref({
+      objectName: '',
+      text: '',
+      fontSize: 20,
+      fontColor: '#2c2c2c',
+      xPos: 0,
+      yPos: 0,
+      boxWidth: 0,
+      haveTextBox: false,
+      letterSpacing: 0,
+      fontFamily: 'Mangueira-Semibold',
+      textAlign: 'left'
+    })
+
+    function addParagraph() {
+      const newParagraph = { ...paragraph.value }
       newParagraph.xPos *= 3.779528
       newParagraph.yPos *= 3.779528
       if (newParagraph.boxWidth) {
         newParagraph.boxWidth *= 3.779528
       }
-      this.$emit('add-paragraph', newParagraph)
+      emit('add-paragraph', newParagraph)
       // Reset form after adding
-      this.paragraph = {
+      paragraph.value = {
         objectName: '',
         text: '',
         fontSize: 20,
@@ -159,12 +190,17 @@ export default {
         fontFamily: 'Mangueira-Semibold',
         textAlign: 'left'
       }
-    },
-    setTextAlign(alignment) {
-      this.paragraph.textAlign = alignment;
+    }
+
+    function setTextAlign(alignment) {
+      paragraph.value.textAlign = alignment;
+    }
+
+    return {
+      paragraph,
+      addParagraph,
+      setTextAlign
     }
   }
 }
 </script>
-
-
