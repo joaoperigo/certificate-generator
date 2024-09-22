@@ -92,6 +92,10 @@
         :class="['absolute right-0 top-0 h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto', 
                  {'transform translate-x-[calc(100%-3rem)] overflow-y-hidden': isRightSidebarCollapsed}]"
       >
+        <div class="sticky top-2 end-0 text-end">
+          <button> add text</button>
+          <button>edit paragraph</button>
+        </div>
         <sidebar-toggle 
           position="right" 
           :is-collapsed="isRightSidebarCollapsed" 
