@@ -88,11 +88,16 @@ class CertificateController extends Controller
         return response()->json($certificate, 200);
     }
 
-    public function destroy(Certificate $certificate)
-    {
-        $certificate->delete();
+    // public function destroy(Certificate $certificate)
+    // {
+    //     $certificate->delete();
 
-        return redirect()->route('certificates.index')
-            ->with('success', 'Certificate deleted successfully.');
-    }
+    //     return redirect()->route('certificates.index')
+    //         ->with('success', 'Certificate deleted successfully.');
+    // }
+    public function destroy(Certificate $certificate)
+{
+    $certificate->delete();
+    return response()->json(['message' => 'Certificate deleted successfully']);
+}
 }
