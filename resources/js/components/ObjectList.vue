@@ -25,7 +25,7 @@
       </li>
     </ul>
     
-    <add-paragraph @add-paragraph="addObject"></add-paragraph>
+    <!-- <add-paragraph @add-paragraph="addObject"></add-paragraph> -->
   </div>
 </template>
 
@@ -66,9 +66,9 @@ export default {
     deleteObject(index) {
       this.$emit('delete-object', index)
     },
-    addObject(newObject) {
-      this.$emit('add-object', newObject)
-    }
+    // addObject(newObject) {
+    //   this.$emit('add-object', newObject)
+    // }
   }
 }
 </script>
