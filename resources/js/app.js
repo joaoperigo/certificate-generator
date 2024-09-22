@@ -8,7 +8,8 @@ import AddParagraph from './components/AddParagraph.vue'
 import EditParagraph from './components/EditParagraph.vue'
 import ObjectList from './components/ObjectList.vue'
 import CertificateDownload from './components/CertificateDownload.vue'
-import CertificateViewer from './components/CertificateViewer.vue';
+import CertificateViewer from './components/CertificateViewer.vue'
+import CertificateSearch from './components/CertificateSearch.vue'
 
 import axios from 'axios';
 
@@ -32,6 +33,7 @@ app.component('add-paragraph', AddParagraph)
 app.component('edit-paragraph', EditParagraph)
 app.component('object-list', ObjectList)
 app.component('certificate-download', CertificateDownload)
-app.component('certificate-viewer', CertificateViewer);
+app.component('certificate-viewer', CertificateViewer)
+app.component('certificate-search', CertificateSearch)
 
 app.mount('#app');
