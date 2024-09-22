@@ -264,32 +264,33 @@ export default {
       alert(this.jsonOutput)
     },
     async saveCertificate() {
-      this.generateJSON()
-      try {
-        if (this.initialCertificate) {
-          // Se temos um certificado inicial, atualizamos
-          const response = await axios.put(`/certificates/${this.initialCertificate.id}`, {
-            title: this.certificate.title,
-            data: this.certificate.data
-          })
-          console.log('Certificate updated:', response.data)
-          alert('Certificate updated successfully!')
-        } else {
-          // Se não temos um certificado inicial, criamos um novo
-          const response = await axios.post('/certificates', {
-            title: this.certificate.title,
-            data: this.certificate.data
-          })
-          console.log('Certificate saved:', response.data)
-          alert('Certificate saved successfully!')
-        }
-        // Emitir um evento para notificar o componente pai
-        this.$emit('save', this.certificate)
-      } catch (error) {
-        console.error('Error saving/updating certificate:', error)
-        alert('Error saving/updating certificate. Please try again.')
-      }
-    },
+  this.generateJSON()
+  try {
+    let response;
+    if (this.initialCertificate && this.initialCertificate.id) {
+      // Atualizando um certificado existente
+      response = await axios.put(`/certificates/${this.initialCertificate.id}`, {
+        title: this.certificate.title,
+        data: this.certificate.data
+      });
+      console.log('Certificate updated:', response.data);
+      alert('Certificate updated successfully!');
+    } else {
+      // Criando um novo certificado
+      response = await axios.post('/certificates', {
+        title: this.certificate.title,
+        data: this.certificate.data
+      });
+      console.log('Certificate saved:', response.data);
+      alert('Certificate saved successfully!');
+    }
+    // Emitir um evento para notificar o componente pai
+    this.$emit('save', response.data);
+  } catch (error) {
+    console.error('Error saving/updating certificate:', error);
+    alert('Error saving/updating certificate. Please try again.');
+  }
+},
     updateCertificateData() {
       this.certificateData = {
         title: this.certificate.title,

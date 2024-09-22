@@ -1,55 +1,56 @@
-<!-- CertificateViewer.vue -->
 <template>
-    <div class="certificate-viewer">
+    <div class="certificate-viewer p-4">
       <h1 class="text-2xl font-bold mb-4">{{ certificate.title }}</h1>
       
-      <page-selector 
-        :pages="pages" 
-        :currentPage="currentPage"
-        @switch-page="switchPage"
-      ></page-selector>
+      <div class="mb-4 flex items-center justify-between">
+        <button @click="prevPage" :disabled="currentPage === 0" class="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Previous Page</button>
+        <span>Page {{ currentPage + 1 }} of {{ pages.length }}</span>
+        <button @click="nextPage" :disabled="currentPage === pages.length - 1" class="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Next Page</button>
+      </div>
   
-      <div class="flex">
-        <div class="w-2/3 pr-4">
+      <div class="flex flex-col md:flex-row">
+        <div class="w-full md:w-2/3 pr-0 md:pr-4 mb-4 md:mb-0">
           <canvas-editor
             :current-page="currentPage"
             :pages="pages"
-            class="w-full h-auto"
+            class="w-full h-auto border border-gray-300"
           ></canvas-editor>
         </div>
         
-        <div class="w-1/3">
-          <object-list
-            :objects="currentPageObjects"
-            @update-object="updateObject"
-          ></object-list>
+        <div class="w-full md:w-1/3">
+          <h2 class="text-xl font-bold mb-2">Objects on Page</h2>
+          <div v-for="(object, index) in currentPageObjects" :key="index" class="mb-4">
+            <h3 class="font-bold">{{ object.objectName }}</h3>
+            <textarea 
+              v-model="object.text" 
+              @input="updateObject(index, object)"
+              class="w-full p-2 border rounded"
+              rows="3"
+            ></textarea>
+          </div>
         </div>
       </div>
   
-      <certificate-download
-        v-if="isCertificateDataReady"
-        :certificate-data="certificate"
-        class="mt-4"
-      ></certificate-download>
+      <div class="mt-4 flex justify-between">
+        <button @click="saveCertificate" class="bg-green-500 text-white px-4 py-2 rounded">Save Changes</button>
+        <button @click="downloadPDF" class="bg-blue-500 text-white px-4 py-2 rounded">Download PDF</button>
+      </div>
   
-      <button @click="saveCertificate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
-        Save Changes
-      </button>
+      <certificate-download 
+        ref="certificateDownload"
+        :certificate-data="certificate"
+      ></certificate-download>
     </div>
   </template>
   
   <script>
-  import PageSelector from './PageSelector.vue'
   import CanvasEditor from './CanvasEditor.vue'
-  import ObjectList from './ObjectList.vue'
   import CertificateDownload from './CertificateDownload.vue'
   import axios from 'axios'
   
   export default {
     components: {
-      PageSelector,
       CanvasEditor,
-      ObjectList,
       CertificateDownload
     },
     props: {
@@ -60,7 +61,7 @@
     },
     data() {
       return {
-        certificate: { ...this.initialCertificate },
+        certificate: JSON.parse(JSON.stringify(this.initialCertificate)),
         currentPage: 0
       }
     },
@@ -70,17 +71,46 @@
       },
       currentPageObjects() {
         return this.pages[this.currentPage]?.objects || []
-      },
-      isCertificateDataReady() {
-        return this.certificate && this.certificate.pages && this.certificate.pages.length > 0
+      }
+    },
+    watch: {
+      certificate: {
+        deep: true,
+        handler() {
+          console.log('Certificate updated:', this.certificate);
+        }
       }
     },
     methods: {
-      switchPage(pageIndex) {
-        this.currentPage = pageIndex
+      prevPage() {
+        if (this.currentPage > 0) {
+          this.currentPage--
+        }
+      },
+      nextPage() {
+        if (this.currentPage < this.pages.length - 1) {
+          this.currentPage++
+        }
       },
       updateObject(index, updatedObject) {
-        this.pages[this.currentPage].objects[index] = updatedObject
+        if (this.pages[this.currentPage] && this.pages[this.currentPage].objects) {
+          const newObjects = [...this.pages[this.currentPage].objects];
+          newObjects[index] = { ...newObjects[index], ...updatedObject };
+          this.pages[this.currentPage].objects = newObjects;
+        }
+      },
+      async downloadPDF() {
+        if (this.$refs.certificateDownload) {
+          try {
+            await this.$refs.certificateDownload.downloadCertificate()
+          } catch (error) {
+            console.error('Error downloading PDF:', error)
+            alert('Error downloading PDF. Please try again.')
+          }
+        } else {
+          console.error('CertificateDownload component not found')
+          alert('Unable to download PDF. Component not found.')
+        }
       },
       async saveCertificate() {
         try {
