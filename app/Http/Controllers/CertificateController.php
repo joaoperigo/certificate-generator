@@ -47,6 +47,18 @@ class CertificateController extends Controller
 
     public function edit(Certificate $certificate)
     {
+        $certificateData = json_decode($certificate->data, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $certificate->pages = $certificateData['pages'] ?? [];
+        } else {
+            $certificate->pages = [
+                [
+                    'backgroundImage' => null,
+                    'objects' => []
+                ]
+            ];
+        }
+    
         return view('certificates.edit', compact('certificate'));
     }
 
