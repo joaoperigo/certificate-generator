@@ -16,22 +16,27 @@ class CertificateController extends Controller
 
     public function show(Certificate $certificate)
     {
+        $certificateData = json_decode($certificate->data, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $certificate->pages = $certificateData['pages'] ?? [];
+        } else {
+            $certificate->pages = [];
+        }
+    
         return view('certificates.show', compact('certificate'));
     }
 
-    // Em CertificateController.php
-public function updateTexts(Request $request, Certificate $certificate)
-{
-    $validatedData = $request->validate([
-        'data' => 'required|json',
-    ]);
+    public function updateTexts(Request $request, Certificate $certificate)
+    {
+        $validatedData = $request->validate([
+            'data' => 'required|json',
+        ]);
 
-    $certificate->data = $validatedData['data'];
-    $certificate->save();
+        $certificate->data = $validatedData['data'];
+        $certificate->save();
 
-    return response()->json(['message' => 'Certificate texts updated successfully']);
-}
-
+        return response()->json(['message' => 'Certificate texts updated successfully']);
+    }
     public function create()
     {
         $images = Image::all();
