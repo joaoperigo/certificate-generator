@@ -10,6 +10,7 @@ import ObjectList from './components/ObjectList.vue'
 import CertificateDownload from './components/CertificateDownload.vue'
 import CertificateViewer from './components/CertificateViewer.vue'
 import CertificateSearch from './components/CertificateSearch.vue'
+import CertificateList from './components/CertificateList.vue'
 
 import axios from 'axios';
 
@@ -35,5 +36,6 @@ app.component('object-list', ObjectList)
 app.component('certificate-download', CertificateDownload)
 app.component('certificate-viewer', CertificateViewer)
 app.component('certificate-search', CertificateSearch)
+app.component('certificate-list', CertificateList)
 
 app.mount('#app');

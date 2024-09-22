@@ -2,10 +2,10 @@
   <div class="add-paragraph w-full">
     <h2 class="text-base text-stone-200 mt-12 font-bold mb-2">Create object</h2>
     <div class="mb-4">
-      <input v-model="paragraph.objectName" class="shadow appearance-none rounded w-full py-2 px-3 text-stone-200 leading-tight focus:outline-none focus:shadow-outline border border-b-4 border-stone-400 bg-transparent" type="text" id="object-name" placeholder="Name of the object">
+      <input v-model="paragraph.objectName" class="shadow appearance-none rounded w-full py-2 px-3 text-stone-200 leading-tight focus:outline-none focus:shadow-outline border border-b-4 border-stone-400 bg-stone-700" type="text" id="object-name" placeholder="Name of the object">
     </div>
     <div class="mb-4 position-relative">
-      <textarea v-model="paragraph.text" class="shadow appearance-none rounded w-full py-2 px-3 text-stone-200 leading-tight focus:outline-none focus:shadow-outline border border-b-4 border-stone-400 bg-transparent" id="text" placeholder="Describe yourself here..."></textarea>
+      <textarea v-model="paragraph.text" class="shadow appearance-none rounded w-full py-2 px-3 text-stone-200 leading-tight focus:outline-none focus:shadow-outline border border-b-4 border-stone-400 bg-stone-700" id="text" placeholder="Describe yourself here..."></textarea>
     </div>
 
     <div class="mb-4">
@@ -72,21 +72,21 @@
     </div> 
 
     <div class="grid grid-cols-2 gap-4 mb-4">
-      <div class="flex items-center justify-between">
-        <label class="text-stone-200" for="have-text-box">
+      <div class="flex items-center justify-between gap-2">
+        <label class="text-stone-200 text-end text-sm" for="have-text-box">
           Have text box?
         </label>
         <Switch
           v-model="paragraph.haveTextBox"
           :class="[
-            paragraph.haveTextBox ? 'bg-blue-600' : 'bg-stone-700',
-            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2'
+            paragraph.haveTextBox ? 'bg-stone-600' : 'bg-stone-700',
+            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-offset-2 rotate-90'
           ]"
         >
           <span
             :class="[
-              paragraph.haveTextBox ? 'translate-x-5' : 'translate-x-0',
-              'pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+              paragraph.haveTextBox ? 'translate-x-5 rotate-[270deg]' : 'translate-x-0',
+              'pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out rotate-[270deg]'
             ]"
           >
             <span
@@ -107,7 +107,7 @@
               ]"
               aria-hidden="true"
             >
-              <svg class="h-3 w-3 text-blue-600" fill="currentColor" viewBox="0 0 12 12">
+              <svg class="h-3 w-3 text-stone-600" fill="currentColor" viewBox="0 0 12 12">
                 <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
               </svg>
             </span>
@@ -116,8 +116,8 @@
       </div>
       <div 
         :class="[
-          'flex items-center text-stone-200 border rounded-xl transition-all duration-300 bg-stone-800',
-          paragraph.haveTextBox ? 'border-b-4 border-blue-500 bg-stone-700' : 'border-stone-500 bg-stone-800 opacity-50'
+          'flex items-center text-stone-200 border border-b-4 rounded-xl transition-all duration-300 bg-stone-800',
+          paragraph.haveTextBox ? 'border-b-4 border-stone-300 bg-stone-700' : 'border-stone-500 bg-stone-800 opacity-50'
         ]"
       >
         <div class="mx-2">
@@ -134,7 +134,7 @@
     </div>
 
     <div class="text-start">
-      <button @click="addParagraph" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-6 rounded-full mt-4" type="button"><< Add Paragraph</button>
+      <button @click="addParagraph" class="bg-stone-500 hover:bg-stone-700 text-white font-bold py-2 px-4 mb-6 rounded-full mt-4" type="button"><< Add Paragraph</button>
     </div>
   </div>
 </template>
@@ -157,10 +157,10 @@ export default {
     const paragraph = ref({
       objectName: '',
       text: '',
-      fontSize: 20,
+      fontSize: 30,
       fontColor: '#2c2c2c',
-      xPos: 0,
-      yPos: 0,
+      xPos: 19,
+      yPos: 89,
       boxWidth: 0,
       haveTextBox: false,
       letterSpacing: 0,
