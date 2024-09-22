@@ -78,15 +78,14 @@ class CertificateController extends Controller
 
     public function update(Request $request, Certificate $certificate)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'data' => 'required|json',
         ]);
-
-        $certificate->update($request->only('title', 'data'));
-
-        return redirect()->route('certificates.index')
-            ->with('success', 'Certificate updated successfully.');
+    
+        $certificate->update($validatedData);
+    
+        return response()->json($certificate, 200);
     }
 
     public function destroy(Certificate $certificate)
