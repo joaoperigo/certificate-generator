@@ -144,7 +144,14 @@ export default {
   props: {
     initialCertificate: {
       type: Object,
-      default: null
+      default: () => ({
+        title: '',
+        data: '',
+        pages: [{
+          backgroundImage: null,
+          objects: []
+        }]
+      })
     }
   },
   data() {
@@ -153,16 +160,18 @@ export default {
         title: '',
         data: ''
       },
-      pages: this.initialCertificate ? [...this.initialCertificate.pages] : [
-        {
-          backgroundImage: null,
-          objects: []
-        }
-      ],
+      pages: this.initialCertificate && Array.isArray(this.initialCertificate.pages) 
+      ? [...this.initialCertificate.pages] 
+      : [
+          {
+            backgroundImage: null,
+            objects: []
+          }
+        ],
       currentPage: 0,
       jsonOutput: null,
       certificateData: null,
-      previewBackgroundImage: null,
+      previewBackgroundImageUrl: null,  // Renomeado
       isLeftSidebarCollapsed: false,
       isRightSidebarCollapsed: false,
     }
@@ -172,7 +181,7 @@ export default {
       return this.pages[this.currentPage]?.objects || []
     },
     currentPageBackgroundImage() {
-      return this.pages[this.currentPage]?.backgroundImage || this.previewBackgroundImage
+      return this.pages[this.currentPage]?.backgroundImage || this.previewBackgroundImageUrl
     },
     isCertificateDataReady() {
       return this.certificateData && this.certificateData.pages && this.certificateData.pages.length > 0
@@ -220,11 +229,11 @@ export default {
       this.pages[this.currentPage].backgroundImage = imageUrl
     },
     previewBackgroundImage(imageUrl) {
-      this.previewBackgroundImage = imageUrl
+      this.previewBackgroundImageUrl = imageUrl
     },
     removeBackgroundImage() {
       this.pages[this.currentPage].backgroundImage = null
-      this.previewBackgroundImage = null
+      this.previewBackgroundImageUrl = null
     },
     addObject(object) {
       if (!this.pages[this.currentPage].objects) {
