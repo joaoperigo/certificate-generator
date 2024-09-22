@@ -24,6 +24,8 @@ Route::get('/', function () {
 
 Route::resource('certificates', CertificateController::class);
 
+Route::put('/certificates/{certificate}/update-texts', [CertificateController::class, 'updateTexts']);
+
 // Route::resource('images', ImageController::class);
 // Route::post('/images/upload', [ImageController::class, 'upload'])->name('images.upload');
 Route::post('/images/upload', [ImageController::class, 'upload'])->name('images.upload');

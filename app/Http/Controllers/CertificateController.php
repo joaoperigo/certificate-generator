@@ -14,14 +14,23 @@ class CertificateController extends Controller
         return view('certificates.index', compact('certificates'));
     }
 
-    public function show($id)
+    public function show(Certificate $certificate)
     {
-        $certificate = Certificate::findOrFail($id);
-        $title = $certificate->title;
-        $certificateData = json_decode($certificate->data, true); // Decodifica o JSON para um array associativo
-    
-        return view('certificates.show', compact('title', 'certificateData'));
+        return view('certificates.show', compact('certificate'));
     }
+
+    // Em CertificateController.php
+public function updateTexts(Request $request, Certificate $certificate)
+{
+    $validatedData = $request->validate([
+        'data' => 'required|json',
+    ]);
+
+    $certificate->data = $validatedData['data'];
+    $certificate->save();
+
+    return response()->json(['message' => 'Certificate texts updated successfully']);
+}
 
     public function create()
     {
