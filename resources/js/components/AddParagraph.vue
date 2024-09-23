@@ -1,6 +1,6 @@
 <template>
-  <div class="add-paragraph w-full">
-    <h2 class="text-base text-stone-200 mt-12 font-bold mb-2">Create object</h2>
+  <div class="add-paragraph w-full" id="add-paragraph">
+    <h2 class="text-base text-stone-200 mt-0 font-bold mb-2">Create object</h2>
     <div class="mb-4">
       <input v-model="paragraph.objectName" class="shadow appearance-none rounded w-full py-2 px-3 text-stone-200 leading-tight focus:outline-none focus:shadow-outline border border-b-4 border-stone-400 bg-stone-700" type="text" id="object-name" placeholder="Name of the object">
     </div>

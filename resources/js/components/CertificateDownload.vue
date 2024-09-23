@@ -49,7 +49,7 @@ export default {
 
       // Adicionar imagem de fundo
       if (page.backgroundImage) {
-        doc.addImage(page.backgroundImage, 'JPEG', 0, 0, 279.4, 215.9);
+        doc.addImage(page.backgroundImage, 'JPEG', 0, 0, 303.02, 215.98);
       }
 
       // Adicionar objetos (textos)

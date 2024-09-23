@@ -89,9 +89,15 @@
       :class="['absolute right-0 top-0 h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto', 
                {'transform translate-x-[calc(100%-3rem)] overflow-y-hidden': isRightSidebarCollapsed}]"
     >
-      <div class="sticky top-2 end-0 text-end">
-        <button> add text</button>
-        <button>edit paragraph</button>
+      <div class="sticky top-2 end-0 inline-flex justify-end gap-4 w-full pe-4 z-50">
+        <a href="#objects-list" class="text-stone-200 grid grid-cols-1 w-30">
+          <PhStack :size="20" class="mx-auto"/>
+          <div class="text-center text-sm text-stone-400">Edit</div>
+        </a>
+        <a href="#add-paragraph" class="text-stone-200 grid grid-cols-1 w-30">
+          <PhStackPlus :size="20" class="mx-auto"/>
+          <div class="text-center text-sm text-stone-400">Add</div>
+        </a>
       </div>
       <sidebar-toggle 
         position="right" 
@@ -127,6 +133,7 @@ import CertificateDownload from './CertificateDownload.vue'
 import SidebarToggle from './SidebarToggle.vue'
 
 import { BookmarkIcon } from '@heroicons/vue/24/solid'
+import { PhStack, PhStackPlus } from '@phosphor-icons/vue'
 
 import axios from 'axios'
 
@@ -139,7 +146,9 @@ export default {
     ObjectList,
     CertificateDownload,
     BookmarkIcon,
-    SidebarToggle
+    SidebarToggle,
+    PhStack,
+    PhStackPlus
   },
   props: {
     initialCertificate: {

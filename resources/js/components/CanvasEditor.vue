@@ -76,29 +76,34 @@ export default {
       objects.forEach(obj => this.drawObject(obj))
     },
     drawObject(obj) {
-      this.ctx.font = `${obj.fontSize}px ${obj.fontFamily}`
-      this.ctx.fillStyle = obj.fontColor
-      this.ctx.textAlign = obj.textAlign || 'left'
+    const ptToPx = (pt) => pt * 1.3333 // Converte pt para px assumindo 96 DPI
+    
+    // Converte o tamanho da fonte de pt para px
+    const fontSizePx = ptToPx(obj.fontSize)
+    
+    this.ctx.font = `${fontSizePx}px ${obj.fontFamily}`
+    this.ctx.fillStyle = obj.fontColor
+    this.ctx.textAlign = obj.textAlign || 'left'
 
-      const words = obj.text.split(' ')
-      let line = ''
-      let y = obj.yPos
+    const words = obj.text.split(' ')
+    let line = ''
+    let y = obj.yPos
 
-      for (let word of words) {
-        const testLine = line + word + ' '
-        const metrics = this.ctx.measureText(testLine)
-        const testWidth = metrics.width
+    for (let word of words) {
+      const testLine = line + word + ' '
+      const metrics = this.ctx.measureText(testLine)
+      const testWidth = metrics.width
 
-        if (testWidth > obj.boxWidth && line !== '' && obj.boxWidth > 0) {
-          this.drawAlignedText(line, obj.xPos, y, obj)
-          line = word + ' '
-          y += obj.fontSize * 1.2
-        } else {
-          line = testLine
-        }
+      if (testWidth > obj.boxWidth && line !== '' && obj.boxWidth > 0) {
+        this.drawAlignedText(line, obj.xPos, y, obj)
+        line = word + ' '
+        y += fontSizePx * 1.2
+      } else {
+        line = testLine
       }
-      this.drawAlignedText(line, obj.xPos, y, obj)
-    },
+    }
+    this.drawAlignedText(line, obj.xPos, y, obj)
+  },
     drawAlignedText(text, x, y, obj) {
       let adjustedX = x
       if (obj.textAlign === 'center') {
