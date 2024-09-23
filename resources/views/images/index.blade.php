@@ -8,7 +8,7 @@
     @vite('resources/js/app.js')
 </head>
 <body>
-    <div id="app">
+    <div >
         <image-uploader></image-uploader>
     </div>
     
