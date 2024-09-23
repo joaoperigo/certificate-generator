@@ -22,14 +22,12 @@ Route::get('/', function () {
 
 
 
-Route::resource('certificates', CertificateController::class);
 
-Route::put('/certificates/{certificate}/update-texts', [CertificateController::class, 'updateTexts']);
 
 // Route::resource('images', ImageController::class);
 // Route::post('/images/upload', [ImageController::class, 'upload'])->name('images.upload');
-Route::post('/images/upload', [ImageController::class, 'upload'])->name('images.upload');
-Route::get('/images/list', [ImageController::class, 'indexJson']);
+// Route::post('/images/upload', [ImageController::class, 'upload'])->name('images.upload');
+// Route::get('/images/list', [ImageController::class, 'indexJson']);
 
 Route::middleware([
     'auth:sanctum',
@@ -39,10 +37,14 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::resource('certificates', CertificateController::class);
+
+Route::put('/certificates/{certificate}/update-texts', [CertificateController::class, 'updateTexts']);
 });
 
 
 
-Route::get('/test', function () {
-    return '{"file_path": "12354123"}';
-});
+// Route::get('/test', function () {
+//     return '{"file_path": "12354123"}';
+// });
