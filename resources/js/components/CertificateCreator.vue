@@ -276,25 +276,36 @@ export default {
   this.generateJSON()
   try {
     let response;
-    if (this.initialCertificate && this.initialCertificate.id) {
+    const certificateData = {
+      title: this.certificate.title,
+      data: this.certificate.data
+    };
+
+    if (this.certificate.id) {
       // Atualizando um certificado existente
-      response = await axios.put(`/certificates/${this.initialCertificate.id}`, {
-        title: this.certificate.title,
-        data: this.certificate.data
-      });
+      response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
       console.log('Certificate updated:', response.data);
-      alert('Certificate updated successfully!');
     } else {
       // Criando um novo certificado
-      response = await axios.post('/certificates', {
-        title: this.certificate.title,
-        data: this.certificate.data
-      });
+      response = await axios.post('/certificates', certificateData);
       console.log('Certificate saved:', response.data);
-      alert('Certificate saved successfully!');
+      
+      // Atualizar o ID do certificado no componente
+      if (response.data.id) {
+        this.certificate.id = response.data.id;
+      }
+      
+      // Atualizar a URL sem recarregar a página
+      window.history.pushState({}, '', `/certificates/${this.certificate.id}/edit`);
     }
+
+    // Atualizar o componente com os dados mais recentes
+    this.certificate = { ...this.certificate, ...response.data };
+    
     // Emitir um evento para notificar o componente pai
-    this.$emit('save', response.data);
+    this.$emit('save', this.certificate);
+
+    alert('Certificate saved successfully!');
   } catch (error) {
     console.error('Error saving/updating certificate:', error);
     alert('Error saving/updating certificate. Please try again.');

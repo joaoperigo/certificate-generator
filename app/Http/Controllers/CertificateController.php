@@ -50,12 +50,9 @@ class CertificateController extends Controller
             'title' => 'required|string|max:255',
             'data' => 'required|json',
         ]);
-
-        $certificate = Certificate::create([
-            'title' => $validatedData['title'],
-            'data' => $validatedData['data'],
-        ]);
-
+    
+        $certificate = Certificate::create($validatedData);
+    
         return response()->json($certificate, 201);
     }
 
