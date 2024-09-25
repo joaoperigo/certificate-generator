@@ -1,18 +1,18 @@
 <template>
-  <div class="object-list pb-[600px]" id="objects-list">
-    <h2 class="mt-8 font-bold mb-2 text-stone-200 text-base">Edit Objects</h2>
+  <div class="object-list ">
+    <h2 class="font-bold mb-2 text-stone-200 text-base px-4" >Edit Objects</h2>
     <ul>
-      <li v-for="(object, index) in objects" :key="index" class="mb-4 p-4 border rounded bg-stone-900 text-stone-300">
+      <li v-for="(object, index) in objects" :key="index" class="border-b border-stone-600 rounded  text-stone-300 px-4 py-4">
         <div v-if="editingIndex !== index">
           <h3 class="font-bold text-xl">{{ object.objectName }}</h3>
           <p>{{ object.text }}</p>
           <div class="mt-2 flex">
-            <button @click="startEdit(index)" class="bg-stone-500 hover:bg-stone-700 text-white font-bold py-3 ps-3 pe-5 rounded-full mr-2 flex align-between items-center gap-2">
-              <PhPencilSimple :size="20" />
+            <button @click="startEdit(index)" class=" hover:bg-stone-700 text-white font-bold py-3 ps-3 pe-5 rounded me-2 flex align-between items-center gap-2">
+              <PhPencilLine :size="20" />
               Edit
             </button>
-            <button @click="deleteObject(index)" class="border bg-transparent hover:bg-stone-700 text-white font-bold py-3 ps-3 pe-5 rounded-full mr-2 flex align-between items-center gap-2">
-              <PhPencilSimple :size="20" />
+            <button @click="deleteObject(index)" class=" hover:bg-stone-700 text-white font-bold py-3 ps-3 pe-5 rounded me-2 flex align-between items-center gap-2">
+              <PhEraser :size="20" />
               Delete
             </button>
           </div>
@@ -35,13 +35,14 @@
 import EditParagraph from './EditParagraph.vue'
 import AddParagraph from './AddParagraph.vue'
 
-import { PhPencilSimple } from '@phosphor-icons/vue';
+import { PhPencilLine, PhEraser } from '@phosphor-icons/vue';
 
 export default {
   components: {
     EditParagraph,
     AddParagraph,
-    PhPencilSimple
+    PhPencilLine,
+    PhEraser
   },
   props: {
     objects: {
