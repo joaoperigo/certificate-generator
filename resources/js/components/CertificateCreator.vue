@@ -1,21 +1,27 @@
 <!-- CertificateCreator.vue -->
 <template>
   <div class="certificate-creator h-screen flex relative overflow-hidden w-full bg-stone-900">
+    <sidebar-toggle 
+      position="right" 
+      :is-collapsed="isRightSidebarCollapsed" 
+      @toggle="toggleRightSidebar"
+    />
+    <sidebar-toggle 
+      position="left" 
+      :is-collapsed="isLeftSidebarCollapsed" 
+      @toggle="toggleLeftSidebar"
+    />
+    
     <!-- Left Sidebar -->
     <div 
       :class="['absolute left-0 top-0 rounded-lg h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto custom-scrollbar pb-20', 
                {'transform -translate-x-[calc(100%-3rem)] overflow-y-hidden bg-transparent disappear-sidebar': isLeftSidebarCollapsed}]"
     >
-      <sidebar-toggle 
-        position="left" 
-        :is-collapsed="isLeftSidebarCollapsed" 
-        @toggle="toggleLeftSidebar"
-        class="absolute right-2 top-2 z-10"
-      />
+
       <div>
         <!-- Left sidebar content -->
         <div>
-          <div class="mt-8 mb-0 p-4 border-b border-b-stone-600">
+          <div class="mt-8 mb-0 p-4 border-b border-b-stone-600 pt-20">
             <label for="title" class="block text-stone-200 text-base font-bold mb-2">Certificate title:</label>
             <input 
               v-model="certificate.title" 
@@ -75,7 +81,7 @@
     
     <!-- Main Content -->
     <div 
-      :class="['flex-grow bg-stone-900 p-4 overflow-auto transition-all duration-300 px-12', mainContentClass]"
+      :class="['flex-grow bg-stone-900 p-4 overflow-auto transition-all duration-300 px-12 custom-scrollbar', mainContentClass]"
     >
       <canvas-editor 
         :current-page="currentPage" 
@@ -86,11 +92,12 @@
     
     <!-- Right Sidebar -->
     <div 
-      :class="['absolute right-0 top-0 h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto custom-scrollbar', 
+      :class="['absolute right-0 top-0 h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto custom-scrollbar scroll-smooth', 
                {'transform translate-x-[calc(100%-3rem)] overflow-y-hidden bg-transparent  disappear-sidebar': isRightSidebarCollapsed}]"
     >
-      <div class="sticky top-0 end-0 inline-flex justify-end gap-5 w-full pt-3 pb-2 pe-6 z-10 bg-stone-800">
-        <a href="#add-paragraph" class="text-stone-200 grid grid-cols-1 w-30">
+    <div id="right-sidebar"></div>
+      <div class="sticky top-20 end-0 inline-flex justify-end gap-5 w-full pb-2 pe-6 z-10 bg-stone-800">
+        <a href="#right-sidebar" class="text-stone-200 grid grid-cols-1 w-30">
           <PhStackPlus :size="20" class="mx-auto"/>
           <div class="text-center text-sm text-stone-400">Add</div>
         </a>
@@ -99,15 +106,10 @@
           <div class="text-center text-sm text-stone-400">Edit</div>
         </a>
       </div>
-      <sidebar-toggle 
-        position="right" 
-        :is-collapsed="isRightSidebarCollapsed" 
-        @toggle="toggleRightSidebar"
-        class="absolute left-2 top-2 z-10"
-      />
+
       
       <!-- Right sidebar content -->
-      <div class="p-0 pt-0">
+      <div class="p-0 ">
         <add-paragraph 
           @add-paragraph="addObject"
           class="mb-6"
