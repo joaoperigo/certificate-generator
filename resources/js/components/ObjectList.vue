@@ -1,5 +1,5 @@
 <template>
-  <div class="object-list ">
+  <div class="object-list sticky top-0 z-20 bg-stone-800 pt-4 border-t border-stone-600">
     <h2 class="font-bold mb-2 text-stone-200 text-base px-4" >Edit Objects</h2>
     <ul>
       <li v-for="(object, index) in objects" :key="index" class="border-b border-stone-600 rounded  text-stone-300 px-4 py-4">

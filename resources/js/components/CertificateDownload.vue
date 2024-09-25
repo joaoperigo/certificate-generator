@@ -1,5 +1,7 @@
 <template>
-  <button @click="downloadCertificate" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+  
+  <button @click="downloadCertificate" class="border border-b-4 border-stone-300 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded-xl w-full mb-2">
+    <PhDownload :size="40" class="mx-auto" />
     Download Certificate
   </button>
 </template>
@@ -10,8 +12,13 @@ import { mangueiraRegular } from '@/fonts/mangueiraRegular.js';
 import { mangueiraMedium } from '@/fonts/mangueiraMedium.js';
 import { myriadRegular } from '@/fonts/myriadRegular.js';
 
+import { PhDownload } from "@phosphor-icons/vue";
+
 export default {
   name: 'CertificateDownload',
+  components: {
+    PhDownload
+  },
   props: {
     certificateData: {
       type: Object,
