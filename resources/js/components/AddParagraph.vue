@@ -1,5 +1,5 @@
 <template>
-  <div class="add-paragraph w-full" id="add-paragraph">
+  <div class="add-paragraph w-full border-b border-stone-600 px-4" id="add-paragraph">
     <h2 class="text-base text-stone-200 mt-0 font-bold mb-2">Create object</h2>
     <div class="mb-4">
       <input v-model="paragraph.objectName" class="shadow appearance-none rounded w-full py-2 px-3 text-stone-200 leading-tight focus:outline-none focus:shadow-outline border border-b-4 border-stone-400 bg-stone-700" type="text" id="object-name" placeholder="Name of the object">
@@ -28,7 +28,7 @@
         <input v-model="paragraph.fontColor" class="w-full bg-stone-700 rounded-xl h-10" type="color" id="font-color">
       </div>
     </div>
-
+    
     <div class="columns-2 mb-4">
       <div class="flex content-between items-center text-stone-200 border border-b-4 rounded-xl">
          <PhArrowsVertical :size="20" class="mx-2" />
@@ -134,7 +134,10 @@
     </div>
 
     <div class="text-start">
-      <button @click="addParagraph" class="bg-stone-500 hover:bg-stone-700 text-white font-bold py-2 px-4 mb-6 rounded-full mt-4" type="button"><< Add Paragraph</button>
+      <button @click="addParagraph" class=" border border-b-4 border-stone-600  hover:bg-stone-300 text-stone-900 bg-stone-100 font-bold py-3 ps-2 pe-4 mb-6 rounded-xl mt-6 flex justify-center gap-2 items-center w-full" type="button" id="objects-list">
+        <PhCaretDoubleLeft :size="20" class="text-stone-900" />
+        Add Paragraph
+      </button>
     </div>
   </div>
 </template>
@@ -142,7 +145,7 @@
 <script>
 import { ref } from 'vue'
 import { Switch } from '@headlessui/vue'
-import { PhArrowsHorizontal, PhArrowsVertical, PhTextAlignLeft, PhTextAlignCenter, PhTextAlignRight } from '@phosphor-icons/vue';
+import { PhArrowsHorizontal, PhArrowsVertical, PhTextAlignLeft, PhTextAlignCenter, PhTextAlignRight, PhPlusCircle, PhCaretDoubleLeft } from '@phosphor-icons/vue';
 
 export default {
   components: {
@@ -151,7 +154,9 @@ export default {
     PhArrowsHorizontal,
     PhTextAlignLeft,
     PhTextAlignCenter,
-    PhTextAlignRight
+    PhTextAlignRight,
+    PhPlusCircle,
+    PhCaretDoubleLeft
   },
   setup(props, { emit }) {
     const paragraph = ref({

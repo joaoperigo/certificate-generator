@@ -15,7 +15,7 @@
       <div>
         <!-- Left sidebar content -->
         <div>
-          <div class="mt-10 mb-0 p-4 border-b border-b-stone-600">
+          <div class="mt-8 mb-0 p-4 border-b border-b-stone-600">
             <label for="title" class="block text-stone-200 text-base font-bold mb-2">Certificate title:</label>
             <input 
               v-model="certificate.title" 
@@ -86,17 +86,17 @@
     
     <!-- Right Sidebar -->
     <div 
-      :class="['absolute right-0 top-0 h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto', 
-               {'transform translate-x-[calc(100%-3rem)] overflow-y-hidden': isRightSidebarCollapsed}]"
+      :class="['absolute right-0 top-0 h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto custom-scrollbar', 
+               {'transform translate-x-[calc(100%-3rem)] overflow-y-hidden bg-transparent  disappear-sidebar': isRightSidebarCollapsed}]"
     >
-      <div class="sticky top-2 end-0 inline-flex justify-end gap-4 w-full pe-4 z-50">
-        <a href="#objects-list" class="text-stone-200 grid grid-cols-1 w-30">
-          <PhStack :size="20" class="mx-auto"/>
-          <div class="text-center text-sm text-stone-400">Edit</div>
-        </a>
+      <div class="sticky top-0 end-0 inline-flex justify-end gap-5 w-full pt-3 pb-2 pe-6 z-10 bg-stone-800">
         <a href="#add-paragraph" class="text-stone-200 grid grid-cols-1 w-30">
           <PhStackPlus :size="20" class="mx-auto"/>
           <div class="text-center text-sm text-stone-400">Add</div>
+        </a>
+        <a href="#objects-list" class="text-stone-200 grid grid-cols-1 w-30">
+          <PhStack :size="20" class="mx-auto"/>
+          <div class="text-center text-sm text-stone-400">Edit</div>
         </a>
       </div>
       <sidebar-toggle 
@@ -107,7 +107,7 @@
       />
       
       <!-- Right sidebar content -->
-      <div class="p-4">
+      <div class="p-0 pt-0">
         <add-paragraph 
           @add-paragraph="addObject"
           class="mb-6"
