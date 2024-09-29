@@ -180,6 +180,7 @@ export default {
       if (newParagraph.boxWidth) {
         newParagraph.boxWidth *= 3.779528
       }
+      
       emit('add-paragraph', newParagraph)
       // Reset form after adding
       paragraph.value = {

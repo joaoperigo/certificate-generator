@@ -135,9 +135,15 @@
       </div>
     </div>
 
-    <div class="text-start">
-      <button @click="saveParagraph" class="bg-stone-500 hover:bg-stone-700 text-white font-bold py-2 px-4 mb-6 rounded-full mt-4" type="button">Save Changes</button>
-      <button @click="cancel" class="bg-stone-700 hover:bg-stone-600 text-white font-bold py-2 px-4 mb-6 rounded-full mt-4 ml-2" type="button">Cancel</button>
+    <div class="grid grid-flow-col justify-stretch">
+      <button @click="saveParagraph" class="bg-stone-500 hover:bg-stone-700 text-white font-bold py-3 ps-0 pe-4 mb-6 rounded mt-4 inline-flex justify-center items-center gap-3" type="button">
+        <PhCheck :size="24" />
+        Save 
+      </button>
+      <button @click="cancel" class="bg-stone-700 hover:bg-stone-600 text-white font-bold py-3 ps-0 pe-4 mb-6 rounded mt-4 ml-2 inline-flex justify-center items-center gap-3" type="button">
+        <PhX :size="24" />
+        Cancel
+      </button>
     </div>
   </div>
 </template>
@@ -145,7 +151,7 @@
 <script>
 import { ref } from 'vue'
 import { Switch } from '@headlessui/vue'
-import { PhArrowsHorizontal, PhArrowsVertical, PhTextAlignLeft, PhTextAlignCenter, PhTextAlignRight } from '@phosphor-icons/vue';
+import { PhArrowsHorizontal, PhArrowsVertical, PhTextAlignLeft, PhTextAlignCenter, PhTextAlignRight, PhX, PhCheck } from '@phosphor-icons/vue';
 
 export default {
   components: {
@@ -154,7 +160,9 @@ export default {
     PhArrowsHorizontal,
     PhTextAlignLeft,
     PhTextAlignCenter,
-    PhTextAlignRight
+    PhTextAlignRight,
+    PhX,
+    PhCheck
   },
   props: {
     paragraph: {
