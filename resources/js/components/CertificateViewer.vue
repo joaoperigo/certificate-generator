@@ -4,9 +4,9 @@
       <div class="flex flex-col md:flex-row">
         <div class="w-full md:w-2/3 pr-0 md:pr-4 mb-4 md:mb-0 absolute left-0 top-0 h-full transition-transform duration-300 overflow-y-auto custom-scrollbar scroll-smooth px-10 pb-20">
           <div class="mb-4 flex items-center justify-between pt-20 px-2">
-            <button @click="prevPage" :disabled="currentPage === 0" class="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Previous Page</button>
+            <button @click="prevPage" :disabled="currentPage === 0" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Previous Page</button>
             <span>Page {{ currentPage + 1 }} of {{ pages.length }}</span>
-            <button @click="nextPage" :disabled="currentPage === pages.length - 1" class="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Next Page</button>
+            <button @click="nextPage" :disabled="currentPage === pages.length - 1" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Next Page</button>
           </div>
           <canvas-editor
             :current-page="currentPage"
@@ -27,18 +27,19 @@
                 rows="3"
               ></textarea>
             </div>
-            <!-- <certificate-download 
+            <certificate-download 
               ref="certificateDownload"
               :certificate-data="certificate"
-            ></certificate-download> -->
-            <button @click="downloadPDF" class="bg-blue-500 text-white px-4 py-4 rounded-lg w-full">Download PDF</button>
+              buttonClasses="border border-b-4 border-stone-300 hover:bg-purple-400 bg-purple-500 text-white font-bold py-6 px-4 rounded-xl w-full mb-2" 
+            ></certificate-download>
+            <!-- <button @click="downloadPDF" class="bg-purple-500 text-white px-4 py-4 rounded-lg w-full">Download PDF</button> -->
           </div>
         </div>
       </div>
   
       <!-- <div class="mt-4 flex justify-between">
         <button @click="saveCertificate" class="bg-green-500 text-white px-4 py-2 rounded">Save Changes</button>
-        <button @click="downloadPDF" class="bg-blue-500 text-white px-4 py-2 rounded">Download PDF</button>
+        <button @click="downloadPDF" class="bg-purple-500 text-white px-4 py-2 rounded">Download PDF</button>
       </div> -->
   
 

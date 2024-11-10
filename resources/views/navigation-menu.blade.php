@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="fixed top-0 estart-0 end-0 z-30 w-full">
     <!-- Primary Navigation Menu -->
-    <div class="mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto px-2 sm:px-4 lg:px-6">
         <div class="flex justify-between h-16 pointer-events-none">
             <div class="flex  pointer-events-auto">
                 <!-- Logo -->
@@ -8,13 +8,21 @@
                     <a href="{{ route('dashboard') }}">
                         <x-application-mark class="block h-9 w-auto" />
                     </a>
-                </div>
+                </div> 
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('certificates.index') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Certificates') }}
+                <div class="hidden sm:flex ms-4">
+                @if(Route::currentRouteName() === 'certificates.index')
+                    <x-nav-link href="{{ route('certificates.create') }}" :active="request()->routeIs('certificates.create')">
+                        {{ __('Create Certificate') }}
+                        @include('components.plus-circle')
                     </x-nav-link>
+                @else
+                    <x-nav-link href="{{ route('certificates.index') }}" :active="request()->routeIs('certificates.index')">
+                        {{ __('All Certificates') }}
+                        @include('components.magnifying-glass')
+                    </x-nav-link>
+                @endif
                 </div>
             </div>
 
@@ -72,7 +80,7 @@
                 @endif
 
                 <!-- Settings Dropdown -->
-                <div class="ms-3 relative pointer-events-auto">
+                <div class="ms-3 relative pointer-events-auto border border-b-4 border-slate-400 rounded-lg">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())

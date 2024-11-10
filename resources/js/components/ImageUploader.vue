@@ -13,7 +13,7 @@
       <div v-else class="image-preview">
         <img :src="previewUrl || currentImageUrl" alt="Preview" class="preview-image">
         <button @click="removeImage" class="remove-button p-0">
-          <XCircleIcon class="h-7 w-7 text-blue-500"/>
+          <XCircleIcon class="h-7 w-7 text-purple-500"/>
         </button>
       </div>
     </div>
@@ -91,7 +91,7 @@ export default {
 }
 
 .drag-over {
-  @apply border-blue-500 bg-blue-50;
+  @apply border-purple-500 bg-purple-50;
 }
 
 .upload-prompt {
@@ -99,7 +99,7 @@ export default {
 }
 
 .file-input-label {
-  @apply mt-2 px-4 py-2 bg-stone-100 text-stone-900 border border-b-4 border-stone-600 rounded-2xl cursor-pointer hover:bg-blue-600 transition-colors duration-300;
+  @apply mt-2 px-4 py-2 bg-stone-100 text-stone-900 border border-b-4 border-stone-600 rounded-2xl cursor-pointer hover:bg-purple-600 hover:text-slate-100 transition-colors duration-300;
 }
 
 .image-preview {
