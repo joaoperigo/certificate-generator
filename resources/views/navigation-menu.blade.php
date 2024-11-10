@@ -1,28 +1,25 @@
 <nav x-data="{ open: false }" class="fixed top-0 estart-0 end-0 z-30 w-full">
     <!-- Primary Navigation Menu -->
-    <div class="mx-auto px-2 sm:px-4 lg:px-6">
+    <div class="mx-auto px-2 sm:px-4 lg:px-4">
         <div class="flex justify-between h-16 pointer-events-none">
             <div class="flex  pointer-events-auto">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="shrink-0 flex items-center me-2">
                     <a href="{{ route('dashboard') }}">
                         <x-application-mark class="block h-9 w-auto" />
                     </a>
                 </div> 
 
                 <!-- Navigation Links -->
-                <div class="hidden sm:flex ms-4">
-                @if(Route::currentRouteName() === 'certificates.index')
+                <div class="hidden sm:flex gap-2 ms-4">
                     <x-nav-link href="{{ route('certificates.create') }}" :active="request()->routeIs('certificates.create')">
-                        {{ __('Create Certificate') }}
+                        {{ __('New') }}
                         @include('components.plus-circle')
                     </x-nav-link>
-                @else
                     <x-nav-link href="{{ route('certificates.index') }}" :active="request()->routeIs('certificates.index')">
-                        {{ __('All Certificates') }}
+                        {{ __('All') }}
                         @include('components.magnifying-glass')
                     </x-nav-link>
-                @endif
                 </div>
             </div>
 
