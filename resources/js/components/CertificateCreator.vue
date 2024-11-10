@@ -68,10 +68,11 @@
                 Generate JSON
               </button>
             </div>
-            <div class="pt-4 ps-4">
+            <div class="pt-4 ps-0">
               <certificate-download 
                 v-if="isCertificateDataReady"
                 :certificate-data="certificateData"
+                buttonClasses="border border-b-4 border-stone-300 hover:bg-stone-700 text-white font-bold py-2 px-0 rounded-xl w-full mb-2" 
               ></certificate-download>
             </div>
           </div>

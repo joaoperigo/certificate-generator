@@ -1,6 +1,6 @@
 <template>
   
-  <button @click="downloadCertificate" class="border border-b-4 border-stone-300 hover:bg-stone-700 text-white font-bold py-2 px-4 rounded-xl w-full mb-2">
+  <button @click="downloadCertificate" :class="buttonClasses">
     <PhDownload :size="40" class="mx-auto" />
     Download Certificate
   </button>
@@ -23,6 +23,10 @@ export default {
     certificateData: {
       type: Object,
       required: true
+    },
+    buttonClasses: {  
+      type: String,
+      default: ''  
     }
   },
   methods: {
