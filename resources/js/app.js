@@ -11,6 +11,7 @@ import CertificateDownload from './components/CertificateDownload.vue'
 import CertificateViewer from './components/CertificateViewer.vue'
 import CertificateSearch from './components/CertificateSearch.vue'
 import CertificateList from './components/CertificateList.vue'
+import TemplateSelector from './components/TemplateSelector.vue'
 
 import axios from 'axios';
 
@@ -37,5 +38,6 @@ app.component('certificate-download', CertificateDownload)
 app.component('certificate-viewer', CertificateViewer)
 app.component('certificate-search', CertificateSearch)
 app.component('certificate-list', CertificateList)
+app.component('template-selector', TemplateSelector)
 
 app.mount('#app');
