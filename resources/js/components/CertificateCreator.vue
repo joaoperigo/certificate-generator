@@ -111,10 +111,15 @@
       
       <!-- Right sidebar content -->
       <div class="p-0 ">
-        <template-selector
+        <div class="sticky top-20">
+          <template-selector
             @applyTemplate="addObject"
             @addPage="addPage"
-        ></template-selector>
+          ></template-selector>
+          <quick-object-creator
+            @create-object="addObject"
+          ></quick-object-creator>
+        </div>
         <add-paragraph 
           @add-paragraph="addObject"
           class="mb-6"
@@ -139,6 +144,7 @@ import ObjectList from './ObjectList.vue'
 import CertificateDownload from './CertificateDownload.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import TemplateSelector from './TemplateSelector.vue'
+import QuickObjectCreator from './QuickObjectCreator.vue'
 
 import { BookmarkIcon } from '@heroicons/vue/24/solid'
 import { PhStack, PhStackPlus } from '@phosphor-icons/vue'
@@ -151,6 +157,7 @@ export default {
     ImageUploader,
     CanvasEditor,
     TemplateSelector,
+    QuickObjectCreator,
     AddParagraph,
     ObjectList,
     CertificateDownload,
