@@ -111,6 +111,9 @@
       
       <!-- Right sidebar content -->
       <div class="p-0 ">
+        <template-selector
+          @applyTemplate="addObject"
+        ></template-selector>
         <add-paragraph 
           @add-paragraph="addObject"
           class="mb-6"
@@ -134,6 +137,7 @@ import AddParagraph from './AddParagraph.vue'
 import ObjectList from './ObjectList.vue'
 import CertificateDownload from './CertificateDownload.vue'
 import SidebarToggle from './SidebarToggle.vue'
+import TemplateSelector from './TemplateSelector.vue'
 
 import { BookmarkIcon } from '@heroicons/vue/24/solid'
 import { PhStack, PhStackPlus } from '@phosphor-icons/vue'
@@ -145,6 +149,7 @@ export default {
     PageSelector,
     ImageUploader,
     CanvasEditor,
+    TemplateSelector,
     AddParagraph,
     ObjectList,
     CertificateDownload,
