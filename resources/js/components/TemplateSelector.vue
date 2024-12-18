@@ -1,5 +1,5 @@
 <template>
-    <div class="template-selector p-4 border-b border-stone-600 sticky top-20 bg-stone-800">
+    <div class="template-selector p-4 border-b border-stone-600 bg-stone-800">
     <h2 class="text-base text-stone-200 font-bold mb-2">Select Template</h2>
       
       <select 
