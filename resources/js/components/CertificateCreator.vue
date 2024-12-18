@@ -112,7 +112,8 @@
       <!-- Right sidebar content -->
       <div class="p-0 ">
         <template-selector
-          @applyTemplate="addObject"
+            @applyTemplate="addObject"
+            @addPage="addPage"
         ></template-selector>
         <add-paragraph 
           @add-paragraph="addObject"
