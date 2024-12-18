@@ -1,7 +1,6 @@
 <template>
   <div class="add-paragraph w-full border-b border-stone-600 px-4 pt-20 sticky top-12" id="add-paragraph">
     <h2 class="text-base text-stone-200 mt-0 font-bold mb-2">Create object</h2>
-    <p class="text-white"> <br>[Nome] | [Descrição] | [Data e Local] <br><br></p>
     <div class="mb-4">
       <input v-model="paragraph.objectName" class="shadow appearance-none rounded w-full py-2 px-3 text-stone-200 leading-tight focus:outline-none focus:shadow-outline border border-b-4 border-stone-400 bg-stone-700" type="text" id="object-name" placeholder="Name of the object">
     </div>
@@ -138,6 +137,7 @@
       <button @click="addParagraph" class=" border border-b-4 border-stone-600  hover:bg-stone-300 text-stone-900 bg-stone-100 font-bold py-3 ps-2 pe-4 mb-6 rounded-xl mt-6 flex justify-center gap-2 items-center w-full" type="button" id="objects-list">
         <PhCaretDoubleLeft :size="20" class="text-stone-900" />
         Add Paragraph
+        <PhArticle class="w-5 h-5" />
       </button>
     </div>
   </div>
@@ -146,7 +146,7 @@
 <script>
 import { ref } from 'vue'
 import { Switch } from '@headlessui/vue'
-import { PhArrowsHorizontal, PhArrowsVertical, PhTextAlignLeft, PhTextAlignCenter, PhTextAlignRight, PhPlusCircle, PhCaretDoubleLeft } from '@phosphor-icons/vue';
+import { PhArrowsHorizontal, PhArrowsVertical, PhTextAlignLeft, PhTextAlignCenter, PhTextAlignRight, PhPlusCircle, PhCaretDoubleLeft, PhArticle } from '@phosphor-icons/vue';
 
 export default {
   components: {
@@ -157,7 +157,8 @@ export default {
     PhTextAlignCenter,
     PhTextAlignRight,
     PhPlusCircle,
-    PhCaretDoubleLeft
+    PhCaretDoubleLeft,
+    PhArticle
   },
   setup(props, { emit }) {
     const paragraph = ref({
