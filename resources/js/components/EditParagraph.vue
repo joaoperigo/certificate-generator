@@ -31,11 +31,11 @@
 
     <div class="columns-2 mb-4">
       <div class="flex content-between items-center text-stone-200 border border-b-4 rounded-xl">
-         <PhArrowsVertical :size="20" class="mx-2" />
+         <PhArrowsHorizontal :size="20" class="mx-2" />
         <input v-model.number="editedParagraph.xPos" @input="emitUpdate" class="w-full bg-stone-700 rounded-xl" type="number" id="x-pos" step="any">
       </div>
       <div class="flex content-between items-center text-stone-200 border border-b-4 rounded-xl">
-        <PhArrowsHorizontal :size="20" class="mx-2" />
+        <PhArrowsVertical :size="20" class="mx-2" />
         <input v-model.number="editedParagraph.yPos" @input="emitUpdate" class="w-full bg-stone-700 rounded-xl" type="number" id="y-pos">
       </div>        
     </div>

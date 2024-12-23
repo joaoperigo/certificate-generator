@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import { loadFonts, getFontWithFallback } from '@/services/fontService'
+
 export default {
   props: {
     currentPage: {
@@ -20,12 +22,13 @@ export default {
   data() {
     return {
       ctx: null,
-      canvasWidth: 303.02 * 3.779528, // mm to px
-      canvasHeight: 215.98 * 3.779528 // mm to px
+      canvasWidth: 303.02 * 3.779528,
+      canvasHeight: 215.98 * 3.779528,
+      fontsLoaded: false
     }
   },
-  mounted() {
-    this.initCanvas()
+  async mounted() {
+    await this.initCanvas()
   },
   watch: {
     currentPage: {
@@ -42,15 +45,23 @@ export default {
     }
   },
   methods: {
-    initCanvas() {
+    async initCanvas() {
       const canvas = this.$refs.canvas
       canvas.width = this.canvasWidth
       canvas.height = this.canvasHeight
       this.ctx = canvas.getContext('2d')
+      
+      // Carrega as fontes antes de desenhar
+      if (!this.fontsLoaded) {
+        await loadFonts()
+        this.fontsLoaded = true
+      }
+      
       this.redrawCanvas()
     },
     redrawCanvas() {
-      if (!this.ctx) return
+      if (!this.ctx || !this.fontsLoaded) return
+      
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
       const currentPageData = this.pages[this.currentPage]
       
@@ -66,7 +77,6 @@ export default {
       const img = new Image()
       img.onload = () => {
         this.ctx.drawImage(img, 0, 0, this.canvasWidth, this.canvasHeight)
-        // Redesenhar os objetos após carregar a imagem de fundo
         this.drawObjects(this.pages[this.currentPage].objects)
       }
       img.src = imageUrl
@@ -76,34 +86,33 @@ export default {
       objects.forEach(obj => this.drawObject(obj))
     },
     drawObject(obj) {
-    const ptToPx = (pt) => pt * 1.3333 // Converte pt para px assumindo 96 DPI
-    
-    // Converte o tamanho da fonte de pt para px
-    const fontSizePx = ptToPx(obj.fontSize)
-    
-    this.ctx.font = `${fontSizePx}px ${obj.fontFamily}`
-    this.ctx.fillStyle = obj.fontColor
-    this.ctx.textAlign = obj.textAlign || 'left'
+      const ptToPx = (pt) => pt * 1.3333
+      const fontSizePx = ptToPx(obj.fontSize)
+      
+      // Usa a função getFontWithFallback para garantir fallback apropriado
+      this.ctx.font = `${fontSizePx}px ${getFontWithFallback(obj.fontFamily)}`
+      this.ctx.fillStyle = obj.fontColor
+      this.ctx.textAlign = obj.textAlign || 'left'
 
-    const words = obj.text.split(' ')
-    let line = ''
-    let y = obj.yPos
+      const words = obj.text.split(' ')
+      let line = ''
+      let y = obj.yPos
 
-    for (let word of words) {
-      const testLine = line + word + ' '
-      const metrics = this.ctx.measureText(testLine)
-      const testWidth = metrics.width
+      for (let word of words) {
+        const testLine = line + word + ' '
+        const metrics = this.ctx.measureText(testLine)
+        const testWidth = metrics.width
 
-      if (testWidth > obj.boxWidth && line !== '' && obj.boxWidth > 0) {
-        this.drawAlignedText(line, obj.xPos, y, obj)
-        line = word + ' '
-        y += fontSizePx * 1.2
-      } else {
-        line = testLine
+        if (testWidth > obj.boxWidth && line !== '' && obj.boxWidth > 0) {
+          this.drawAlignedText(line, obj.xPos, y, obj)
+          line = word + ' '
+          y += fontSizePx * 1.2
+        } else {
+          line = testLine
+        }
       }
-    }
-    this.drawAlignedText(line, obj.xPos, y, obj)
-  },
+      this.drawAlignedText(line, obj.xPos, y, obj)
+    },
     drawAlignedText(text, x, y, obj) {
       let adjustedX = x
       if (obj.textAlign === 'center') {

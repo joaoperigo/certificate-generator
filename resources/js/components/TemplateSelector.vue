@@ -55,7 +55,7 @@
                 },
                 {
                   objectName: 'Descrição',
-                  text: 'Descrição do Certificado',
+                  text: 'concluiu com excelência o curso de Preenchimento Facial, na modalidade híbrida,  realizada teoria on-line na modalidade híbrida e prática clínica presencial em 14 de Março de 2024; no âmbito do Instituto Integrado de Pesquisa e Educação, com carga horária total de 20 horas. Obteve êxito em todas as atividades propostas, aprendeu desde técnicas básicas a avançadas de preenchimento facial, destacando-se nas práticas do procedimento.',
                   fontSize: 24,
                   fontColor: '#2c2c2c',
                   xPos: 20,
@@ -68,7 +68,7 @@
                 },
                 {
                   objectName: 'Data e Local',
-                  text: 'Local e Data',
+                  text: 'Rio de Janeiro, 14 de Março de 2024',
                   fontSize: 20,
                   fontColor: '#2c2c2c',
                   xPos: 20,
@@ -80,7 +80,7 @@
                 },
                 {
                   objectName: 'Código',
-                  text: 'CÓDIGO DE VALIDAÇÃO',
+                  text: 'ASQ23D',
                   fontSize: 16,
                   fontColor: '#2c2c2c',
                   xPos: 100,
