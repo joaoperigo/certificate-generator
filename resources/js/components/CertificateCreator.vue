@@ -287,6 +287,7 @@ export default {
       this.jsonOutput = JSON.stringify(certificateData, null, 2)
       this.certificate.data = this.jsonOutput
       alert(this.jsonOutput)
+      console.log('JSON Output:', this.jsonOutput)
     },
     async saveCertificate() {
   this.generateJSON()

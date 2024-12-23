@@ -7,6 +7,7 @@
 
 <script>
 import { loadFonts, getFontWithFallback } from '@/services/fontService'
+import { UNITS, mmToPx, pxToMm } from '@/services/units'
 
 export default {
   props: {
@@ -22,8 +23,8 @@ export default {
   data() {
     return {
       ctx: null,
-      canvasWidth: 303.02 * 3.779528,
-      canvasHeight: 215.98 * 3.779528,
+      canvasWidth: 303.02 * UNITS.MM_TO_PX,
+      canvasHeight: 215.98 * UNITS.MM_TO_PX,
       fontsLoaded: false
     }
   },
@@ -51,7 +52,6 @@ export default {
       canvas.height = this.canvasHeight
       this.ctx = canvas.getContext('2d')
       
-      // Carrega as fontes antes de desenhar
       if (!this.fontsLoaded) {
         await loadFonts()
         this.fontsLoaded = true
@@ -86,42 +86,72 @@ export default {
       objects.forEach(obj => this.drawObject(obj))
     },
     drawObject(obj) {
-      const ptToPx = (pt) => pt * 1.3333
-      const fontSizePx = ptToPx(obj.fontSize)
-      
-      // Usa a função getFontWithFallback para garantir fallback apropriado
-      this.ctx.font = `${fontSizePx}px ${getFontWithFallback(obj.fontFamily)}`
-      this.ctx.fillStyle = obj.fontColor
-      this.ctx.textAlign = obj.textAlign || 'left'
+  // obj.fontSize já vem em pt (do photoshop/jsPDF)
+  const PT_TO_PX = 1.3333;
+  const fontSizePx = obj.fontSize * PT_TO_PX;
+  
+  this.ctx.font = `${fontSizePx}px ${getFontWithFallback(obj.fontFamily)}`;
+  this.ctx.fillStyle = obj.fontColor;
+  this.ctx.textAlign = obj.textAlign || 'left';
 
-      const words = obj.text.split(' ')
-      let line = ''
-      let y = obj.yPos
+  // Para debug
+  console.log({
+    'fontSize em pt (original)': obj.fontSize,
+    'fontSize em px (calculado)': fontSizePx,
+    'font string': this.ctx.font
+  });
 
-      for (let word of words) {
-        const testLine = line + word + ' '
-        const metrics = this.ctx.measureText(testLine)
-        const testWidth = metrics.width
+  const words = obj.text.split(' ');
+  let line = '';
+  let y = obj.yPos;
 
-        if (testWidth > obj.boxWidth && line !== '' && obj.boxWidth > 0) {
-          this.drawAlignedText(line, obj.xPos, y, obj)
-          line = word + ' '
-          y += fontSizePx * 1.2
-        } else {
-          line = testLine
-        }
-      }
-      this.drawAlignedText(line, obj.xPos, y, obj)
-    },
-    drawAlignedText(text, x, y, obj) {
-      let adjustedX = x
-      if (obj.textAlign === 'center') {
-        adjustedX = x + obj.boxWidth / 2
-      } else if (obj.textAlign === 'right') {
-        adjustedX = x + obj.boxWidth
-      }
-      this.ctx.fillText(text, adjustedX, y)
+  for (let word of words) {
+    const testLine = line + word + ' ';
+    const metrics = this.ctx.measureText(testLine);
+    const testWidth = metrics.width;
+
+    if (testWidth > obj.boxWidth && line !== '' && obj.boxWidth > 0) {
+      this.drawAlignedText(line, obj.xPos, y, obj);
+      line = word + ' ';
+      y += fontSizePx * 1.2;
+    } else {
+      line = testLine;
     }
+  }
+  this.drawAlignedText(line, obj.xPos, y, obj);
+},
+
+drawAlignedText(text, x, y, obj) {
+  let adjustedX = x;
+  const textWidth = this.ctx.measureText(text).width;
+
+  if (!obj.boxWidth) {
+    // Sem boxWidth: usa o textAlign nativo do canvas
+    this.ctx.textAlign = obj.textAlign || 'left';
+    adjustedX = x;
+  } else {
+    // Com boxWidth: usa a lógica anterior que funcionava
+    this.ctx.textAlign = 'left';  // Sempre left quando tem box
+    if (obj.textAlign === 'center') {
+      adjustedX = x + (obj.boxWidth / 2);
+    } else if (obj.textAlign === 'right') {
+      adjustedX = x + obj.boxWidth;
+    }
+  }
+
+  // Debug
+  console.log({
+    text,
+    alignment: obj.textAlign,
+    hasBoxWidth: !!obj.boxWidth,
+    boxWidth: obj.boxWidth,
+    originalX: x,
+    adjustedX: adjustedX,
+    textWidth
+  });
+
+  this.ctx.fillText(text, adjustedX, y);
+}
   }
 }
 </script>
