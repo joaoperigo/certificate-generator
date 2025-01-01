@@ -48,14 +48,15 @@
     </div>
     
     <image-uploader 
-    v-if="certificate.id"
-    :currentImageUrl="currentPageBackgroundImage"
-    :certificate-id="Number(certificate.id)"
-    :page-number="Number(currentPage)"
-    @image-selected="setBackgroundImage"
-    @remove-image="removeBackgroundImage"
-    class="p-4 border-b border-stone-600"
-  ></image-uploader>
+      v-if="certificate.id"
+      :key="getUploaderKey"
+      :currentImageUrl="currentPageBackgroundImage"
+      :certificate-id="Number(certificate.id)"
+      :page-number="Number(currentPage)"
+      @image-selected="setBackgroundImage"
+      @remove-image="removeBackgroundImage"
+      class="p-4 border-b border-stone-600"
+    ></image-uploader>
           
           <button 
             @click="saveCertificate" 
@@ -198,6 +199,7 @@ export default {
         objects: []
       }],
       currentPage: 0,
+      uploaderKey: 0, // Adicionamos um key counter
       jsonOutput: null,
       certificateData: null,
       previewBackgroundImageUrl: null,  // Renomeado
@@ -219,6 +221,9 @@ export default {
       let marginLeft = this.isLeftSidebarCollapsed ? 'ml-12' : 'ml-[300px]'
       let marginRight = this.isRightSidebarCollapsed ? 'mr-12' : 'mr-[300px]'
       return `${marginLeft} ${marginRight}`
+    },
+    getUploaderKey() {
+      return `uploader-${this.currentPage}-${this.uploaderKey}`
     }
   },
   watch: {
@@ -239,12 +244,21 @@ export default {
       this.pages.push({
         backgroundImage: null,
         objects: []
-      })
-      this.currentPage = this.pages.length - 1
+      });
+      this.currentPage = this.pages.length - 1;
+      this.uploaderKey++; // Incrementa o contador
+      this.updateCertificateData();
     },
+
     switchPage(pageIndex) {
-      this.currentPage = pageIndex
+      if (pageIndex !== this.currentPage) {
+        this.currentPage = pageIndex;
+        this.uploaderKey++; // Incrementa o contador ao trocar de página
+      }
     },
+
+
+
     deletePage(index) {
       if (this.pages.length > 1) {
         this.pages.splice(index, 1)
@@ -272,16 +286,10 @@ export default {
       this.previewBackgroundImageUrl = imageUrl
     },
     removeBackgroundImage() {
-      console.log('Removing background image from page:', this.currentPage);
-      
       if (this.pages[this.currentPage]) {
         this.pages[this.currentPage].backgroundImage = null;
-        
-        // Atualizar o JSON do certificado
         this.updateCertificateData();
-        
-        // Salvar automaticamente para persistir a mudança
-        this.saveCertificate();
+        this.uploaderKey++; // Incrementa o contador ao remover a imagem
       }
     },
     addObject(object) {
