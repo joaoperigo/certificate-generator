@@ -89,24 +89,49 @@ class ImageController extends Controller
         }
     }
 
-    public function show(Image $image)
+    public function destroy(Image $image)
     {
         try {
-            Log::info('Attempting to show image', [
+            // Verifica se o arquivo existe
+            if (Storage::disk('private')->exists($image->path)) {
+                // Deleta o arquivo físico
+                Storage::disk('private')->delete($image->path);
+            }
+
+            // Deleta o registro do banco
+            $image->delete();
+
+            Log::info('Image deleted successfully', [
                 'image_id' => $image->id,
                 'path' => $image->path
             ]);
 
+            return response()->json([
+                'success' => true,
+                'message' => 'Image deleted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to delete image', [
+                'image_id' => $image->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete image'
+            ], 500);
+        }
+    }
+
+    public function show(Image $image)
+    {
+        try {
             // Verifica se o arquivo existe
             if (!Storage::disk('private')->exists($image->path)) {
-                Log::error('Image file not found', [
-                    'image_id' => $image->id,
-                    'path' => $image->path
-                ]);
                 throw new \Exception('Image file not found');
             }
 
-            // Retorna o arquivo
             return response()->stream(
                 function () use ($image) {
                     echo Storage::disk('private')->get($image->path);
@@ -114,6 +139,7 @@ class ImageController extends Controller
                 200,
                 [
                     'Content-Type' => Storage::disk('private')->mimeType($image->path),
+                    'Content-Disposition' => 'inline; filename="' . basename($image->path) . '"',
                     'Cache-Control' => 'public, max-age=86400'
                 ]
             );
@@ -121,13 +147,11 @@ class ImageController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to show image', [
                 'image_id' => $image->id,
-                'path' => $image->path ?? null,
+                'path' => $image->path,
                 'error' => $e->getMessage()
             ]);
 
-            return response()->json([
-                'error' => 'Image not found'
-            ], 404);
+            return abort(404);
         }
     }
 }
