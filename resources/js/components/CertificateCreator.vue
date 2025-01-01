@@ -201,7 +201,7 @@ export default {
       currentPage: 0,
       uploaderKey: 0, // Adicionamos um key counter
       jsonOutput: null,
-      // previewBackgroundImageUrl: null,  // Renomeado
+      previewBackgroundImageUrl: null,  // Renomeado
       isLeftSidebarCollapsed: false,
       isRightSidebarCollapsed: false,
     }
