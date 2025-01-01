@@ -40,12 +40,12 @@ export default {
     certificateId: {
       type: Number,
       required: true,
-      validator: value => Number.isInteger(value) && value > 0
+      validator: value => !isNaN(value) && value > 0
     },
     pageNumber: {
       type: Number,
       required: true,
-      validator: value => Number.isInteger(value) && value >= 0
+      validator: value => !isNaN(value) && value >= 0
     },
     currentImageUrl: {
       type: String,
@@ -61,10 +61,19 @@ export default {
     }
   },
   watch: {
-    currentImageUrl(newUrl) {
-      if (newUrl) {
-        this.previewUrl = null;
-      }
+    pageNumber: {
+      handler() {
+        this.resetState();
+      },
+      immediate: true
+    },
+    currentImageUrl: {
+      handler(newUrl) {
+        if (!newUrl) {
+          this.resetState();
+        }
+      },
+      immediate: true
     }
   },
   computed: {
@@ -73,6 +82,12 @@ export default {
     }
   },
   methods: {
+    resetState() {
+      this.selectedFile = null;
+      this.previewUrl = null;
+      this.isDragging = false;
+      this.uploadProgress = 0;
+    },
     onFileSelected(event) {
       this.handleFile(event.target.files[0])
     },
