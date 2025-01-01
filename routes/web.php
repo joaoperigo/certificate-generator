@@ -40,7 +40,14 @@ Route::middleware([
 
     Route::resource('certificates', CertificateController::class);
 
-Route::put('/certificates/{certificate}/update-texts', [CertificateController::class, 'updateTexts']);
+    Route::put('/certificates/{certificate}/update-texts', [CertificateController::class, 'updateTexts']);
+
+    Route::get('certificate-images/{certificateImage}', [CertificateImageController::class, 'show'])
+        ->name('certificate.images.show');
+
+    Route::post('/api/images', [ImageController::class, 'store']);
+    Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
+    
 });
 
 
