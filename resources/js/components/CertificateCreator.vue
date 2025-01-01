@@ -42,13 +42,20 @@
             class="p-4 border-b border-stone-600"
           ></page-selector>
 
-          <image-uploader 
-            :currentImageUrl="currentPageBackgroundImage"
-            @image-preview="previewBackgroundImage"
-            @remove-image="removeBackgroundImage"
-            @image-selected="setBackgroundImage"
-            class="p-4 border-b border-stone-600"
-          ></image-uploader>
+    <!-- Modificar o ImageUploader para só aparecer depois que tiver ID -->
+    <div v-if="!certificate.id" class="p-4 border-b border-stone-600 text-stone-200">
+      Por favor, salve o certificado primeiro antes de adicionar imagens.
+    </div>
+    
+    <image-uploader 
+    v-if="certificate.id"
+    :currentImageUrl="currentPageBackgroundImage"
+    :certificate-id="Number(certificate.id)"
+    :page-number="Number(currentPage)"
+    @image-selected="setBackgroundImage"
+    @remove-image="removeBackgroundImage"
+    class="p-4 border-b border-stone-600"
+  ></image-uploader>
           
           <button 
             @click="saveCertificate" 
@@ -181,18 +188,15 @@ export default {
   },
   data() {
     return {
-      certificate: this.initialCertificate ? { ...this.initialCertificate } : {
-        title: '',
-        data: ''
+      certificate: {
+        id: this.initialCertificate?.id ? Number(this.initialCertificate.id) : null,
+        title: this.initialCertificate?.title || '',
+        data: this.initialCertificate?.data || ''
       },
-      pages: this.initialCertificate && Array.isArray(this.initialCertificate.pages) 
-      ? [...this.initialCertificate.pages] 
-      : [
-          {
-            backgroundImage: null,
-            objects: []
-          }
-        ],
+      pages: this.initialCertificate?.pages || [{
+        backgroundImage: null,
+        objects: []
+      }],
       currentPage: 0,
       jsonOutput: null,
       certificateData: null,
@@ -251,14 +255,34 @@ export default {
       }
     },
     setBackgroundImage(imageUrl) {
-      this.pages[this.currentPage].backgroundImage = imageUrl
+      console.log('Setting background image:', imageUrl);
+      
+      // Atualizar a página atual com a nova URL da imagem
+      if (this.pages[this.currentPage]) {
+        this.pages[this.currentPage].backgroundImage = imageUrl;
+      
+        // Atualizar o JSON do certificado
+        this.updateCertificateData();
+        
+        // Salvar automaticamente para persistir a mudança
+        this.saveCertificate();
+      }
     },
     previewBackgroundImage(imageUrl) {
       this.previewBackgroundImageUrl = imageUrl
     },
     removeBackgroundImage() {
-      this.pages[this.currentPage].backgroundImage = null
-      this.previewBackgroundImageUrl = null
+      console.log('Removing background image from page:', this.currentPage);
+      
+      if (this.pages[this.currentPage]) {
+        this.pages[this.currentPage].backgroundImage = null;
+        
+        // Atualizar o JSON do certificado
+        this.updateCertificateData();
+        
+        // Salvar automaticamente para persistir a mudança
+        this.saveCertificate();
+      }
     },
     addObject(object) {
       if (!this.pages[this.currentPage].objects) {
@@ -290,46 +314,31 @@ export default {
       console.log('JSON Output:', this.jsonOutput)
     },
     async saveCertificate() {
-  this.generateJSON()
-  try {
-    let response;
-    const certificateData = {
-      title: this.certificate.title,
-      data: this.certificate.data
-    };
+      try {
+        this.generateJSON();
+        let response;
+        const certificateData = {
+          title: this.certificate.title,
+          data: this.certificate.data
+        };
 
-    if (this.certificate.id) {
-      // Atualizando um certificado existente
-      response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
-      console.log('Certificate updated:', response.data);
-    } else {
-      // Criando um novo certificado
-      response = await axios.post('/certificates', certificateData);
-      console.log('Certificate saved:', response.data);
-      
-      // Atualizar o ID do certificado no componente
-      if (response.data.id) {
-        this.certificate.id = response.data.id;
+        if (this.certificate.id) {
+          response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
+        } else {
+          response = await axios.post('/certificates', certificateData);
+          // Garantir que o ID seja um número
+          this.certificate.id = Number(response.data.id);
+        }
+
+        console.log('Certificate saved:', response.data);
+        alert('Certificate saved successfully!');
+      } catch (error) {
+        console.error('Error saving certificate:', error);
+        alert('Error saving certificate. Please try again.');
       }
-      
-      // Atualizar a URL sem recarregar a página
-      window.history.pushState({}, '', `/certificates/${this.certificate.id}/edit`);
-    }
-
-    // Atualizar o componente com os dados mais recentes
-    this.certificate = { ...this.certificate, ...response.data };
-    
-    // Emitir um evento para notificar o componente pai
-    this.$emit('save', this.certificate);
-
-    alert('Certificate saved successfully!');
-  } catch (error) {
-    console.error('Error saving/updating certificate:', error);
-    alert('Error saving/updating certificate. Please try again.');
-  }
-},
+    },
     updateCertificateData() {
-      this.certificateData = {
+      const certificateData = {
         title: this.certificate.title,
         pages: this.pages.map(page => ({
           backgroundImage: page.backgroundImage,
@@ -344,7 +353,10 @@ export default {
             textAlign: obj.textAlign
           }))
         }))
-      }
+      };
+      
+      this.certificate.data = JSON.stringify(certificateData);
+      console.log('Updated certificate data:', certificateData);
     },
     toggleLeftSidebar() {
       this.isLeftSidebarCollapsed = !this.isLeftSidebarCollapsed

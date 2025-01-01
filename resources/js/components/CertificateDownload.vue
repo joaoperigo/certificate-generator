@@ -26,58 +26,68 @@ export default {
     }
   },
   methods: {
-    async downloadCertificate() {
-      if (!this.certificateData?.pages?.length) {
-        console.error('Certificate data is not available')
-        alert('Certificate data is not available for download.')
-        return
-      }
-
-      const doc = new jsPDF({
+    // Em CertificateDownload.vue
+async downloadCertificate() {
+    const doc = new jsPDF({
         orientation: "landscape",
         unit: "mm",
         format: [303.02, 215.98]
-      })
+    });
 
-      // Adiciona todas as fontes ao PDF
-      addFontsToPDF(doc)
+    // Adiciona fontes ao PDF
+    addFontsToPDF(doc);
 
-      this.certificateData.pages.forEach((page, index) => {
-        if (index > 0) {
-          doc.addPage()
-        }
+    // Para cada página
+    for (let i = 0; i < this.certificateData.pages.length; i++) {
+        const page = this.certificateData.pages[i];
+        if (i > 0) doc.addPage();
 
-        // Adiciona imagem de fundo
+        // Se houver imagem de fundo, carrega ela
         if (page.backgroundImage) {
-          doc.addImage(page.backgroundImage, 'JPEG', 0, 0, 303.02, 215.98)
-        }
-
-        // Adiciona objetos (textos)
-        if (page.objects?.length) {
-          page.objects.forEach(obj => {
             try {
-              doc.setFont(obj.fontFamily || "helvetica", "normal")
-              doc.setFontSize(obj.fontSize || 12)
-              doc.setTextColor(obj.fontColor || "#000000")
-              
-              // Converte coordenadas de pixels para milímetros
-              const xPos = obj.xPos / 3.779528
-              const yPos = obj.yPos / 3.779528
-              const boxWidth = obj.boxWidth ? obj.boxWidth / 3.779528 : undefined
+                // Faz o download da imagem
+                const response = await fetch(page.backgroundImage);
+                const blob = await response.blob();
+                
+                // Converte para base64
+                const reader = new FileReader();
+                const base64data = await new Promise(resolve => {
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(blob);
+                });
 
-              doc.text(obj.text, xPos, yPos, {
-                align: obj.textAlign || 'left',
-                maxWidth: boxWidth
-              })
+                // Adiciona ao PDF
+                doc.addImage(base64data, 'JPEG', 0, 0, 303.02, 215.98);
             } catch (error) {
-              console.error('Error rendering text:', obj.text, error)
+                console.error('Error loading background image:', error);
             }
-          })
         }
-      })
 
-      doc.save(`${this.certificateData.title || 'certificate'}.pdf`)
+        // Adiciona os objetos de texto
+        if (page.objects?.length) {
+            page.objects.forEach(obj => {
+                try {
+                    doc.setFont(obj.fontFamily || "helvetica", "normal");
+                    doc.setFontSize(obj.fontSize || 12);
+                    doc.setTextColor(obj.fontColor || "#000000");
+                    
+                    const xPos = obj.xPos / 3.779528;
+                    const yPos = obj.yPos / 3.779528;
+                    const boxWidth = obj.boxWidth ? obj.boxWidth / 3.779528 : undefined;
+
+                    doc.text(obj.text, xPos, yPos, {
+                        align: obj.textAlign || 'left',
+                        maxWidth: boxWidth
+                    });
+                } catch (error) {
+                    console.error('Error rendering text:', obj.text, error);
+                }
+            });
+        }
     }
+
+    doc.save(`${this.certificateData.title || 'certificate'}.pdf`);
+}
   }
 }
 </script>

@@ -8,8 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     use HasFactory;
-    
-    protected $fillable = ['name', 'file_path'];
+
+    protected $fillable = [
+        'path',
+        'name',
+        'certificate_id'
+    ];
 
     public function certificate()
     {

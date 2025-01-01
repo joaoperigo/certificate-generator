@@ -3,69 +3,131 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class ImageController extends Controller
 {
-    // public function index()
-    // {
-    //     // Retorna todas as imagens, com o caminho do arquivo
-    //     $images = Image::all();
-    //     return response()->json($images);
-    // }
+    public function store(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'image' => 'required|image|max:10240',
+                'certificate_id' => 'required|numeric|exists:certificates,id',
+                'page_number' => 'required|numeric|min:0'
+            ]);
 
-    // public function store(Request $request)
-    // {
-    //     // Valida o request para garantir que um arquivo de imagem é enviado
-    //     $request->validate([
-    //         'image' => 'required|image|mimes:jpg,jpeg,png|max:2048', // Ajuste conforme necessário
-    //     ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
 
-    //     // Processa o upload da imagem
-    //     if ($request->hasFile('image')) {
-    //         $file = $request->file('image');
-    //         $path = $file->store('public/images'); // Armazena a imagem na pasta public/images
-    //         $filePath = str_replace('public/', '', $path); // Remove a parte 'public/' para o armazenamento no banco
+            // Buscar o certificado
+            $certificate = Certificate::findOrFail($request->certificate_id);
+            
+            // Criar nome do arquivo incluindo o ID do certificado
+            $sanitizedTitle = Str::slug($certificate->title);
+            $filename = sprintf(
+                'cert_%d_%s_page_%d_%s.%s',
+                $certificate->id,
+                $sanitizedTitle,
+                $request->page_number + 1,
+                Str::random(8),
+                $request->file('image')->extension()
+            );
 
-    //         // Cria um novo registro no banco de dados
-    //         $image = new Image();
-    //         $image->file_path = $filePath;
-    //         $image->save();
+            // Exemplo de nome gerado:
+            // cert_123_certificado-de-exemplo_page_1_a7b8c9d0.jpg
 
-    //         return response()->json(['message' => 'Image uploaded successfully', 'image' => $image]);
-    //     }
+            // Caminho específico
+            $path = 'certificates/backgrounds/' . $filename;
 
-    //     return response()->json(['message' => 'No image uploaded'], 400);
-    // }
-     // Método para lidar com o upload de imagens
-     public function upload(Request $request)
-     {
-         // Valida o arquivo de imagem enviado
-         $request->validate([
-             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-         ]);
-     
-         // Armazena o arquivo no diretório de uploads
-         $file = $request->file('image');
-         $path = $file->storeAs('public/images', $file->getClientOriginalName());
-     
-         // Cria um registro da imagem no banco de dados
-         $image = Image::create([
-             'file_path' => str_replace('public/', '', $path), // Corrige o caminho do arquivo para armazenar no banco
-         ]);
-     
-         // Retorna a resposta com a lista de imagens
-         return response()->json([
-             'message' => 'Image uploaded successfully',
-             'images' => Image::all(), // Retorna todas as imagens
-         ], 201);
-     }
- 
-     // Método para listar todas as imagens
-     public function indexJson()
-     {
-         $images = Image::all();
-         return response()->json($images);
-     }
+            // Salvar o arquivo
+            if (!Storage::disk('private')->putFileAs('certificates/backgrounds', $request->file('image'), $filename)) {
+                throw new \Exception('Failed to store file');
+            }
+
+            // Criar registro no banco
+            $image = Image::create([
+                'path' => $path,
+                'name' => $filename,
+                'certificate_id' => $request->certificate_id
+            ]);
+
+            Log::info('Background image uploaded successfully', [
+                'path' => $path,
+                'certificate_id' => $request->certificate_id,
+                'page' => $request->page_number,
+                'image_id' => $image->id,
+                'filename' => $filename
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'image' => $image,
+                'url' => route('images.show', $image->id)
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Background image upload failed', [
+                'error' => $e->getMessage(),
+                'certificate_id' => $request->certificate_id ?? null,
+                'page' => $request->page_number ?? null
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function show(Image $image)
+    {
+        try {
+            Log::info('Attempting to show image', [
+                'image_id' => $image->id,
+                'path' => $image->path
+            ]);
+
+            // Verifica se o arquivo existe
+            if (!Storage::disk('private')->exists($image->path)) {
+                Log::error('Image file not found', [
+                    'image_id' => $image->id,
+                    'path' => $image->path
+                ]);
+                throw new \Exception('Image file not found');
+            }
+
+            // Retorna o arquivo
+            return response()->stream(
+                function () use ($image) {
+                    echo Storage::disk('private')->get($image->path);
+                },
+                200,
+                [
+                    'Content-Type' => Storage::disk('private')->mimeType($image->path),
+                    'Cache-Control' => 'public, max-age=86400'
+                ]
+            );
+
+        } catch (\Exception $e) {
+            Log::error('Failed to show image', [
+                'image_id' => $image->id,
+                'path' => $image->path ?? null,
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'error' => 'Image not found'
+            ], 404);
+        }
+    }
 }
