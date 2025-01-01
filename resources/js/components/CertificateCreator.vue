@@ -201,8 +201,7 @@ export default {
       currentPage: 0,
       uploaderKey: 0, // Adicionamos um key counter
       jsonOutput: null,
-      certificateData: null,
-      previewBackgroundImageUrl: null,  // Renomeado
+      // previewBackgroundImageUrl: null,  // Renomeado
       isLeftSidebarCollapsed: false,
       isRightSidebarCollapsed: false,
     }
@@ -216,6 +215,24 @@ export default {
     },
     isCertificateDataReady() {
       return this.certificateData && this.certificateData.pages && this.certificateData.pages.length > 0
+    },
+    certificateData() {
+      return {
+        title: this.certificate.title,
+        pages: this.pages.map(page => ({
+          backgroundImage: page.backgroundImage,
+          objects: page.objects.map(obj => ({
+            text: obj.text,
+            fontFamily: obj.fontFamily,
+            fontSize: obj.fontSize,
+            fontColor: obj.fontColor,
+            xPos: obj.xPos,
+            yPos: obj.yPos,
+            boxWidth: obj.boxWidth,
+            textAlign: obj.textAlign
+          }))
+        }))
+      };
     },
     mainContentClass() {
       let marginLeft = this.isLeftSidebarCollapsed ? 'ml-12' : 'ml-[300px]'
