@@ -302,12 +302,31 @@ export default {
     previewBackgroundImage(imageUrl) {
       this.previewBackgroundImageUrl = imageUrl
     },
-    removeBackgroundImage() {
-      if (this.pages[this.currentPage]) {
-        this.pages[this.currentPage].backgroundImage = null;
-        this.updateCertificateData();
-        this.uploaderKey++; // Incrementa o contador ao remover a imagem
-      }
+    async removeBackgroundImage() {
+        if (this.pages[this.currentPage]) {
+            try {
+                // Extrai o ID da imagem da URL
+                const imageUrl = this.pages[this.currentPage].backgroundImage;
+                if (imageUrl) {
+                    const imageId = imageUrl.split('/').pop();
+                    
+                    // Chama a API para deletar a imagem
+                    await axios.delete(`/api/images/${imageId}`);
+                }
+
+                // Atualiza o estado local
+                this.pages[this.currentPage].backgroundImage = null;
+                this.updateCertificateData();
+                this.uploaderKey++; // Reset do uploader
+
+                // Salva o certificado
+                await this.saveCertificate();
+
+            } catch (error) {
+                console.error('Error removing image:', error);
+                alert('Failed to remove image. Please try again.');
+            }
+        }
     },
     addObject(object) {
       if (!this.pages[this.currentPage].objects) {

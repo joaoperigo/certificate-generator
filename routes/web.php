@@ -48,6 +48,8 @@ Route::middleware([
     Route::post('/api/images', [ImageController::class, 'store']);
     Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
     
+    Route::delete('/api/images/{image}', [ImageController::class, 'destroy']);
+
 });
 
 
