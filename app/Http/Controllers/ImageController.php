@@ -127,7 +127,6 @@ class ImageController extends Controller
     public function show(Image $image)
     {
         try {
-            // Verifica se o arquivo existe
             if (!Storage::disk('private')->exists($image->path)) {
                 throw new \Exception('Image file not found');
             }
@@ -140,7 +139,10 @@ class ImageController extends Controller
                 [
                     'Content-Type' => Storage::disk('private')->mimeType($image->path),
                     'Content-Disposition' => 'inline; filename="' . basename($image->path) . '"',
-                    'Cache-Control' => 'public, max-age=86400'
+                    // Headers para prevenir cache
+                    'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+                    'Pragma' => 'no-cache',
+                    'Expires' => 'Sat, 01 Jan 2000 00:00:00 GMT'
                 ]
             );
 

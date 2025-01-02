@@ -288,6 +288,13 @@ export default {
     setBackgroundImage(imageUrl) {
       console.log('Setting background image:', imageUrl);
       
+      // const nocacheUrl = `${imageUrl}?v=${new Date().getTime()}`;
+      // if (this.pages[this.currentPage]) {
+      //     this.pages[this.currentPage].backgroundImage = nocacheUrl;
+      //     this.updateCertificateData();
+      //     this.saveCertificate();
+      // }
+
       // Atualizar a página atual com a nova URL da imagem
       if (this.pages[this.currentPage]) {
         this.pages[this.currentPage].backgroundImage = imageUrl;
@@ -354,7 +361,7 @@ export default {
       }
       this.jsonOutput = JSON.stringify(certificateData, null, 2)
       this.certificate.data = this.jsonOutput
-      alert(this.jsonOutput)
+      // alert(this.jsonOutput)
       console.log('JSON Output:', this.jsonOutput)
     },
     async saveCertificate() {
