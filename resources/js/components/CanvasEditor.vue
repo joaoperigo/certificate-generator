@@ -86,72 +86,82 @@ export default {
       objects.forEach(obj => this.drawObject(obj))
     },
     drawObject(obj) {
-  // obj.fontSize já vem em pt (do photoshop/jsPDF)
-  const PT_TO_PX = 1.3333;
-  const fontSizePx = obj.fontSize * PT_TO_PX;
-  
-  this.ctx.font = `${fontSizePx}px ${getFontWithFallback(obj.fontFamily)}`;
-  this.ctx.fillStyle = obj.fontColor;
-  this.ctx.textAlign = obj.textAlign || 'left';
+      const PT_TO_PX = 1.3333;
+      const fontSizePx = obj.fontSize * PT_TO_PX;
+      
+      this.ctx.font = `${fontSizePx}px ${getFontWithFallback(obj.fontFamily)}`;
+      this.ctx.fillStyle = obj.fontColor;
+      this.ctx.textAlign = obj.textAlign || 'left';
 
-  // Para debug
-  console.log({
-    'fontSize em pt (original)': obj.fontSize,
-    'fontSize em px (calculado)': fontSizePx,
-    'font string': this.ctx.font
-  });
+      // Primeiro, divide o texto em linhas usando \n
+      const paragraphs = obj.text.split('\n');
+      let y = obj.yPos;
 
-  const words = obj.text.split(' ');
-  let line = '';
-  let y = obj.yPos;
+      for (let paragraph of paragraphs) {
+        if (paragraph === '') {
+          // Para linhas vazias, apenas aumenta o y
+          y += fontSizePx * 1.2;
+          continue;
+        }
 
-  for (let word of words) {
-    const testLine = line + word + ' ';
-    const metrics = this.ctx.measureText(testLine);
-    const testWidth = metrics.width;
+        const words = paragraph.split(' ');
+        let line = '';
 
-    if (testWidth > obj.boxWidth && line !== '' && obj.boxWidth > 0) {
-      this.drawAlignedText(line, obj.xPos, y, obj);
-      line = word + ' ';
-      y += fontSizePx * 1.2;
-    } else {
-      line = testLine;
+        for (let word of words) {
+          const testLine = line + word + ' ';
+          const metrics = this.ctx.measureText(testLine);
+          const testWidth = metrics.width;
+
+          if (testWidth > obj.boxWidth && line !== '' && obj.boxWidth > 0) {
+            this.drawAlignedText(line.trim(), obj.xPos, y, obj);
+            line = word + ' ';
+            y += fontSizePx * 1.2;
+          } else {
+            line = testLine;
+          }
+        }
+
+        // Desenha a última linha do parágrafo
+        if (line.trim()) {
+          this.drawAlignedText(line.trim(), obj.xPos, y, obj);
+        }
+        
+        // Adiciona espaço extra entre parágrafos
+        y += fontSizePx * 1.2;
+      }
+    },
+
+    drawAlignedText(text, x, y, obj) {
+      let adjustedX = x;
+      const textWidth = this.ctx.measureText(text).width;
+
+      if (!obj.boxWidth) {
+        // Sem boxWidth: usa o textAlign nativo do canvas
+        this.ctx.textAlign = obj.textAlign || 'left';
+        adjustedX = x;
+      } else {
+        // Com boxWidth: usa a lógica anterior que funcionava
+        this.ctx.textAlign = 'left';  // Sempre left quando tem box
+        if (obj.textAlign === 'center') {
+          adjustedX = x + (obj.boxWidth / 2);
+        } else if (obj.textAlign === 'right') {
+          adjustedX = x + obj.boxWidth;
+        }
+      }
+
+      // Debug
+      console.log({
+        text,
+        alignment: obj.textAlign,
+        hasBoxWidth: !!obj.boxWidth,
+        boxWidth: obj.boxWidth,
+        originalX: x,
+        adjustedX: adjustedX,
+        textWidth
+      });
+
+      this.ctx.fillText(text, adjustedX, y);
     }
-  }
-  this.drawAlignedText(line, obj.xPos, y, obj);
-},
-
-drawAlignedText(text, x, y, obj) {
-  let adjustedX = x;
-  const textWidth = this.ctx.measureText(text).width;
-
-  if (!obj.boxWidth) {
-    // Sem boxWidth: usa o textAlign nativo do canvas
-    this.ctx.textAlign = obj.textAlign || 'left';
-    adjustedX = x;
-  } else {
-    // Com boxWidth: usa a lógica anterior que funcionava
-    this.ctx.textAlign = 'left';  // Sempre left quando tem box
-    if (obj.textAlign === 'center') {
-      adjustedX = x + (obj.boxWidth / 2);
-    } else if (obj.textAlign === 'right') {
-      adjustedX = x + obj.boxWidth;
-    }
-  }
-
-  // Debug
-  console.log({
-    text,
-    alignment: obj.textAlign,
-    hasBoxWidth: !!obj.boxWidth,
-    boxWidth: obj.boxWidth,
-    originalX: x,
-    adjustedX: adjustedX,
-    textWidth
-  });
-
-  this.ctx.fillText(text, adjustedX, y);
-}
   }
 }
 </script>
