@@ -182,9 +182,9 @@
           if (template.objects.page1) {
             const page1Objects = template.objects.page1.map(obj => ({
               ...obj,
-              xPos: obj.xPos * 3.779528,
-              yPos: obj.yPos * 3.779528,
-              boxWidth: obj.boxWidth ? obj.boxWidth * 3.779528 : undefined
+              xPos: obj.xPos,
+              yPos: obj.yPos,
+              boxWidth: obj.boxWidth ? obj.boxWidth : undefined
             }))
   
             // Emitir objetos da primeira página
@@ -201,9 +201,9 @@
             if (template.objects.page2) {
               const page2Objects = template.objects.page2.map(obj => ({
                 ...obj,
-                xPos: obj.xPos * 3.779528,
-                yPos: obj.yPos * 3.779528,
-                boxWidth: obj.boxWidth ? obj.boxWidth * 3.779528 : undefined
+                xPos: obj.xPos,
+                yPos: obj.yPos,
+                boxWidth: obj.boxWidth ? obj.boxWidth : undefined
               }))
   
               // Emitir objetos da segunda página
@@ -217,9 +217,9 @@
           if (template.objects.page1) {
             const objectsToAdd = template.objects.page1.map(obj => ({
               ...obj,
-              xPos: obj.xPos * 3.779528,
-              yPos: obj.yPos * 3.779528,
-              boxWidth: obj.boxWidth ? obj.boxWidth * 3.779528 : undefined
+              xPos: obj.xPos,
+              yPos: obj.yPos,
+              boxWidth: obj.boxWidth ? obj.boxWidth : undefined
             }))
   
             objectsToAdd.forEach(obj => {

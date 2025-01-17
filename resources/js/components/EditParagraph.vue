@@ -173,9 +173,9 @@ export default {
   setup(props, { emit }) {
     const editedParagraph = ref({
       ...props.paragraph,
-      xPos: props.paragraph.xPos / 3.779528,
-      yPos: props.paragraph.yPos / 3.779528,
-      boxWidth: props.paragraph.boxWidth ? props.paragraph.boxWidth / 3.779528 : undefined
+      xPos: props.paragraph.xPos,
+      yPos: props.paragraph.yPos,
+      boxWidth: props.paragraph.boxWidth ? props.paragraph.boxWidth : undefined
     })
 
     function emitUpdate() {

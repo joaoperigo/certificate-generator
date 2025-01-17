@@ -345,11 +345,6 @@ export default {
       this.updateCertificateData()
     },
     updateObject(index, updatedObject) {
-      updatedObject.xPos *= 3.779528
-      updatedObject.yPos *= 3.779528
-      if (updatedObject.boxWidth) {
-        updatedObject.boxWidth *= 3.779528
-      }
       this.pages[this.currentPage].objects[index] = updatedObject
     },
     deleteObject(index) {

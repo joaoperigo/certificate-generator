@@ -177,11 +177,6 @@ export default {
 
     function addParagraph() {
       const newParagraph = { ...paragraph.value }
-      newParagraph.xPos *= 3.779528
-      newParagraph.yPos *= 3.779528
-      if (newParagraph.boxWidth) {
-        newParagraph.boxWidth *= 3.779528
-      }
       
       emit('add-paragraph', newParagraph)
       // Reset form after adding
