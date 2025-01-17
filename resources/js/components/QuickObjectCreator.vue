@@ -94,6 +94,7 @@
           fontFamily: 'Mangueira-Regular',
           textAlign: 'left',
           letterSpacing: 0,
+          boxWidth: 0,
           haveTextBox: false
         }
         this.$emit('create-object', titleObject)
@@ -127,6 +128,7 @@
           fontFamily: 'Mangueira-Medium',
           textAlign: 'left',
           letterSpacing: 0,
+          boxWidth: 0,
           haveTextBox: false
         }
         this.$emit('create-object', dataELocalObject)
@@ -143,6 +145,7 @@
           fontFamily: 'Mangueira-Regular',
           textAlign: 'center',
           letterSpacing: .2,
+          boxWidth: 0,
           haveTextBox: false
         }
         this.$emit('create-object', codeObject)
@@ -159,6 +162,7 @@
           fontFamily: 'Mangueira-Regular',
           textAlign: 'center',
           letterSpacing: .2,
+          boxWidth: 0,
           haveTextBox: false
         }
         this.$emit('create-object', codeObject)
@@ -175,8 +179,8 @@
           fontFamily: 'Mangueira-Regular',
           textAlign: 'left',
           letterSpacing: 0,
+          boxWidth: 0,
           haveTextBox: false,
-          // boxWidth: 200
         }
         this.$emit('create-object', alunoDataObject)
       },
@@ -192,6 +196,7 @@
           fontFamily: 'Mangueira-Regular',
           textAlign: 'left',
           letterSpacing: .2,
+          boxWidth: 0,
           haveTextBox: false
         }
         this.$emit('create-object', codeBackObject)

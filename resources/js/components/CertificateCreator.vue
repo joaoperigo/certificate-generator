@@ -229,7 +229,8 @@ export default {
             xPos: obj.xPos,
             yPos: obj.yPos,
             boxWidth: obj.boxWidth,
-            textAlign: obj.textAlign
+            textAlign: obj.textAlign,
+            letterSpacing: obj.letterSpacing,
           }))
         }))
       };

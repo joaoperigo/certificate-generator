@@ -92,6 +92,13 @@ export default {
       this.ctx.font = `${fontSizePx}px ${getFontWithFallback(obj.fontFamily)}`;
       this.ctx.fillStyle = obj.fontColor;
       this.ctx.textAlign = obj.textAlign || 'left';
+      
+      if (typeof obj.letterSpacing === 'number') {
+        const letterSpacingPx = obj.letterSpacing * UNITS.MM_TO_PX;
+        this.ctx.letterSpacing = `${letterSpacingPx}px`;
+      } else {
+        this.ctx.letterSpacing = '0px';
+      }
 
       // Primeiro, divide o texto em linhas usando \n
       const paragraphs = obj.text.split('\n');
