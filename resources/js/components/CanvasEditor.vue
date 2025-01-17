@@ -86,27 +86,25 @@ export default {
       objects.forEach(obj => this.drawObject(obj))
     },
     drawObject(obj) {
-      const PT_TO_PX = 1.3333;
-      const fontSizePx = obj.fontSize * PT_TO_PX;
+      // Conversões para pixels no início
+      const fontSizePx = obj.fontSize * UNITS.PT_TO_PX;
+      const xPosPx = obj.xPos * UNITS.MM_TO_PX;
+      const yPosPx = obj.yPos * UNITS.MM_TO_PX;
+      const boxWidthPx = obj.boxWidth ? obj.boxWidth * UNITS.MM_TO_PX : undefined;
+      const letterSpacingPx = obj.letterSpacing ? obj.letterSpacing * UNITS.MM_TO_PX : 0;
       
+      // Configurações do contexto
       this.ctx.font = `${fontSizePx}px ${getFontWithFallback(obj.fontFamily)}`;
       this.ctx.fillStyle = obj.fontColor;
       this.ctx.textAlign = obj.textAlign || 'left';
-      
-      if (typeof obj.letterSpacing === 'number') {
-        const letterSpacingPx = obj.letterSpacing * UNITS.MM_TO_PX;
-        this.ctx.letterSpacing = `${letterSpacingPx}px`;
-      } else {
-        this.ctx.letterSpacing = '0px';
-      }
+      this.ctx.letterSpacing = `${letterSpacingPx}px`;
 
-      // Primeiro, divide o texto em linhas usando \n
+      // Divisão do texto em parágrafos
       const paragraphs = obj.text.split('\n');
-      let y = obj.yPos;
+      let y = yPosPx;  // Inicializa com a posição Y convertida
 
       for (let paragraph of paragraphs) {
         if (paragraph === '') {
-          // Para linhas vazias, apenas aumenta o y
           y += fontSizePx * 1.2;
           continue;
         }
@@ -119,8 +117,8 @@ export default {
           const metrics = this.ctx.measureText(testLine);
           const testWidth = metrics.width;
 
-          if (testWidth > obj.boxWidth && line !== '' && obj.boxWidth > 0) {
-            this.drawAlignedText(line.trim(), obj.xPos, y, obj);
+          if (testWidth > boxWidthPx && line !== '' && boxWidthPx > 0) {
+            this.drawAlignedText(line.trim(), xPosPx, y, obj, boxWidthPx);
             line = word + ' ';
             y += fontSizePx * 1.2;
           } else {
@@ -128,12 +126,10 @@ export default {
           }
         }
 
-        // Desenha a última linha do parágrafo
         if (line.trim()) {
-          this.drawAlignedText(line.trim(), obj.xPos, y, obj);
+          this.drawAlignedText(line.trim(), xPosPx, y, obj, boxWidthPx);
         }
         
-        // Adiciona espaço extra entre parágrafos
         y += fontSizePx * 1.2;
       }
     },

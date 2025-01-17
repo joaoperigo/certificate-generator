@@ -69,11 +69,11 @@ async downloadCertificate() {
                 try {
                     doc.setFont(obj.fontFamily || "helvetica", "normal");
                     doc.setFontSize(obj.fontSize || 12);
-                    doc.setTextColor(obj.fontColor || "#000000");
+                    doc.setTextColor(obj.fontColor || "#333333");
                     
-                    const xPos = obj.xPos / 3.779528;
-                    const yPos = obj.yPos / 3.779528;
-                    const boxWidth = obj.boxWidth ? obj.boxWidth / 3.779528 : undefined;
+                    const xPos = obj.xPos;
+                    const yPos = obj.yPos;
+                    const boxWidth = obj.boxWidth ? obj.boxWidth : undefined;
 
                     doc.text(obj.text, xPos, yPos, {
                         align: obj.textAlign || 'left',
