@@ -51,7 +51,8 @@
                   fontFamily: 'Mangueira-Regular',
                   textAlign: 'left',
                   letterSpacing: 0,
-                  haveTextBox: false
+                  haveTextBox: false,
+                  boxWidth: 0,
                 },
                 {
                   objectName: 'Descrição',
@@ -76,6 +77,7 @@
                   fontFamily: 'Mangueira-Medium',
                   textAlign: 'left',
                   letterSpacing: 0,
+                  boxWidth: 0,
                   haveTextBox: false
                 },
                 {
@@ -88,6 +90,7 @@
                   fontFamily: 'Mangueira-Regular',
                   textAlign: 'center',
                   letterSpacing: .2,
+                  boxWidth: 0,
                   haveTextBox: false
                 }
               ],
@@ -103,7 +106,7 @@
                   textAlign: 'left',
                   letterSpacing: 0,
                   haveTextBox: false,
-                  // boxWidth: 200
+                  boxWidth: 0,
                 },
                 {
                   objectName: 'Código',
@@ -115,6 +118,7 @@
                   fontFamily: 'Mangueira-Regular',
                   textAlign: 'left',
                   letterSpacing: .2,
+                  boxWidth: 0,
                   haveTextBox: false
                 }
               ]

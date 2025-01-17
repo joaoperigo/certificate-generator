@@ -77,7 +77,8 @@ async downloadCertificate() {
 
                     doc.text(obj.text, xPos, yPos, {
                         align: obj.textAlign || 'left',
-                        maxWidth: boxWidth
+                        maxWidth: boxWidth,
+                        charSpace: obj.letterSpacing
                     });
                 } catch (error) {
                     console.error('Error rendering text:', obj.text, error);
