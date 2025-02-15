@@ -19,4 +19,9 @@ class Certificate extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function certificateStudents()
+    {
+        return $this->hasMany(CertificateStudent::class);
+    }
 }

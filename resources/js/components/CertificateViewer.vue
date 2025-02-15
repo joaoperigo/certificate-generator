@@ -17,23 +17,29 @@
       </div>
       
       <div class="w-full md:w-1/3 absolute right-0 top-0 h-full transition-transform duration-300 overflow-y-auto custom-scrollbar scroll-smooth">
-        <div class="pb-20 bg-stone-100 mt-24 px-10">
-          <h1 class="text-2xl font-bold mb-4">{{ certificate.title }}</h1>
-          <div v-for="(object, index) in currentPageObjects" :key="index" class="mb-4">
-            <h3 class="font-bold">{{ object.objectName }}</h3>
-            <textarea 
-              v-model="object.text" 
-              @input="updateObject(index, object)"
-              class="w-full p-2 border rounded"
-              rows="3"
-            ></textarea>
-          </div>
-          <certificate-download 
-            ref="certificateDownload"
-            :certificate-data="certificate"
-            buttonClasses="border border-b-4 border-stone-300 hover:bg-purple-400 bg-purple-500 text-white font-bold py-6 px-4 rounded-xl w-full mb-2" 
-          ></certificate-download>
+        <!-- Certificate Student Form -->
+        <certificate-student-form 
+          :certificate="certificate"
+          @update:currentStudent="applyStudentData"
+        ></certificate-student-form>
+
+        <!-- Text Objects Editor -->
+        <div v-for="(object, index) in currentPageObjects" :key="index" class="mb-4">
+          <h3 class="font-bold">{{ object.objectName }}</h3>
+          <textarea 
+            v-model="object.text" 
+            @input="updateObject(index, object)"
+            class="w-full p-2 border rounded"
+            rows="3"
+          ></textarea>
         </div>
+        
+        <certificate-download 
+          ref="certificateDownload"
+          :certificate-data="certificate"
+          :current-student="currentStudent"
+          buttonClasses="border border-b-4 border-stone-300 hover:bg-purple-400 bg-purple-500 text-white font-bold py-6 px-4 rounded-xl w-full mb-2" 
+        ></certificate-download>
       </div>
     </div>
   </div>
@@ -42,12 +48,14 @@
 <script>
 import CanvasEditor from './CanvasEditor.vue'
 import CertificateDownload from './CertificateDownload.vue'
+import CertificateStudentForm from './CertificateStudentForm.vue'
 import axios from 'axios'
 
 export default {
   components: {
     CanvasEditor,
-    CertificateDownload
+    CertificateDownload,
+    CertificateStudentForm
   },
   props: {
     initialCertificate: {
@@ -59,7 +67,8 @@ export default {
     return {
       certificate: JSON.parse(JSON.stringify(this.initialCertificate)),
       currentPage: 0,
-      loadedImages: new Map() // Cache para as imagens carregadas
+      loadedImages: new Map(),
+      currentStudent: null
     }
   },
   computed: {
@@ -70,83 +79,98 @@ export default {
       return this.pages[this.currentPage]?.objects || []
     },
     processedPages() {
-      // Retorna uma cópia das páginas com as imagens carregadas do cache
       return this.pages.map(page => ({
         ...page,
-        backgroundImage: this.loadedImages.get(page.backgroundImage) || page.backgroundImage
+        backgroundImage: this.loadedImages.get(page.backgroundImage) || page.backgroundImage,
+        objects: page.objects.map(obj => ({
+          ...obj,
+          text: this.replaceStudentData(obj.text)
+        }))
       }))
     }
   },
-  watch: {
-    'pages.length': {
-      immediate: true,
-      handler(newLength) {
-        if (newLength > 0) {
-          this.preloadImages()
-        }
-      }
-    },
-    currentPage() {
-      // Pré-carrega imagens quando a página muda
-      this.preloadImages()
-    }
-  },
   methods: {
+    replaceStudentData(text) {
+      if (!this.currentStudent) return text;
+      
+      return text
+        .replace(/\[name\]/g, this.currentStudent.name || '')
+        .replace(/\[cpf\]/g, this.currentStudent.cpf || '')
+        .replace(/\[document\]/g, this.currentStudent.document || '')
+        .replace(/\[code\]/g, this.currentStudent.code || '')
+        .replace(/\[unit\]/g, this.currentStudent.unit || '')
+        .replace(/\[start_date\]/g, this.formatDate(this.currentStudent.start_date) || '')
+        .replace(/\[end_date\]/g, this.formatDate(this.currentStudent.end_date) || '');
+    },
+
+    formatDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('pt-BR');
+    },
+
+    applyStudentData(student) {
+      this.currentStudent = student;
+    },
+
     async preloadImages() {
-      // Pré-carrega a imagem da página atual e da próxima
-      const pagesToLoad = [this.currentPage]
+      const pagesToLoad = [this.currentPage];
       if (this.currentPage < this.pages.length - 1) {
-        pagesToLoad.push(this.currentPage + 1)
+        pagesToLoad.push(this.currentPage + 1);
       }
 
       for (const pageIndex of pagesToLoad) {
-        const imageUrl = this.pages[pageIndex]?.backgroundImage
+        const imageUrl = this.pages[pageIndex]?.backgroundImage;
         if (imageUrl && !this.loadedImages.has(imageUrl)) {
           try {
-            const response = await fetch(imageUrl)
-            const blob = await response.blob()
-            const imageDataUrl = await this.blobToDataURL(blob)
-            this.loadedImages.set(imageUrl, imageDataUrl)
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const imageDataUrl = await this.blobToDataURL(blob);
+            this.loadedImages.set(imageUrl, imageDataUrl);
           } catch (error) {
-            console.error('Error loading image:', error)
+            console.error('Error loading image:', error);
           }
         }
       }
     },
+
     blobToDataURL(blob) {
       return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = reject
-        reader.readAsDataURL(blob)
-      })
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
     },
+
     prevPage() {
       if (this.currentPage > 0) {
-        this.currentPage--
+        this.currentPage--;
       }
     },
+
     nextPage() {
       if (this.currentPage < this.pages.length - 1) {
-        this.currentPage++
+        this.currentPage++;
       }
     },
+
     updateObject(index, updatedObject) {
       if (this.pages[this.currentPage] && this.pages[this.currentPage].objects) {
-        const newObjects = [...this.pages[this.currentPage].objects]
-        newObjects[index] = { ...newObjects[index], ...updatedObject }
-        this.pages[this.currentPage].objects = newObjects
+        const newObjects = [...this.pages[this.currentPage].objects];
+        newObjects[index] = { ...newObjects[index], ...updatedObject };
+        this.pages[this.currentPage].objects = newObjects;
+        this.saveCertificate();
       }
     },
+
     async saveCertificate() {
       try {
         await axios.put(`/certificates/${this.certificate.id}/update-texts`, {
           data: JSON.stringify(this.certificate)
-        })
-        alert('Certificate texts updated successfully!')
+        });
       } catch (error) {
-        console.error('Error updating certificate texts:', error)
-        alert('Error updating certificate texts. Please try again.')
+        console.error('Error updating certificate texts:', error);
       }
     }
   }
