@@ -43,8 +43,9 @@
           ></page-selector>
 
     <!-- Modificar o ImageUploader para só aparecer depois que tiver ID -->
-    <div v-if="!certificate.id" class="p-4 border-b border-stone-600 text-stone-200">
-      Por favor, salve o certificado primeiro antes de adicionar imagens.
+    <div v-if="!certificate.id" class="p-4 border-b border-stone-600 text-stone-200 text-center">
+      <h2 class="text-xl font-black">Adicionar Imagem</h2>
+      <p>Por favor, salve o certificado primeiro antes de adicionar imagens.</p>
     </div>
     
     <image-uploader 
@@ -130,7 +131,6 @@
         </div>
         <add-paragraph 
           @add-paragraph="addObject"
-          class="mb-6"
         ></add-paragraph>
         
         <object-list 

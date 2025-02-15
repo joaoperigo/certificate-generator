@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\CertificateStudentController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\CertificateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,17 +40,18 @@ Route::middleware([
     })->name('dashboard');
 
     Route::resource('certificates', CertificateController::class);
-
     Route::put('/certificates/{certificate}/update-texts', [CertificateController::class, 'updateTexts']);
 
-    Route::get('certificate-images/{certificateImage}', [CertificateImageController::class, 'show'])
-        ->name('certificate.images.show');
+    // Certificate Students routes
+    Route::get('/certificates/{certificate}/certificate-students', [CertificateStudentController::class, 'index']);
+    Route::post('/certificates/{certificate}/certificate-students', [CertificateStudentController::class, 'store']);
+    Route::put('/certificates/{certificate}/certificate-students/{student}', [CertificateStudentController::class, 'update']);
+    Route::delete('/certificates/{certificate}/certificate-students/{student}', [CertificateStudentController::class, 'destroy']);
 
+    // Image routes
     Route::post('/api/images', [ImageController::class, 'store']);
     Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
-    
     Route::delete('/api/images/{image}', [ImageController::class, 'destroy']);
-
 });
 
 

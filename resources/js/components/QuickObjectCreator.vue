@@ -1,4 +1,3 @@
-<!-- QuickObjectCreator.vue -->
 <template>
     <div class="quick-object-creator p-4 border-b border-stone-600 bg-stone-800">
       <h2 class="text-base text-stone-200 font-bold mb-2">Quick Objects</h2>
