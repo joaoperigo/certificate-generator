@@ -29,7 +29,7 @@
       <h2 class="text-xl font-semibold mb-4">{{ isEditing ? 'Edit Student' : 'New Student' }}</h2>
       
       <div class="grid grid-cols-2 gap-4 mb-4">
-        <div>
+        <div class=" col-start-1 col-end-3">
           <label class="block text-sm font-medium text-gray-700">Name</label>
           <input v-model="form.name" type="text" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
         </div>

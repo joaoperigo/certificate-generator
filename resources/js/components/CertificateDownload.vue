@@ -30,17 +30,40 @@ export default {
     }
   },
   methods: {
+    formatDate(dateString) {
+      if (!dateString) return '';
+      
+      const date = new Date(dateString);
+      const day = date.getDate();
+      const year = date.getFullYear();
+      
+      const months = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      ];
+      const month = months[date.getMonth()];
+      
+      return `${day} de ${month} de ${year}`;
+    },
+
     replaceStudentData(text) {
       if (!this.currentStudent) return text;
       
       return text
-        .replace(/\[name\]/g, this.currentStudent.name)
+        .replace(/\[name\]/g, this.currentStudent.name || '')
+        .replace(/\{name\}/g, this.currentStudent.name || '')
         .replace(/\[cpf\]/g, this.currentStudent.cpf || '')
+        .replace(/\{cpf\}/g, this.currentStudent.cpf || '')
         .replace(/\[document\]/g, this.currentStudent.document || '')
+        .replace(/\{document\}/g, this.currentStudent.document || '')
         .replace(/\[code\]/g, this.currentStudent.code || '')
+        .replace(/\{code\}/g, this.currentStudent.code || '')
         .replace(/\[unit\]/g, this.currentStudent.unit || '')
-        .replace(/\[start_date\]/g, this.currentStudent.start_date || '')
-        .replace(/\[end_date\]/g, this.currentStudent.end_date || '');
+        .replace(/\{unit\}/g, this.currentStudent.unit || '')
+        .replace(/\[start_date\]/g, this.formatDate(this.currentStudent.start_date) || '')
+        .replace(/\{start_date\}/g, this.formatDate(this.currentStudent.start_date) || '')
+        .replace(/\[end_date\]/g, this.formatDate(this.currentStudent.end_date) || '')
+        .replace(/\{end_date\}/g, this.formatDate(this.currentStudent.end_date) || '');
     },
 
     async downloadCertificate() {
@@ -61,18 +84,15 @@ export default {
         // If there's a background image, load it
         if (page.backgroundImage) {
           try {
-            // Download the image
             const response = await fetch(page.backgroundImage);
             const blob = await response.blob();
             
-            // Convert to base64
             const reader = new FileReader();
             const base64data = await new Promise(resolve => {
               reader.onloadend = () => resolve(reader.result);
               reader.readAsDataURL(blob);
             });
 
-            // Add to PDF
             doc.addImage(base64data, 'JPEG', 0, 0, 303.02, 215.98);
           } catch (error) {
             console.error('Error loading background image:', error);
