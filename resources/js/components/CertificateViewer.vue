@@ -1,30 +1,68 @@
 <template>
-  <div class="certificate-viewer p-4 mt-20">
-    <div class="flex flex-col md:flex-row">
-      <div class="w-full md:w-2/3 pr-0 md:pr-4 mb-4 md:mb-0 absolute left-0 top-0 h-full transition-transform duration-300 overflow-y-auto custom-scrollbar scroll-smooth px-10 pb-20">
-        <div class="mb-4 flex items-center justify-between pt-20 px-2">
-          <button @click="prevPage" :disabled="currentPage === 0" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Previous Page</button>
-          <span>Page {{ currentPage + 1 }} of {{ pages.length }}</span>
-          <button @click="nextPage" :disabled="currentPage === pages.length - 1" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Next Page</button>
-        </div>
-        
-        <canvas-editor
-          :current-page="currentPage"
-          :pages="processedPages"
-          class="w-full h-auto border border-gray-300"
-          ref="canvasEditor"
-        ></canvas-editor>
-      </div>
-      
-      <div class="w-full md:w-1/3 absolute right-0 top-0 h-full transition-transform duration-300 overflow-y-auto custom-scrollbar scroll-smooth">
-        <!-- Certificate Student Form -->
+  <div class="certificate-viewer h-screen flex relative overflow-hidden w-full">
+    <sidebar-toggle 
+      position="right" 
+      :is-collapsed="isRightSidebarCollapsed" 
+      @toggle="toggleRightSidebar"
+      class="bg-slate-500"
+    />
+    <sidebar-toggle 
+      position="left" 
+      :is-collapsed="isLeftSidebarCollapsed" 
+      @toggle="toggleLeftSidebar"
+      class="bg-slate-500"
+    />
+        <!-- Left Sidebar -->
+    <div 
+      :class="['absolute left-0 top-0 rounded-lg h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto custom-scrollbar pb-20', 
+               {'transform -translate-x-[calc(100%-3rem)] overflow-y-hidden bg-transparent disappear-sidebar': isLeftSidebarCollapsed}]"
+    >
         <certificate-student-form 
           :certificate="certificate"
           @update:currentStudent="applyStudentData"
         ></certificate-student-form>
 
+    </div>
+    <!-- <div class="flex flex-col md:flex-row"> -->
+      <div 
+      :class="['flex-grow bg-stone-900 p-4 overflow-auto transition-all duration-300 px-4 custom-scrollbar', mainContentClass]"
+    >
+
+
+        <div class="flex-grow overflow-auto transition-all duration-300 custom-scrollbar">
+
+
+          <div class="mb-4 flex items-center justify-between px-10">
+          <h1 class="py-4 text-white font-bold text-xl text-center">{{ certificate.title }}</h1>
+          <div class="space-x-6">
+            <button @click="prevPage" :disabled="currentPage === 0" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Previous Page</button>
+          <span class="text-white">Page {{ currentPage + 1 }} of {{ pages.length }}</span>
+          <button @click="nextPage" :disabled="currentPage === pages.length - 1" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Next Page</button>
+          </div>
+        </div>
+
+       
+        <canvas-editor
+          :current-page="currentPage"
+          :pages="processedPages"
+          class="h-full w-full"
+          ref="canvasEditor"
+        ></canvas-editor>
+        </div>
+   
+        
+      
+    </div>
+
+    <div 
+      :class="['absolute right-0 top-0 h-full w-[300px] pt-24 transition-transform duration-300 overflow-y-auto custom-scrollbar scroll-smooth', 
+               {'transform translate-x-[calc(100%-3rem)] overflow-y-hidden bg-transparent  disappear-sidebar': isRightSidebarCollapsed}]"
+    >
+      <!-- <div class="w-full md:w-1/3 absolute right-0 top-0 h-full transition-transform duration-300 overflow-y-auto custom-scrollbar scroll-smooth"> -->
+        <!-- Certificate Student Form -->
+
         <!-- Text Objects Editor -->
-         <div class="p-10">
+    <div class="p-8">
           <div v-for="(object, index) in currentPageObjects" :key="index" class="mb-4">
             <h3 class="font-bold">{{ object.objectName }}</h3>
             <textarea 
@@ -42,8 +80,9 @@
           buttonClasses="border border-b-4 border-stone-300 hover:bg-purple-400 bg-purple-500 text-white font-bold py-6 px-4 rounded-xl w-full mb-2" 
         ></certificate-download>
       </div>
+
       </div>
-    </div>
+
   </div>
 </template>
 
@@ -51,13 +90,15 @@
 import CanvasEditor from './CanvasEditor.vue'
 import CertificateDownload from './CertificateDownload.vue'
 import CertificateStudentForm from './CertificateStudentForm.vue'
+import SidebarToggle from './SidebarToggle.vue'
 import axios from 'axios'
 
 export default {
   components: {
     CanvasEditor,
     CertificateDownload,
-    CertificateStudentForm
+    CertificateStudentForm,
+    SidebarToggle
   },
   props: {
     initialCertificate: {
@@ -70,7 +111,9 @@ export default {
       certificate: JSON.parse(JSON.stringify(this.initialCertificate)),
       currentPage: 0,
       loadedImages: new Map(),
-      currentStudent: null
+      currentStudent: null,
+      isLeftSidebarCollapsed: false,
+      isRightSidebarCollapsed: false,
     }
   },
   computed: {
@@ -95,7 +138,12 @@ export default {
       ...this.certificate,
       pages: this.processedPages
     };
-  }
+    },
+    mainContentClass() {
+      let marginLeft = this.isLeftSidebarCollapsed ? 'ml-12' : 'ml-[300px]'
+      let marginRight = this.isRightSidebarCollapsed ? 'mr-12' : 'mr-[300px]'
+      return `${marginLeft} ${marginRight}`
+    },
   },
   methods: {
     replaceStudentData(text) {
@@ -190,6 +238,12 @@ export default {
       } catch (error) {
         console.error('Error updating certificate texts:', error);
       }
+    },
+    toggleLeftSidebar() {
+      this.isLeftSidebarCollapsed = !this.isLeftSidebarCollapsed
+    },
+    toggleRightSidebar() {
+      this.isRightSidebarCollapsed = !this.isRightSidebarCollapsed
     }
   }
 }
@@ -216,5 +270,33 @@ export default {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #888888;
+}
+
+
+/* ToggleBar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #666666 rgba(0,0,0,0);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #ff00cc;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #ffc000;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #FF0000;
+}
+
+.disappear-sidebar > div {
+  @apply opacity-0 pointer-events-none;
 }
 </style>

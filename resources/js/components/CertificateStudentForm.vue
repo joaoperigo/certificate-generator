@@ -1,35 +1,12 @@
 <template>
-  <div class="pb-20 bg-stone-100 mt-24 px-10">
-    <h1 class="text-2xl font-bold mb-4">{{ certificate.title }}</h1>
-    
-    <!-- Students List -->
-    <div v-if="certificateStudents.length > 0" class="mb-6">
-      <h2 class="text-xl font-semibold mb-3">Registered Students</h2>
-      <div v-for="student in certificateStudents" :key="student.id" class="bg-white p-4 rounded-lg shadow mb-3">
-        <div class="flex justify-between items-center">
-          <div>
-            <h3 class="font-medium">{{ student.name }}</h3>
-            <p class="text-sm text-gray-600">CPF: {{ student.cpf || 'Not provided' }}</p>
-            <p class="text-sm text-gray-600">Code: {{ student.code || 'Not provided' }}</p>
-          </div>
-          <div class="flex gap-2">
-            <button @click="editStudent(student)" class="bg-blue-500 text-white px-3 py-1 rounded">
-              Edit
-            </button>
-            <button @click="removeStudent(student)" class="bg-red-500 text-white px-3 py-1 rounded">
-              Remove
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="pb-20 bg-stone-100 mt-24">    
 
-    <!-- Form -->
-    <form @submit.prevent="submitForm" class="bg-white p-6 rounded-lg shadow">
-      <h2 class="text-xl font-semibold mb-4">{{ isEditing ? 'Edit Student' : 'New Student' }}</h2>
+<!-- Form -->
+<form @submit.prevent="submitForm" class="bg-white p-6 rounded-lg shadow">
+      <h1 class="text-xl font-semibold mb-4">{{ isEditing ? 'Edit Student' : 'New Student' }}</h1>
       
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <div class=" col-start-1 col-end-3">
+      <div>
+        <div>
           <label class="block text-sm font-medium text-gray-700">Name</label>
           <input v-model="form.name" type="text" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
         </div>
@@ -82,6 +59,30 @@
         </button>
       </div>
     </form>
+
+    <!-- Students List -->
+    <div v-if="certificateStudents.length > 0" class="mb-6">
+      <h2 class="text-xl font-semibold mb-3">Registered Students</h2>
+      <div v-for="student in certificateStudents" :key="student.id" class="bg-white p-4 rounded-lg shadow mb-3">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="font-medium">{{ student.name }}</h3>
+            <p class="text-sm text-gray-600">CPF: {{ student.cpf || 'Not provided' }}</p>
+            <p class="text-sm text-gray-600">Code: {{ student.code || 'Not provided' }}</p>
+          </div>
+          <div class="flex gap-2">
+            <button @click="editStudent(student)" class="bg-blue-500 text-white px-3 py-1 rounded">
+              Edit
+            </button>
+            <button @click="removeStudent(student)" class="bg-red-500 text-white px-3 py-1 rounded">
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
   </div>
 </template>
 
