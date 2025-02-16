@@ -24,15 +24,16 @@
         ></certificate-student-form>
 
         <!-- Text Objects Editor -->
-        <div v-for="(object, index) in currentPageObjects" :key="index" class="mb-4">
-          <h3 class="font-bold">{{ object.objectName }}</h3>
-          <textarea 
-            v-model="object.text" 
-            @input="updateObject(index, object)"
-            class="w-full p-2 border rounded"
-            rows="3"
-          ></textarea>
-        </div>
+         <div class="p-10">
+          <div v-for="(object, index) in currentPageObjects" :key="index" class="mb-4">
+            <h3 class="font-bold">{{ object.objectName }}</h3>
+            <textarea 
+              v-model="object.text" 
+              @input="updateObject(index, object)"
+              class="w-full p-2 border rounded"
+              rows="3"
+            ></textarea>
+          </div>
         
         <certificate-download 
           ref="certificateDownload"
@@ -40,6 +41,7 @@
           :current-student="currentStudent"
           buttonClasses="border border-b-4 border-stone-300 hover:bg-purple-400 bg-purple-500 text-white font-bold py-6 px-4 rounded-xl w-full mb-2" 
         ></certificate-download>
+      </div>
       </div>
     </div>
   </div>
@@ -87,7 +89,13 @@ export default {
           text: this.replaceStudentData(obj.text)
         }))
       }))
-    }
+    },
+    processedCertificateData() {
+    return {
+      ...this.certificate,
+      pages: this.processedPages
+    };
+  }
   },
   methods: {
     replaceStudentData(text) {
@@ -105,8 +113,18 @@ export default {
 
     formatDate(dateString) {
       if (!dateString) return '';
+      
       const date = new Date(dateString);
-      return date.toLocaleDateString('pt-BR');
+      const day = date.getDate();
+      const year = date.getFullYear();
+      
+      const months = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      ];
+      const month = months[date.getMonth()];
+      
+      return `${day} de ${month} de ${year}`;
     },
 
     applyStudentData(student) {
