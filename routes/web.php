@@ -45,8 +45,8 @@ Route::middleware([
     // Certificate Students routes
     Route::get('/certificates/{certificate}/certificate-students', [CertificateStudentController::class, 'index']);
     Route::post('/certificates/{certificate}/certificate-students', [CertificateStudentController::class, 'store']);
-    Route::put('/certificates/{certificate}/certificate-students/{student}', [CertificateStudentController::class, 'update']);
-    Route::delete('/certificates/{certificate}/certificate-students/{student}', [CertificateStudentController::class, 'destroy']);
+    Route::put('/certificates/{certificate}/certificate-students/{certificateStudent}', [CertificateStudentController::class, 'update']);
+    Route::delete('/certificates/{certificate}/certificate-students/{certificateStudent}', [CertificateStudentController::class, 'destroy']);
 
     // Image routes
     Route::post('/api/images', [ImageController::class, 'store']);
