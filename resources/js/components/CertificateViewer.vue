@@ -14,7 +14,7 @@
     />
         <!-- Left Sidebar -->
     <div 
-      :class="['absolute left-0 top-0 rounded-lg h-full w-[300px] bg-stone-800 transition-transform duration-300 overflow-y-auto custom-scrollbar pb-20', 
+      :class="['absolute left-0 top-0 rounded-lg h-full w-[300px] transition-transform duration-300 overflow-y-auto custom-scrollbar pb-20', 
                {'transform -translate-x-[calc(100%-3rem)] overflow-y-hidden bg-transparent disappear-sidebar': isLeftSidebarCollapsed}]"
     >
         <certificate-student-form 
@@ -25,20 +25,20 @@
     </div>
     <!-- <div class="flex flex-col md:flex-row"> -->
       <div 
-      :class="['flex-grow bg-stone-900 p-4 overflow-auto transition-all duration-300 px-4 custom-scrollbar', mainContentClass]"
+      :class="['flex-grow p-4 overflow-auto transition-all duration-300 px-4 custom-scrollbar', mainContentClass]"
     >
 
 
         <div class="flex-grow overflow-auto transition-all duration-300 custom-scrollbar">
 
 
-          <div class="mb-4 flex items-center justify-between px-10">
-          <h1 class="py-4 text-white font-bold text-xl text-center">{{ certificate.title }}</h1>
-          <div class="space-x-6">
-            <button @click="prevPage" :disabled="currentPage === 0" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Previous Page</button>
-          <span class="text-white">Page {{ currentPage + 1 }} of {{ pages.length }}</span>
-          <button @click="nextPage" :disabled="currentPage === pages.length - 1" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300">Next Page</button>
-          </div>
+          <div class="mb-4 flex items-center justify-center px-10 space-x-6">
+          <h1 class="py-4 font-bold text-2xl text-center">{{ certificate.title }}</h1>
+          <!-- <div class="space-x-6">
+            <button @click="prevPage" :disabled="currentPage === 0" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300 disabled:text-black">Previous Page</button>
+          <span >Page {{ currentPage + 1 }} of {{ pages.length }}</span>
+          <button @click="nextPage" :disabled="currentPage === pages.length - 1" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300 disabled:text-black">Next Page</button>
+          </div>  -->
         </div>
 
        
@@ -60,6 +60,12 @@
     >
       <!-- <div class="w-full md:w-1/3 absolute right-0 top-0 h-full transition-transform duration-300 overflow-y-auto custom-scrollbar scroll-smooth"> -->
         <!-- Certificate Student Form -->
+
+        <div class="space-x-6 pt-8 px-8 flex justify-between items-center">
+            <button @click="prevPage" :disabled="currentPage === 0" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300 disabled:text-black"><</button>
+          <span >Page {{ currentPage + 1 }} of {{ pages.length }}</span>
+          <button @click="nextPage" :disabled="currentPage === pages.length - 1" class="bg-purple-500 text-white px-4 py-2 rounded disabled:bg-gray-300 disabled:text-black">></button>
+          </div>
 
         <!-- Text Objects Editor -->
     <div class="p-8">

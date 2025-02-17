@@ -2,8 +2,8 @@
   <div class="pb-20 bg-stone-100 mt-24">    
 
 <!-- Form -->
-<form @submit.prevent="submitForm" class="bg-white p-6 rounded-lg shadow">
-      <h1 class="text-xl font-semibold mb-4">{{ isEditing ? 'Edit Student' : 'New Student' }}</h1>
+<form @submit.prevent="submitForm" class="p-6 space-y-6">
+      <h1 class="font-semibold mb-4">{{ isEditing ? 'Edit Student' : 'New Student' }}</h1>
       
       <div>
         <div>
@@ -30,6 +30,14 @@
           <label class="block text-sm font-medium text-gray-700">Unit</label>
           <input v-model="form.unit" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
         </div>
+
+        <!-- <div>
+          <label class="block text-sm font-medium text-gray-700">Unit</label>
+          <select v-model="form.unit">
+            <option value="Rio de Janeiro">Rio de Janeiro</option>
+            <option value="Brasília">Brasília</option>
+          </select>
+        </div> -->
         
         <div>
           <label class="block text-sm font-medium text-gray-700">Start Date</label>
@@ -61,21 +69,28 @@
     </form>
 
     <!-- Students List -->
-    <div v-if="certificateStudents.length > 0" class="mb-6">
-      <h2 class="text-xl font-semibold mb-3">Registered Students</h2>
-      <div v-for="student in certificateStudents" :key="student.id" class="bg-white p-4 rounded-lg shadow mb-3">
+    <div v-if="certificateStudents.length > 0" class="mb-6 p-6 space-y-6">
+      <h2 class="font-semibold mb-3">Registered Students</h2>
+      <div v-for="student in certificateStudents" :key="student.id" class="p-4 mb-3">
         <div class="flex justify-between items-center">
           <div>
             <h3 class="font-medium">{{ student.name }}</h3>
-            <p class="text-sm text-gray-600">CPF: {{ student.cpf || 'Not provided' }}</p>
-            <p class="text-sm text-gray-600">Code: {{ student.code || 'Not provided' }}</p>
+            <p class="text-sm text-gray-600">{{ student.code || 'Not provided' }}</p>
+            <p>
+              {{ formatDate(student.start_date) || 'Not provided' }} 
+              <span v-if="student.start_date!=student.end_date">
+                {{ formatDate(student.end_date) || 'Not provided' }}
+              </span>
+            </p>
           </div>
           <div class="flex gap-2">
-            <button @click="editStudent(student)" class="bg-blue-500 text-white px-3 py-1 rounded">
+            <button @click="editStudent(student)" class=" hover:bg-stone-700 text-white font-bold py-3 ps-3 pe-5 rounded me-2 flex align-between items-center gap-2">
+              <PhPencilLine :size="20" />
               Edit
             </button>
-            <button @click="removeStudent(student)" class="bg-red-500 text-white px-3 py-1 rounded">
-              Remove
+            <button @click="removeStudent(student)" class=" hover:bg-stone-700 text-white font-bold py-3 ps-3 pe-5 rounded me-2 flex align-between items-center gap-2">
+              <PhEraser :size="20" />
+              Delete
             </button>
           </div>
         </div>
@@ -89,7 +104,13 @@
 <script>
 import axios from 'axios'
 
+import { PhPencilLine, PhEraser } from '@phosphor-icons/vue';
+
 export default {
+  components: {
+    PhPencilLine,
+    PhEraser
+  },
   props: {
     certificate: {
       type: Object,
@@ -135,6 +156,7 @@ export default {
     async submitForm() {
       try {
         if (this.isEditing) {
+          // Atualiza a URL para usar certificateStudent
           await axios.put(
             `/certificates/${this.certificate.id}/certificate-students/${this.editingId}`,
             this.form
@@ -150,23 +172,41 @@ export default {
         this.resetForm()
       } catch (error) {
         console.error('Error saving certificate student:', error)
+        alert('Erro ao salvar aluno: ' + (error.response?.data?.error || error.message))
       }
     },
     
     editStudent(student) {
       this.form = { ...student }
+
+      // Converte as datas para o formato YYYY-MM-DD
+      this.form.start_date = this.formatDate(student.start_date);
+      this.form.end_date = this.formatDate(student.end_date);
+
       this.isEditing = true
       this.editingId = student.id
       this.$emit('update:currentStudent', student)
     },
     
+    // Função para formatar a data no formato YYYY-MM-DD
+    formatDate(date) {
+      if (!date) return '';
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = ('0' + (d.getMonth() + 1)).slice(-2); // Adiciona zero à esquerda se necessário
+      const day = ('0' + d.getDate()).slice(-2); // Adiciona zero à esquerda se necessário
+      return `${year}-${month}-${day}`;
+    },
+
     async removeStudent(student) {
-      if (confirm('Are you sure you want to remove this student?')) {
+      if (confirm('Tem certeza que deseja remover este aluno?')) {
         try {
+          // Atualiza a URL para usar certificateStudent
           await axios.delete(`/certificates/${this.certificate.id}/certificate-students/${student.id}`)
           await this.loadCertificateStudents()
         } catch (error) {
           console.error('Error removing certificate student:', error)
+          alert('Erro ao remover aluno: ' + (error.response?.data?.error || error.message))
         }
       }
     },

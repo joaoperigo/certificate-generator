@@ -44,6 +44,12 @@ class CertificateStudentController extends Controller
     public function update(Request $request, Certificate $certificate, CertificateStudent $certificateStudent)
     {
         try {
+            Log::info('Updating certificate student', [
+                'certificate_id' => $certificate->id,
+                'student_id' => $certificateStudent->id,
+                'data' => $request->all()
+            ]);
+
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'cpf' => 'nullable|string|max:14',
@@ -57,19 +63,33 @@ class CertificateStudentController extends Controller
             $certificateStudent->update($validated);
             return response()->json($certificateStudent);
         } catch (\Exception $e) {
-            Log::error('Error updating certificate student: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to update certificate student'], 500);
+            Log::error('Error updating certificate student: ' . $e->getMessage(), [
+                'certificate_id' => $certificate->id,
+                'student_id' => $certificateStudent->id,
+                'data' => $request->all(),
+                'error' => $e->getMessage()
+            ]);
+            return response()->json(['error' => 'Failed to update certificate student: ' . $e->getMessage()], 500);
         }
     }
 
     public function destroy(Certificate $certificate, CertificateStudent $certificateStudent)
     {
         try {
+            Log::info('Deleting certificate student', [
+                'certificate_id' => $certificate->id,
+                'student_id' => $certificateStudent->id
+            ]);
+
             $certificateStudent->delete();
             return response()->json(['message' => 'Student removed successfully']);
         } catch (\Exception $e) {
-            Log::error('Error deleting certificate student: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to delete certificate student'], 500);
+            Log::error('Error deleting certificate student: ' . $e->getMessage(), [
+                'certificate_id' => $certificate->id,
+                'student_id' => $certificateStudent->id,
+                'error' => $e->getMessage()
+            ]);
+            return response()->json(['error' => 'Failed to delete certificate student: ' . $e->getMessage()], 500);
         }
     }
 }
