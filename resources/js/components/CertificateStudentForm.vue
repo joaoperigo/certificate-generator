@@ -18,40 +18,63 @@
     <form @submit.prevent="submitForm" class="p-6 space-y-6">
       <h1 class="font-semibold mb-4">{{ isEditing ? 'Edit Student' : 'New Student' }}</h1>
       
-      <div>
+      <div class="space-y-3">
         <div>
-          <label class="block text-sm font-medium text-gray-700">Name</label>
+          <label class="block text-sm font-medium text-gray-700">Name
           <input v-model="form.name" type="text" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+          </label>
         </div>
         
         <div>
-          <label class="block text-sm font-medium text-gray-700">CPF</label>
+          <label class="block text-sm font-medium text-gray-700">CPF
           <input v-model="form.cpf" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+          </label>
         </div>
         
         <div>
-          <label class="block text-sm font-medium text-gray-700">Document</label>
+          <label class="block text-sm font-medium text-gray-700">Extra Document
           <input v-model="form.document" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+          </label>
         </div>
         
         <div>
-          <label class="block text-sm font-medium text-gray-700">Code</label>
-          <input v-model="form.code" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-        </div>
+    <label class="block text-sm font-medium text-gray-700">Code *
+    <div class="flex gap-2">
+      <input 
+        v-model="form.code" 
+        type="text" 
+        required
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+      >
+      <button 
+        type="button"
+        @click="generateCode"
+        class="mt-1 bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 flex items-center"
+      >
+        <PhShuffle :size="20" class="mr-1" />
+        Generate
+      </button>
+    </div>
+  </label>
+    <p v-if="codeError" class="mt-1 text-sm text-red-600">{{ codeError }}</p>
+  </div>
         
         <div>
-          <label class="block text-sm font-medium text-gray-700">Unit</label>
+          <label class="block text-sm font-medium text-gray-700">Unit
           <input v-model="form.unit" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+          </label>
         </div>
         
         <div>
-          <label class="block text-sm font-medium text-gray-700">Start Date</label>
+          <label class="block text-sm font-medium text-gray-700">Start Date
           <input v-model="form.start_date" type="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        </label>
         </div>
         
         <div>
-          <label class="block text-sm font-medium text-gray-700">End Date</label>
-          <input v-model="form.end_date" type="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+          <label class="block text-sm font-medium text-gray-700">End Date
+            <input v-model="form.end_date" type="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+          </label>
         </div>
       </div>
 
@@ -106,12 +129,13 @@
 
 <script>
 import axios from 'axios'
-import { PhPencilLine, PhEraser } from '@phosphor-icons/vue';
+import { PhShuffle, PhPencilLine, PhEraser } from '@phosphor-icons/vue';
 
 export default {
   components: {
     PhPencilLine,
-    PhEraser
+    PhEraser,
+    PhShuffle
   },
   props: {
     certificate: {
@@ -132,6 +156,7 @@ export default {
         type: 'success',
       },
       selectedStudentMessage: '',
+      codeError: '',
     }
   },
   
@@ -174,26 +199,46 @@ export default {
       }
     },
     
+    async generateCode() {
+      try {
+        const response = await axios.get(`/certificates/${this.certificate.id}/generate-code`);
+        this.form.code = response.data.code;
+        this.codeError = '';
+      } catch (error) {
+        this.showNotification('Error generating code', 'error');
+      }
+    },
+
     async submitForm() {
       try {
+        this.codeError = '';
+        
+        // Add validation before submission
+        if (!this.form.code) {
+          this.codeError = 'Code is required';
+          return;
+        }
+
         if (this.isEditing) {
           await axios.put(
             `/certificates/${this.certificate.id}/certificate-students/${this.editingId}`,
             this.form
           );
-          this.showNotification(`Student ${this.form.name} updated successfully`);
         } else {
           await axios.post(
             `/certificates/${this.certificate.id}/certificate-students`,
             this.form
           );
-          this.showNotification(`Student ${this.form.name} added successfully`);
         }
         
         await this.loadCertificateStudents();
         this.resetForm();
       } catch (error) {
-        this.showNotification('Error: ' + this.getErrorMessage(error), 'error');
+        if (error.response?.data?.errors?.code) {
+          this.codeError = error.response.data.errors.code[0];
+        } else {
+          this.showNotification('Error: ' + this.getErrorMessage(error), 'error');
+        }
       }
     },
     
@@ -239,6 +284,7 @@ export default {
       this.form = this.getEmptyForm();
       this.isEditing = false;
       this.editingId = null;
+      this.selectedStudentMessage = '';
     },
 
     getErrorMessage(error) {

@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('professor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('title');
+            $table->string('quantity_hours');
             $table->json('data'); // Para armazenar o JSON
             $table->timestamps();
         });
