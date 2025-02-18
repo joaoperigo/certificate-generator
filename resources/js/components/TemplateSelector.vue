@@ -43,7 +43,7 @@
               page1: [
                 {
                   objectName: 'Nome',
-                  text: 'Nome do Aluno',
+                  text: '[name]',
                   fontSize: 27,
                   fontColor: '#35548E',
                   xPos: 20,
@@ -56,7 +56,7 @@
                 },
                 {
                   objectName: 'Descrição',
-                  text: 'concluiu com excelência o curso vip de Harmonização Íntima Feminina, realizado no âmbito do Instituto Integrado de Pesquisa e Educação, nos dias xx e xx de Outubro de 2022, com carga horária total de xx horas. Obteve êxito em todas as atividades propostas, aprendeu desde técnicas básicas a avançadas de como cuidar da aparência e saúde da região íntima, tanto masculina, quanto feminina. E também, destacou-se na prática dos procedimentos.',
+                  text: 'concluiu com excelência o curso vip de [course], realizado no âmbito do Instituto Integrado de Pesquisa e Educação, nos dias xx e xx de Outubro de 2022, com carga horária total de [quantity_hours] horas. Obteve êxito em todas as atividades propostas, aprendeu desde técnicas básicas a avançadas de como cuidar da aparência e saúde da região íntima, tanto masculina, quanto feminina. E também, destacou-se na prática dos procedimentos.',
                   fontSize: 11.23,
                   fontColor: '#424242',
                   xPos: 20,
@@ -69,7 +69,7 @@
                 },
                 {
                   objectName: 'Data e Local',
-                  text: 'Rio de Janeiro, 14 de Março de 2024',
+                  text: '[unit], [end_date]',
                   fontSize: 13.39,
                   fontColor: '#2A2A2A',
                   xPos: 20,
@@ -82,7 +82,7 @@
                 },
                 {
                   objectName: 'Código',
-                  text: 'ASQ23D',
+                  text: '[code]',
                   fontSize: 8,
                   fontColor: '#2c2c2c',
                   xPos: 266,
@@ -97,7 +97,7 @@
               page2: [
                 {
                   objectName: 'Dados do Aluno',
-                  text: 'Nome:\nCPF:',
+                  text: 'Nome: [name]\nCPF: [cpf]',
                   fontSize: 6.42,
                   fontColor: '#424242',
                   xPos: 199.5, 
@@ -110,7 +110,7 @@
                 },
                 {
                   objectName: 'Código',
-                  text: 'ASQ23D',
+                  text: '[code]',
                   fontSize: 8.71,
                   fontColor: '#424242',
                   xPos: 225.8, 
@@ -131,7 +131,7 @@
               page1: [
                 {
                   objectName: 'Nome',
-                  text: 'Nome do Aluno',
+                  text: '[name]',
                   fontSize: 27,
                   fontColor: '#315189',
                   xPos: 20,
@@ -143,7 +143,7 @@
                 },
                 {
                   objectName: 'Descrição',
-                  text: 'concluiu com aproveitamento o curso de Arquitetura Labial. Realizado na modalidade presencial, com carga horária total de 10 horas. Oferecido pelo Instituto Integrado de Pesquisa e Educação.',
+                  text: 'concluiu com aproveitamento o curso de [course]. Realizado na modalidade presencial, com carga horária total de 10 horas. Oferecido pelo Instituto Integrado de Pesquisa e Educação.',
                   fontSize: 14.23,
                   fontColor: '#2c2c2c',
                   xPos: 20,
@@ -156,7 +156,7 @@
                 },
                 {
                   objectName: 'Data e Local',
-                  text: 'Rio de Janeiro, 14 de Março de 2024',
+                  text: '[unit], [end_date]',
                   fontSize: 13.39,
                   fontColor: '#2b2b2b',
                   xPos: 20,
