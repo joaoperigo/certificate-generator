@@ -13,17 +13,20 @@ class CertificateStudent extends Model
     protected $fillable = [
         'certificate_id',
         'name',
+        'code',
         'cpf',
         'document',
-        'code',
         'unit',
+        'curso',
+        'quantity_hours',
         'start_date',
         'end_date'
     ];
 
     protected $casts = [
         'start_date' => 'date',
-        'end_date' => 'date'
+        'end_date' => 'date',
+        'quantity_hours' => 'integer'
     ];
 
     public function certificate(): BelongsTo

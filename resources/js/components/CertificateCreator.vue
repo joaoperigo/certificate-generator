@@ -31,7 +31,16 @@
               class="shadow appearance-none  rounded w-full py-2 px-3 text-stone-900 bg-stone-100 border-b-4 border-stone-600 leading-tight focus:outline-none focus:shadow-outline text-xl"
               placeholder="title:"
             >
+            <label for="quantity_hours" class="block text-stone-200 text-base font-bold mb-2">Course Hours:</label>
+            <input 
+              v-model.number="certificate.quantity_hours" 
+              type="number" 
+              id="quantity_hours"
+              class="shadow appearance-none rounded w-full py-2 px-3 text-stone-900 bg-stone-100 border-b-4 border-stone-600 leading-tight focus:outline-none focus:shadow-outline text-xl"
+              placeholder="Course hours:"
+            >
           </div>
+
           
           <page-selector 
             :pages="pages" 
@@ -192,7 +201,8 @@ export default {
       certificate: {
         id: this.initialCertificate?.id ? Number(this.initialCertificate.id) : null,
         title: this.initialCertificate?.title || '',
-        data: this.initialCertificate?.data || ''
+        data: this.initialCertificate?.data || '',
+        quantity_hours: this.initialCertificate?.quantity_hours || ''
       },
       pages: this.initialCertificate?.pages || [{
         backgroundImage: null,
@@ -366,14 +376,14 @@ export default {
         let response;
         const certificateData = {
           title: this.certificate.title,
-          data: this.certificate.data
+          data: this.certificate.data,
+          quantity_hours: this.certificate.quantity_hours
         };
 
         if (this.certificate.id) {
           response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
         } else {
           response = await axios.post('/certificates', certificateData);
-          // Garantir que o ID seja um número
           this.certificate.id = Number(response.data.id);
         }
 

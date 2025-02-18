@@ -49,6 +49,7 @@ class CertificateController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'data' => 'required|json',
+            'quantity_hours' => 'nullable|integer|min:1'
         ]);
     
         $certificate = Certificate::create($validatedData);
@@ -78,6 +79,7 @@ class CertificateController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'data' => 'required|json',
+            'quantity_hours' => 'nullable|integer|min:1'
         ]);
     
         $certificate->update($validatedData);
