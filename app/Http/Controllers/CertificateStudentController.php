@@ -7,6 +7,9 @@ use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+
 class CertificateStudentController extends Controller
 {
     public function index(Certificate $certificate)
@@ -27,10 +30,10 @@ class CertificateStudentController extends Controller
                 'name' => 'required|string|max:255',
                 'cpf' => 'nullable|string|max:14',
                 'document' => 'nullable|string|max:255',
-                'code' => 'nullable|string|max:255',
+                'code' => 'required|string|unique:certificate_students,code|not_in:null',
                 'unit' => 'nullable|string|max:255',
                 'start_date' => 'required|date',
-                'end_date' => 'required|date'
+                'end_date' => 'required|date',
             ]);
 
             $student = $certificate->certificateStudents()->create($validated);
@@ -54,7 +57,12 @@ class CertificateStudentController extends Controller
                 'name' => 'required|string|max:255',
                 'cpf' => 'nullable|string|max:14',
                 'document' => 'nullable|string|max:255',
-                'code' => 'nullable|string|max:255',
+                'code' => [
+                    'required',
+                    'string',
+                    'not_in:null',
+                    Rule::unique('certificate_students', 'code')->ignore($certificateStudent->id)
+                ],
                 'unit' => 'nullable|string|max:255',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date'
@@ -92,4 +100,27 @@ class CertificateStudentController extends Controller
             return response()->json(['error' => 'Failed to delete certificate student: ' . $e->getMessage()], 500);
         }
     }
+
+    public function generateUniqueCode()
+{
+    $maxAttempts = 3;
+    $attempt = 0;
+
+    while ($attempt < $maxAttempts) {
+        // Generate a random 6-character hexadecimal code
+        $code = strtoupper(substr(md5(uniqid()), 0, 6));
+        
+        // Check if the code exists
+        $exists = CertificateStudent::where('code', $code)->exists();
+        
+        if (!$exists) {
+            return response()->json(['code' => $code]);
+        }
+        
+        $attempt++;
+    }
+    
+    return response()->json(['error' => 'Unable to generate unique code'], 500);
+}
+
 }
