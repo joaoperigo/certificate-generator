@@ -3,22 +3,29 @@
     <div class="mx-auto px-2 sm:px-4 lg:px-4">
         <div class="flex justify-between h-16 pointer-events-none">
             <div class="flex pointer-events-auto">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center me-2">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-mark class="block h-9 w-auto" />
-                    </a>
-                </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-4 sm:-my-px sm:flex">
                     <x-nav-link href="{{ route('certificates.create') }}" :active="request()->routeIs('certificates.create')">
+                        
+                        <div class="w-4 h-4">
+                            @include('components.plus-circle')
+                        </div>
                         {{ __('New') }}
-                        @include('components.plus-circle')
                     </x-nav-link>
                     <x-nav-link href="{{ route('certificates.index') }}" :active="request()->routeIs('certificates.index')">
+                        
+                        <div class="w-6 h-6 pt-[6px]">
+                            @include('components.magnifying-glass')
+                        </div>
                         {{ __('All') }}
-                        @include('components.magnifying-glass')
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('certificate_students.search') }}" :active="request()->routeIs('certificate_students.search')">
+                        
+                        <div class="w-5 h-5 pt-1">
+                            @include('components.hash-straight')
+                        </div>
+                        {{ __('Codes') }}
                     </x-nav-link>
                 </div>
             </div>
