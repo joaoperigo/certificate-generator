@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('cpf')->nullable();
             $table->string('document')->nullable();
             $table->string('unit')->nullable();
-            $table->string('curso')->nullable();
+            $table->string('course')->nullable();
             $table->integer('quantity_hours')->nullable();
             $table->date('start_date');
             $table->date('end_date');

@@ -14,7 +14,7 @@
               <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
             </ComboboxButton>
           </div>
-          <div class="absolute max-h-60 w-full overflow-auto border border-t-4 border-b-4 mt-[-10px] border-slate-500  rounded-b-lg bg-slate-100 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-0 pt-4">
+          <div class="absolute max-h-96 w-full overflow-auto border border-t-4 border-b-4 mt-[-10px] border-slate-500  rounded-b-lg bg-slate-100 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-0 pt-4">
             <div
               v-if="filteredCertificates.length === 0"
               class="relative cursor-default select-none py-2 px-4 text-gray-700"

@@ -44,7 +44,7 @@
                         </tr>
                         <tr>
                             <th class="text-left p-4">Curso</th>
-                            <td class="p-4">{{ $student->curso ?: 'Não informado' }}</td>
+                            <td class="p-4">{{ $student->course ?: 'Não informado' }}</td>
                         </tr>
                         <tr class="bg-gray-100">
                             <th class="text-left p-4">Carga Horária</th>
