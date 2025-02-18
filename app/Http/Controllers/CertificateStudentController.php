@@ -106,25 +106,25 @@ class CertificateStudentController extends Controller
     }
 
     public function generateUniqueCode()
-{
-    $maxAttempts = 3;
-    $attempt = 0;
+    {
+        $maxAttempts = 3;
+        $attempt = 0;
 
-    while ($attempt < $maxAttempts) {
-        // Generate a random 6-character hexadecimal code
-        $code = strtoupper(substr(md5(uniqid()), 0, 6));
-        
-        // Check if the code exists
-        $exists = CertificateStudent::where('code', $code)->exists();
-        
-        if (!$exists) {
-            return response()->json(['code' => $code]);
+        while ($attempt < $maxAttempts) {
+            // Generate a random 7-character hexadecimal code
+            $code = strtoupper(substr(md5(uniqid()), 0, 7));
+            
+            // Check if the code exists
+            $exists = CertificateStudent::where('code', $code)->exists();
+            
+            if (!$exists) {
+                return response()->json(['code' => $code]);
+            }
+            
+            $attempt++;
         }
         
-        $attempt++;
+        return response()->json(['error' => 'Unable to generate unique code'], 500);
     }
-    
-    return response()->json(['error' => 'Unable to generate unique code'], 500);
-}
 
 }

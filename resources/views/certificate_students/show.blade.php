@@ -19,8 +19,8 @@
                         placeholder="Digite o código do certificado" 
                         value="{{ request('code') }}"
                         class="flex-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        pattern="[A-Za-z0-9]{6}"
-                        title="O código deve conter 6 caracteres alfanuméricos"
+                        pattern="[A-Za-z0-9]{7}"
+                        title="O código deve conter 7 caracteres alfanuméricos"
                         required
                     >
                     <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
