@@ -161,6 +161,8 @@ export default {
         .replace(/\[document\]/g, this.currentStudent.document || '')
         .replace(/\[code\]/g, this.currentStudent.code || '')
         .replace(/\[unit\]/g, this.currentStudent.unit || '')
+        .replace(/\[course\]/g, this.currentStudent.course || '')
+        .replace(/\[quantity_hours\]/g, this.currentStudent.quantity_hours || '')
         .replace(/\[start_date\]/g, this.formatDate(this.currentStudent.start_date) || '')
         .replace(/\[end_date\]/g, this.formatDate(this.currentStudent.end_date) || '');
     },
