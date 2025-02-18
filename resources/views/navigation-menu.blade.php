@@ -7,21 +7,44 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-4 sm:-my-px sm:flex">
                     <x-nav-link href="{{ route('certificates.create') }}" :active="request()->routeIs('certificates.create')">
-                        
                         <div class="w-4 h-4">
                             @include('components.plus-circle')
                         </div>
                         {{ __('New') }}
                     </x-nav-link>
+                    @if(request()->routeIs('certificates.edit'))
+                        <!-- Certifique-se de que $certificate está disponível no contexto -->
+                        @php
+                            $certificateId = request()->route('certificate'); // Obtém o ID da rota atual
+                        @endphp
+
+                        <x-nav-link href="{{ route('certificates.show', ['certificate' => $certificateId]) }}" :active="request()->routeIs('certificates.show')">
+                            <div class="w-5 h-5 pt-1">
+                                @include('components.file-pdf') <!-- Substitua pelo ícone desejado -->
+                            </div>
+                            {{ __('Generate') }}
+                        </x-nav-link>
+                    @endif
+                    @if(request()->routeIs('certificates.show'))
+                        <!-- Certifique-se de que $certificate está disponível no contexto -->
+                        @php
+                            $certificateId = request()->route('certificate'); // Obtém o ID da rota atual
+                        @endphp
+
+                        <x-nav-link href="{{ route('certificates.edit', ['certificate' => $certificateId]) }}" :active="request()->routeIs('certificates.edit')">
+                            <div class="w-5 h-5 pt-1">
+                                @include('components.note-pencil') <!-- Substitua pelo ícone desejado -->
+                            </div>
+                            {{ __('Edit') }}
+                        </x-nav-link>
+                    @endif
                     <x-nav-link href="{{ route('certificates.index') }}" :active="request()->routeIs('certificates.index')">
-                        
                         <div class="w-6 h-6 pt-[6px]">
                             @include('components.magnifying-glass')
                         </div>
                         {{ __('All') }}
                     </x-nav-link>
-                    <x-nav-link href="{{ route('certificate_students.search') }}" :active="request()->routeIs('certificate_students.search')">
-                        
+                    <x-nav-link href="{{ route('certificate_students.search') }}" :active="request()->routeIs('certificate_students.search')" target="_blank">
                         <div class="w-5 h-5 pt-1">
                             @include('components.hash-straight')
                         </div>
@@ -82,7 +105,12 @@
                         </x-dropdown>
                     </div>
                 @endif
-
+                <!-- Logo -->
+                <div class="shrink-0 flex items-center me-2 pointer-events-auto">
+                    <a href="{{ route('dashboard') }}">
+                        <x-application-mark class="block h-9 w-auto" />
+                    </a>
+                </div>
                 <!-- Settings Dropdown -->
                 <div class="ms-3 relative pointer-events-auto border border-b-4 border-slate-400 rounded-lg">
                     <x-dropdown align="right" width="48">
