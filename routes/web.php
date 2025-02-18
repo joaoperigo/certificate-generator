@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CertificateStudentController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\PublicCertificateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,9 @@ use App\Http\Controllers\CertificateController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Rota pública para verificação de certificados
+Route::get('/verificar-certificado', [PublicCertificateController::class, 'show'])->name('certificate_students.search');
 
 
 

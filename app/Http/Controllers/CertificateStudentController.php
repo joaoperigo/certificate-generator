@@ -27,13 +27,15 @@ class CertificateStudentController extends Controller
     {
         try {
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255',  // trocar para nullable depois
                 'cpf' => 'nullable|string|max:14',
                 'document' => 'nullable|string|max:255',
                 'code' => 'required|string|unique:certificate_students,code|not_in:null',
                 'unit' => 'nullable|string|max:255',
+                'curso' => 'nullable|string|max:255',
+                'quantity_hours' => 'nullable|integer|min:1',
                 'start_date' => 'required|date',
-                'end_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date'
             ]);
 
             $student = $certificate->certificateStudents()->create($validated);
@@ -54,7 +56,7 @@ class CertificateStudentController extends Controller
             ]);
 
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255', // trocar para nullable depois
                 'cpf' => 'nullable|string|max:14',
                 'document' => 'nullable|string|max:255',
                 'code' => [
@@ -64,8 +66,10 @@ class CertificateStudentController extends Controller
                     Rule::unique('certificate_students', 'code')->ignore($certificateStudent->id)
                 ],
                 'unit' => 'nullable|string|max:255',
+                'curso' => 'nullable|string|max:255',
+                'quantity_hours' => 'nullable|integer|min:1',
                 'start_date' => 'required|date',
-                'end_date' => 'required|date'
+                'end_date' => 'required|date|after_or_equal:start_date'
             ]);
 
             $certificateStudent->update($validated);
