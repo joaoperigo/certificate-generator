@@ -67,7 +67,7 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">Course
-          <input v-model="form.curso" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+          <input v-model="form.course" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
         </label>
         </div>
 
@@ -197,7 +197,7 @@ export default {
         document: '',
         code: '',
         unit: '',
-        curso: this.certificate.title || '', // Preenche com o título do certificado
+        course: this.certificate.title || '', // Preenche com o título do certificado
         quantity_hours: this.certificate.quantity_hours || null, // Preenche com as horas do certificado
         start_date: '',
         end_date: ''

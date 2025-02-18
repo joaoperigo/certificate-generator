@@ -17,7 +17,7 @@ class CertificateStudent extends Model
         'cpf',
         'document',
         'unit',
-        'curso',
+        'course',
         'quantity_hours',
         'start_date',
         'end_date'

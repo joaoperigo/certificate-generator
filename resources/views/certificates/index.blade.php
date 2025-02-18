@@ -4,7 +4,7 @@
         <div class="max-w-7xl mx-auto">
             <div id="app">
                 <div class="flex justify-between mb-4 xl:container fex-row h-screen">
-                    <div class="w-full px-40 mt-[240px]">
+                    <div class="w-full px-40 mt-[100px]">
                         <certificate-search 
                             :certificates="{{ $certificates->toJson() }}"
                         ></certificate-search>
