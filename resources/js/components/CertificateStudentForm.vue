@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-20 bg-stone-100 mt-24">    
+  <div class="bg-stone-100 pb-20">    
     <!-- Notification Message -->
     <div v-if="notification.show" 
          :class="['fixed top-4 right-1/2 translate-x-1/2 p-4 rounded-lg shadow-lg transition-all duration-500 transform',
@@ -8,17 +8,30 @@
       {{ notification.message }}
     </div>
 
-    <!-- Selected Student Message -->
-    <div v-if="selectedStudentMessage" 
-         class="bg-purple-100 border-l-4 border-purple-500 text-purple-700 p-4 mb-4 mx-6">
-      {{ selectedStudentMessage }}
+    <div class="fixed top-0 start-0 inline-flex justify-start gap-5 w-[300px] pt-20 px-6 z-10 bg-stone-100 ">
+      <a href="#student-form" class="text-stone-600 grid grid-cols-1 w-30">
+        <PhStackPlus :size="20" class="mx-auto"/>
+        <div class="text-center text-sm text-stone-500">Form</div>
+      </a>
+      <a href="#students-list" class="text-stone-600 grid grid-cols-1 w-30">
+        <PhStack :size="20" class="mx-auto"/>
+        <div class="text-center text-sm text-stone-500">Students</div>
+      </a>
     </div>
 
+    <div id="student-form"></div>
     <!-- Form -->
-    <form @submit.prevent="submitForm" class="p-6 space-y-6">
-      <h1 class="font-semibold mb-4">{{ isEditing ? 'Edit Student' : 'New Student' }}</h1>
+    <form @submit.prevent="submitForm" class="p-6 pt-32">
+      <h1 class="text-sm text-center pb-2 pt-2 border-t">
+        {{ isEditing ? '' : 'Create' }}
+        <!-- Selected Student Message -->
+        <span v-if="selectedStudentMessage" 
+            class="text-purple-700">
+          {{ selectedStudentMessage }}
+      </span>
+      </h1>
       
-      <div class="space-y-3">
+      <div class="space-y-2">
         <div>
           <label class="block text-sm font-medium text-gray-700">Name
           <input v-model="form.name" type="text" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
@@ -90,7 +103,7 @@
         </div>
       </div>
 
-      <div class="flex justify-end gap-2">
+      <div class="flex justify-end gap-2 mt-6">
         <button 
           v-if="isEditing"
           type="button" 
@@ -109,12 +122,59 @@
     </form>
 
     <!-- Students List -->
-    <div v-if="certificateStudents.length > 0" class="mb-6 p-6 space-y-6">
-      <h2 class="font-semibold mb-3">Registered Students</h2>
-      <div v-for="student in certificateStudents" :key="student.id" class="p-4 mb-3">
+    <div id="students-list"></div>
+    <div v-if="certificateStudents.length > 0" class="mb-6 p-6 pt-32 space-y-6">
+      <h2 class="font-semibold mb-3 text-sm text-center border-t pt-4">Registered Students</h2>
+      
+      <!-- Search Section -->
+      <div class="space-y-4 mb-6">
+        <div class="flex gap-4">
+          <div class="flex-1">
+            <input
+              v-model="search.term"
+              type="text"
+              placeholder="Search by name or code..."
+              class="w-full px-3 py-2 border rounded-md"
+            />
+          </div>
+        </div>
+        <div class="">
+          <h3 class="text-center font-bold">From</h3>
+          <div class="flex gap-2 text-sm">
+            <label class="block text-sm text-gray-600 mb-1">Start Date</label>
+            <input
+              v-model="search.startDate"
+              type="date"
+              class="w-full px-3 py-2 border rounded-md"
+            />
+          </div>
+          <h3 class="text-center font-bold">To</h3>
+          <div class="flex gap-2">
+            <label class="block text-sm text-gray-600 mb-1">End Date</label>
+            <input
+              v-model="search.endDate"
+              type="date"
+              class="w-full px-3 py-2 border rounded-md"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Count -->
+      <div class="text-sm text-gray-600 mb-4">
+        Found {{ filteredStudents.length }} student(s)
+      </div>
+
+      <!-- Students List -->
+      <div v-for="student in filteredStudents" :key="student.id" class="p-4 mb-3">
         <div class="flex justify-between items-center">
           <div>
-            <h3 class="font-medium">{{ student.name }}</h3>
+            <div class="flex">
+              <h3 class="font-medium">{{ student.name }}</h3>
+              <button>
+                
+              </button>
+            </div>
             <p class="text-sm text-gray-600">{{ student.code || 'Not provided' }}</p>
             <p>
               {{ formatDate(student.start_date) || 'Not provided' }} 
@@ -125,15 +185,15 @@
           </div>          
         </div>
         <div class="flex gap-2">
-            <button @click="editStudent(student)" class="hover:opacity-50 text-slate-800 font-bold py-3 ps-3 pe-5 rounded me-2 flex align-between items-center gap-2">
-              <PhPencilLine :size="20" />
-              Select
-            </button>
-            <button @click="removeStudent(student)" class="hover:opacity-50 text-slate-800 font-bold py-3 ps-3 pe-5 rounded me-2 flex align-between items-center gap-2">
-              <PhEraser :size="20" />
-              Delete
-            </button>
-          </div>
+          <button  @click="editStudent(student)" class="hover:opacity-50 text-slate-800 font-bold py-3 ps-3 pe-5 rounded me-2 flex align-between items-center gap-2">
+            <PhPencilLine :size="20" />
+            Edit
+          </button>
+          <button @click="removeStudent(student)" class="hover:opacity-50 text-slate-800 font-bold py-3 ps-3 pe-5 rounded me-2 flex align-between items-center gap-2">
+            <PhEraser :size="20" />
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -141,13 +201,15 @@
 
 <script>
 import axios from 'axios'
-import { PhShuffle, PhPencilLine, PhEraser } from '@phosphor-icons/vue';
+import { PhShuffle, PhPencilLine, PhEraser, PhStack, PhStackPlus } from '@phosphor-icons/vue';
 
 export default {
   components: {
     PhPencilLine,
     PhEraser,
-    PhShuffle
+    PhShuffle,
+    PhStack,
+    PhStackPlus,
   },
   props: {
     certificate: {
@@ -169,9 +231,37 @@ export default {
       },
       selectedStudentMessage: '',
       codeError: '',
+      search: {
+        term: '',
+        startDate: '',
+        endDate: ''
+      }
     }
   },
   
+  computed: {
+  filteredStudents() {
+    return this.certificateStudents
+      .filter(student => {
+        const searchLower = this.search.term.toLowerCase();
+        const nameMatch = student.name?.toLowerCase().includes(searchLower);
+        const codeMatch = student.code?.toLowerCase().includes(searchLower);
+        
+        const startDateMatch = !this.search.startDate || 
+          new Date(student.start_date) >= new Date(this.search.startDate);
+        
+        const endDateMatch = !this.search.endDate || 
+          new Date(student.end_date) <= new Date(this.search.endDate);
+
+        return (nameMatch || codeMatch) && startDateMatch && endDateMatch;
+      })
+      .sort((a, b) => {
+        // Ordenar por data de início, mais recente primeiro
+        return new Date(b.start_date) - new Date(a.start_date);
+      });
+  }
+},
+
   mounted() {
     this.loadCertificateStudents()
   },
@@ -265,7 +355,7 @@ export default {
       this.$emit('update:currentStudent', student);
       
       // Show selected student message
-      this.selectedStudentMessage = `Selected student: ${student.name}`;
+      this.selectedStudentMessage = `${student.name}`;
     },
     
     formatDate(date) {

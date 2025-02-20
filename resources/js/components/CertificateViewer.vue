@@ -14,7 +14,7 @@
     />
         <!-- Left Sidebar -->
     <div 
-      :class="['absolute left-0 top-0 rounded-lg h-full w-[300px] transition-transform duration-300 overflow-y-auto custom-scrollbar pb-20', 
+      :class="['absolute left-2 top-0 rounded-lg h-full w-[300px] transition-transform duration-300 overflow-y-auto scroll-smooth custom-scrollbar pb-20', 
                {'transform -translate-x-[calc(100%-3rem)] overflow-y-hidden bg-transparent disappear-sidebar': isLeftSidebarCollapsed}]"
     >
         <certificate-student-form 
