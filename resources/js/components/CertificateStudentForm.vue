@@ -22,13 +22,13 @@
     <div id="student-form"></div>
     <!-- Form -->
     <form @submit.prevent="submitForm" class="p-6 pt-32">
-      <h1 class="text-sm text-center pb-2 pt-2 border-t">
+      <h1 class="text-center font-bold pb-2 pt-2 border-t">
         {{ isEditing ? '' : 'Create' }}
         <!-- Selected Student Message -->
-        <span v-if="selectedStudentMessage" 
+        <span v-if="isEditing" 
             class="text-purple-700">
-          {{ selectedStudentMessage }}
-      </span>
+          {{ form.name }}
+        </span>
       </h1>
       
       <div class="space-y-2">
@@ -123,11 +123,11 @@
 
     <!-- Students List -->
     <div id="students-list"></div>
-    <div v-if="certificateStudents.length > 0" class="mb-6 p-6 pt-32 space-y-6">
-      <h2 class="font-semibold mb-3 text-sm text-center border-t pt-4">Registered Students</h2>
+    <div v-if="certificateStudents.length > 0" class="mb-6 p-6 pt-32">
+      <h2 class="font-semibold mb-3 text-center border-t pt-4">Registered Students</h2>
       
       <!-- Search Section -->
-      <div class="space-y-4 mb-6">
+      <div class="space-y-4 mt-4 mb-6">
         <div class="flex gap-4">
           <div class="flex-1">
             <input
@@ -166,20 +166,32 @@
       </div>
 
       <!-- Students List -->
-      <div v-for="student in filteredStudents" :key="student.id" class="p-4 mb-3">
-        <div class="flex justify-between items-center">
-          <div>
-            <div class="flex">
+      <div v-for="student in filteredStudents" :key="student.id" :id="`student-${student.id}`" class="pb-2 pt-4 border-t">
+        <div class="flex justify-between w-full gap-4">
               <h3 class="font-medium">{{ student.name }}</h3>
-              <button>
-                
+              <!-- Botão de Selecionar -->
+              <button 
+                title="Select"
+                @click="selectStudent(student)" 
+                :class="[
+                  'font-medium py-2 px-4 rounded-lg flex items-center gap-2 border transition-colors',
+                  currentStudent?.id === student.id 
+                    ? 'bg-stone-500 text-white border-purple-700' 
+                    : 'text-purple-700 border-purple-200 hover:bg-purple-100'
+                ]"
+              >
+                <PhUserCircle :size="20" />
+                >
               </button>
             </div>
+        <div class="flex justify-between items-center">
+          <div>
+            
             <p class="text-sm text-gray-600">{{ student.code || 'Not provided' }}</p>
-            <p>
-              {{ formatDate(student.start_date) || 'Not provided' }} 
+            <p class="flex gap-4 text-sm text-stone-500">
+              {{ formatDateBR(student.start_date) || 'Not provided' }} 
               <span v-if="student.start_date!=student.end_date">
-                {{ formatDate(student.end_date) || 'Not provided' }}
+                {{ formatDateBR(student.end_date) || 'Not provided' }}
               </span>
             </p>
           </div>          
@@ -201,7 +213,7 @@
 
 <script>
 import axios from 'axios'
-import { PhShuffle, PhPencilLine, PhEraser, PhStack, PhStackPlus } from '@phosphor-icons/vue';
+import { PhShuffle, PhPencilLine, PhEraser, PhStack, PhStackPlus, PhUserCircle } from '@phosphor-icons/vue';
 
 export default {
   components: {
@@ -210,11 +222,16 @@ export default {
     PhShuffle,
     PhStack,
     PhStackPlus,
+    PhUserCircle
   },
   props: {
     certificate: {
       type: Object,
       required: true
+    },
+    currentStudent: {  // Adicione esta prop
+      type: Object,
+      default: null
     }
   },
   
@@ -313,50 +330,97 @@ export default {
       }
     },
 
-    async submitForm() {
-      try {
-        this.codeError = '';
-        
-        // Add validation before submission
-        if (!this.form.code) {
-          this.codeError = 'Code is required';
-          return;
+    scrollToForm() {
+    document.getElementById('student-form')?.scrollIntoView({ behavior: 'smooth' });
+  },
+
+  scrollToStudent(studentId) {
+    setTimeout(() => {
+      const element = document.getElementById(`student-${studentId}`);
+      const sidebarContainer = document.querySelector('.student-list-sidebar'); // Adicione uma classe ao container da sidebar
+      
+      if (element && sidebarContainer) {
+        const elementTop = element.offsetTop;
+        sidebarContainer.scrollTo({
+          top: elementTop - 120,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+  },
+  
+  editStudent(student) {
+    this.form = { ...student };
+    this.form.start_date = this.formatDateForInput(student.start_date);
+    this.form.end_date = this.formatDateForInput(student.end_date);
+    this.isEditing = true;
+    this.editingId = student.id;
+    this.selectedStudentMessage = `Editing: ${student.name}`;
+    this.scrollToForm();
+  },
+
+  selectStudent(student) {
+    this.$emit('update:currentStudent', student);
+    this.selectedStudentMessage = `Selected: ${student.name}`;
+  },
+
+  // Auxiliar para formatar data para input
+  formatDateForInput(date) {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toISOString().split('T')[0];
+  },
+
+  async submitForm() {
+    try {
+      this.codeError = '';
+      
+      if (!this.form.code) {
+        this.codeError = 'Code is required';
+        return;
+      }
+
+      let response;
+      if (this.isEditing) {
+        response = await axios.put(
+          `/certificates/${this.certificate.id}/certificate-students/${this.editingId}`,
+          this.form
+        );
+        await this.loadCertificateStudents();
+      
+        // Se o usuário que está sendo editado é o mesmo que está selecionado,
+        // precisamos reemitir o evento de seleção com os dados atualizados
+        if (this.currentStudent?.id === this.editingId) {
+          this.$emit('update:currentStudent', response.data);
         }
 
-        if (this.isEditing) {
-          await axios.put(
-            `/certificates/${this.certificate.id}/certificate-students/${this.editingId}`,
-            this.form
-          );
-        } else {
-          await axios.post(
-            `/certificates/${this.certificate.id}/certificate-students`,
-            this.form
-          );
+        if (response.data.id) {
+          this.scrollToStudent(response.data.id);
         }
-        
+      } else {
+        response = await axios.post(
+          `/certificates/${this.certificate.id}/certificate-students`,
+          this.form
+        );
         await this.loadCertificateStudents();
-        this.resetForm();
-      } catch (error) {
-        if (error.response?.data?.errors?.code) {
-          this.codeError = error.response.data.errors.code[0];
-        } else {
-          this.showNotification('Error: ' + this.getErrorMessage(error), 'error');
+      
+        // Scroll para o estudante após salvar
+        if (response.data.id) {
+          setTimeout(() => {
+            this.scrollToStudent(response.data.id);
+          }, 100);
         }
       }
-    },
-    
-    editStudent(student) {
-      this.form = { ...student };
-      this.form.start_date = this.formatDate(student.start_date);
-      this.form.end_date = this.formatDate(student.end_date);
-      this.isEditing = true;
-      this.editingId = student.id;
-      this.$emit('update:currentStudent', student);
-      
-      // Show selected student message
-      this.selectedStudentMessage = `${student.name}`;
-    },
+            
+      this.resetForm();
+    } catch (error) {
+      if (error.response?.data?.errors?.code) {
+        this.codeError = error.response.data.errors.code[0];
+      } else {
+        this.showNotification('Error: ' + this.getErrorMessage(error), 'error');
+      }
+    }
+  },
     
     formatDate(date) {
       if (!date) return '';
@@ -365,6 +429,15 @@ export default {
       const month = ('0' + (d.getMonth() + 1)).slice(-2);
       const day = ('0' + d.getDate()).slice(-2);
       return `${year}-${month}-${day}`;
+    },
+
+    formatDateBR(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
     },
 
     async removeStudent(student) {

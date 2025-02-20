@@ -14,13 +14,15 @@
     />
         <!-- Left Sidebar -->
     <div 
-      :class="['absolute left-2 top-0 rounded-lg h-full w-[300px] transition-transform duration-300 overflow-y-auto scroll-smooth custom-scrollbar pb-20', 
+      :class="['student-list-sidebar absolute left-2 top-0 rounded-lg h-full w-[300px] transition-transform duration-300 overflow-y-auto scroll-smooth custom-scrollbar pb-20', 
                {'transform -translate-x-[calc(100%-3rem)] overflow-y-hidden bg-transparent disappear-sidebar': isLeftSidebarCollapsed}]"
     >
-        <certificate-student-form 
-          :certificate="certificate"
-          @update:currentStudent="applyStudentData"
-        ></certificate-student-form>
+    <certificate-student-form 
+      ref="studentForm"
+      :certificate="certificate"
+      :current-student="currentStudent"
+      @update:currentStudent="applyStudentData"
+    ></certificate-student-form>
 
     </div>
     <!-- <div class="flex flex-col md:flex-row"> -->
