@@ -40,7 +40,15 @@
               placeholder="Course hours:"
             >
           </div>
-
+          
+          <div class="pt-4 px-4">
+            <certificate-metadata
+                :initial-categories="selectedCategories"
+                :initial-teachers="selectedTeachers"
+                @update:categories="updateCategories"
+                @update:teachers="updateTeachers"
+            />
+          </div>
           
           <page-selector 
             :pages="pages" 
@@ -162,6 +170,7 @@ import CertificateDownload from './CertificateDownload.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import TemplateSelector from './TemplateSelector.vue'
 import QuickObjectCreator from './QuickObjectCreator.vue'
+import CertificateMetadata from './CertificateMetadata.vue'
 
 import { BookmarkIcon } from '@heroicons/vue/24/solid'
 import { PhStack, PhStackPlus } from '@phosphor-icons/vue'
@@ -181,7 +190,8 @@ export default {
     BookmarkIcon,
     SidebarToggle,
     PhStack,
-    PhStackPlus
+    PhStackPlus,
+    CertificateMetadata,
   },
   props: {
     initialCertificate: {
@@ -198,24 +208,26 @@ export default {
   },
   data() {
     return {
-      certificate: {
-        id: this.initialCertificate?.id ? Number(this.initialCertificate.id) : null,
-        title: this.initialCertificate?.title || '',
-        data: this.initialCertificate?.data || '',
-        quantity_hours: this.initialCertificate?.quantity_hours || ''
-      },
-      pages: this.initialCertificate?.pages || [{
-        backgroundImage: null,
-        objects: []
-      }],
-      currentPage: 0,
-      uploaderKey: 0, // Adicionamos um key counter
-      jsonOutput: null,
-      previewBackgroundImageUrl: null,  // Renomeado
-      isLeftSidebarCollapsed: false,
-      isRightSidebarCollapsed: false,
+        certificate: {
+            id: this.initialCertificate?.id ? Number(this.initialCertificate.id) : null,
+            title: this.initialCertificate?.title || '',
+            data: this.initialCertificate?.data || '',
+            quantity_hours: this.initialCertificate?.quantity_hours || ''
+        },
+        pages: this.initialCertificate?.pages || [{
+            backgroundImage: null,
+            objects: []
+        }],
+        currentPage: 0,
+        uploaderKey: 0,
+        jsonOutput: null,
+        previewBackgroundImageUrl: null,
+        isLeftSidebarCollapsed: false,
+        isRightSidebarCollapsed: false,
+        selectedCategories: this.initialCertificate?.categories || [],
+        selectedTeachers: this.initialCertificate?.teachers || []
     }
-  },
+},
   computed: {
     currentPageObjects() {
       return this.pages[this.currentPage]?.objects || []
@@ -371,34 +383,35 @@ export default {
       console.log('JSON Output:', this.jsonOutput)
     },
     async saveCertificate() {
-  try {
-    this.generateJSON();
-    let response;
-    const certificateData = {
-      title: this.certificate.title,
-      data: this.certificate.data,
-      quantity_hours: this.certificate.quantity_hours
-    };
+        try {
+            this.generateJSON();
+            let response;
+            const certificateData = {
+                title: this.certificate.title,
+                data: this.certificate.data,
+                quantity_hours: this.certificate.quantity_hours
+            };
 
-    if (this.certificate.id) {
-      // If certificate exists, update it
-      response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
-      console.log('Certificate updated:', response.data);
-      alert('Certificate saved successfully!');
-    } else {
-      // If new certificate, create it and redirect to edit page
-      response = await axios.post('/certificates', certificateData);
-      this.certificate.id = Number(response.data.id);
-      console.log('Certificate created:', response.data);
-      alert('Certificate created successfully!');
-      // Redirect to the edit page
-      window.location.href = `/certificates/${response.data.id}/edit`;
-    }
-  } catch (error) {
-    console.error('Error saving certificate:', error);
-    alert('Error saving certificate. Please try again.');
-  }
-},
+            if (this.certificate.id) {
+                response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
+                await this.updateCategories(this.selectedCategories);
+                await this.updateTeachers(this.selectedTeachers);
+                console.log('Certificate updated:', response.data);
+                alert('Certificate saved successfully!');
+            } else {
+                response = await axios.post('/certificates', certificateData);
+                this.certificate.id = Number(response.data.id);
+                await this.updateCategories(this.selectedCategories);
+                await this.updateTeachers(this.selectedTeachers);
+                console.log('Certificate created:', response.data);
+                alert('Certificate created successfully!');
+                window.location.href = `/certificates/${response.data.id}/edit`;
+            }
+        } catch (error) {
+            console.error('Error saving certificate:', error);
+            alert('Error saving certificate. Please try again.');
+        }
+    },
     updateCertificateData() {
       const certificateData = {
         title: this.certificate.title,
@@ -425,7 +438,32 @@ export default {
     },
     toggleRightSidebar() {
       this.isRightSidebarCollapsed = !this.isRightSidebarCollapsed
-    }
+    },
+    async updateCategories(categories) {
+        this.selectedCategories = categories;
+        if (this.certificate.id) {
+            try {
+                await axios.post(`/certificates/${this.certificate.id}/categories`, {
+                    categories: categories.map(c => c.id)
+                });
+            } catch (error) {
+                console.error('Error updating categories:', error);
+            }
+        }
+    },
+
+    async updateTeachers(teachers) {
+        this.selectedTeachers = teachers;
+        if (this.certificate.id) {
+            try {
+                await axios.post(`/certificates/${this.certificate.id}/teachers`, {
+                    teachers: teachers.map(t => t.id)
+                });
+            } catch (error) {
+                console.error('Error updating teachers:', error);
+            }
+        }
+    },
   }
 }
 </script>
