@@ -6,6 +6,8 @@ use App\Http\Controllers\CertificateStudentController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\PublicCertificateController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +59,16 @@ Route::middleware([
     Route::post('/api/images', [ImageController::class, 'store']);
     Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
     Route::delete('/api/images/{image}', [ImageController::class, 'destroy']);
+
+    // API routes for categories and teachers
+    Route::get('/api/categories', [CategoryController::class, 'index']);
+    Route::post('/api/categories', [CategoryController::class, 'store']);
+    Route::get('/api/teachers', [TeacherController::class, 'index']);
+    Route::post('/api/teachers', [TeacherController::class, 'store']);
+
+    // Update certificate relationships
+    Route::post('/certificates/{certificate}/categories', [CertificateController::class, 'updateCategories']);
+    Route::post('/certificates/{certificate}/teachers', [CertificateController::class, 'updateTeachers']);
 });
 
 

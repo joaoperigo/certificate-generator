@@ -58,21 +58,24 @@ class CertificateController extends Controller
     }
 
     public function edit(Certificate $certificate)
-    {
-        $certificateData = json_decode($certificate->data, true);
-        if (json_last_error() === JSON_ERROR_NONE) {
-            $certificate->pages = $certificateData['pages'] ?? [];
-        } else {
-            $certificate->pages = [
-                [
-                    'backgroundImage' => null,
-                    'objects' => []
-                ]
-            ];
-        }
-    
-        return view('certificates.edit', compact('certificate'));
+{
+    // Load the relationships
+    $certificate->load(['teachers', 'categories']);
+
+    $certificateData = json_decode($certificate->data, true);
+    if (json_last_error() === JSON_ERROR_NONE) {
+        $certificate->pages = $certificateData['pages'] ?? [];
+    } else {
+        $certificate->pages = [
+            [
+                'backgroundImage' => null,
+                'objects' => []
+            ]
+        ];
     }
+
+    return view('certificates.edit', compact('certificate'));
+}
 
     public function update(Request $request, Certificate $certificate)
     {
@@ -95,8 +98,41 @@ class CertificateController extends Controller
     //         ->with('success', 'Certificate deleted successfully.');
     // }
     public function destroy(Certificate $certificate)
-{
-    $certificate->delete();
-    return response()->json(['message' => 'Certificate deleted successfully']);
-}
+    {
+        $certificate->delete();
+        return response()->json(['message' => 'Certificate deleted successfully']);
+    }
+
+    // Category and teacher relations
+    public function updateCategories(Request $request, Certificate $certificate)
+    {
+        try {
+            $validated = $request->validate([
+                'categories' => 'required|array',
+                'categories.*' => 'exists:categories,id'
+            ]);
+
+            $certificate->categories()->sync($validated['categories']);
+            return response()->json(['message' => 'Categories updated successfully']);
+        } catch (\Exception $e) {
+            Log::error('Error updating certificate categories: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update categories'], 500);
+        }
+    }
+
+    public function updateTeachers(Request $request, Certificate $certificate)
+    {
+        try {
+            $validated = $request->validate([
+                'teachers' => 'required|array',
+                'teachers.*' => 'exists:teachers,id'
+            ]);
+
+            $certificate->teachers()->sync($validated['teachers']);
+            return response()->json(['message' => 'Teachers updated successfully']);
+        } catch (\Exception $e) {
+            Log::error('Error updating certificate teachers: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update teachers'], 500);
+        }
+    }
 }
