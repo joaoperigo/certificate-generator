@@ -371,29 +371,34 @@ export default {
       console.log('JSON Output:', this.jsonOutput)
     },
     async saveCertificate() {
-      try {
-        this.generateJSON();
-        let response;
-        const certificateData = {
-          title: this.certificate.title,
-          data: this.certificate.data,
-          quantity_hours: this.certificate.quantity_hours
-        };
+  try {
+    this.generateJSON();
+    let response;
+    const certificateData = {
+      title: this.certificate.title,
+      data: this.certificate.data,
+      quantity_hours: this.certificate.quantity_hours
+    };
 
-        if (this.certificate.id) {
-          response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
-        } else {
-          response = await axios.post('/certificates', certificateData);
-          this.certificate.id = Number(response.data.id);
-        }
-
-        console.log('Certificate saved:', response.data);
-        alert('Certificate saved successfully!');
-      } catch (error) {
-        console.error('Error saving certificate:', error);
-        alert('Error saving certificate. Please try again.');
-      }
-    },
+    if (this.certificate.id) {
+      // If certificate exists, update it
+      response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
+      console.log('Certificate updated:', response.data);
+      alert('Certificate saved successfully!');
+    } else {
+      // If new certificate, create it and redirect to edit page
+      response = await axios.post('/certificates', certificateData);
+      this.certificate.id = Number(response.data.id);
+      console.log('Certificate created:', response.data);
+      alert('Certificate created successfully!');
+      // Redirect to the edit page
+      window.location.href = `/certificates/${response.data.id}/edit`;
+    }
+  } catch (error) {
+    console.error('Error saving certificate:', error);
+    alert('Error saving certificate. Please try again.');
+  }
+},
     updateCertificateData() {
       const certificateData = {
         title: this.certificate.title,
