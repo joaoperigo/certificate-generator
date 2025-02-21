@@ -107,8 +107,9 @@
                 @endif
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center me-2 pointer-events-auto">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-mark class="block h-9 w-auto" />
+                    <a href="{{ route('dashboard') }}" class="text-slate-700 underline">
+                        {{-- <x-application-mark class="block h-9 w-auto" /> --}}
+                        Help?
                     </a>
                 </div>
                 <!-- Settings Dropdown -->
