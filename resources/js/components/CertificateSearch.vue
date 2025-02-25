@@ -1,47 +1,152 @@
 <template>
-    <div class="w-full">
-      <Combobox v-model="selectedCertificate">
-        <ComboboxLabel>Search for the certificate:</ComboboxLabel>
-        <div class="relative mt-1">
-          <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-purple-300 sm:text-sm z-10 ">
-            <ComboboxInput
-              class="w-full border border-b-4 border-slate-600  rounded-xl py-4 pl-5 pr-10 text-xl leading-5 text-slate-900 focus:ring-0 focus:border-purple-500"
-              :displayValue="(certificate) => certificate?.title"
-              @change="query = $event.target.value"
-              placeholder="Enter the certificate name here"
-            />
-            <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
-              <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-            </ComboboxButton>
-          </div>
-          <div class="absolute max-h-96 w-full overflow-auto border border-t-4 border-b-4 mt-[-10px] border-slate-500  rounded-b-lg bg-slate-100 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-0 pt-4">
-            <div
-              v-if="filteredCertificates.length === 0"
-              class="relative cursor-default select-none py-2 px-4 text-gray-700"
-            >
-              Nothing found.
-            </div>
-  
-            <ComboboxOption
-              v-for="certificate in filteredCertificates"
-              :key="certificate.id"
-              :value="certificate"
-              as="template"
-              v-slot="{ selected, active }"
-            >
-              <li
-                class="relative cursor-default select-none py-2 px-4 list-none text-xl"
-                :class="{
-                  'bg-purple-500 text-white': active,
-                  'text-gray-900': !active,
-                }"
+  <div class="w-full">
+    <!-- Filter section -->
+    <div class="mb-6 p-4 bg-slate-100 rounded-lg shadow-sm">
+      <h3 class="text-lg font-medium mb-3 text-slate-700">Filter Certificates</h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Teachers Filter -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-sm font-medium text-slate-700">Teachers</label>
+            <div class="flex space-x-2">
+              <button 
+                @click="selectAllTeachers" 
+                class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200"
               >
-                <div class="flex justify-between items-center">
-                  <span class="block truncate">
-                    <button @click.stop="viewCertificate(certificate)">
-                      {{ certificate.title }}
-                    </button> 
-                  </span>
+                Select All
+              </button>
+              <button 
+                @click="clearTeacherSelection" 
+                class="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded hover:bg-slate-200"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+          <div class="border border-slate-300 rounded-lg p-2 bg-white max-h-40 overflow-y-auto">
+            <div v-if="loading.teachers" class="text-center py-2 text-sm text-slate-500">
+              Loading teachers...
+            </div>
+            <div v-else-if="teachers.length === 0" class="text-center py-2 text-sm text-slate-500">
+              No teachers available
+            </div>
+            <div v-else class="space-y-1">
+              <label v-for="teacher in teachers" :key="teacher.id" class="flex items-center p-1 rounded hover:bg-slate-50">
+                <input 
+                  type="checkbox" 
+                  :value="teacher.id" 
+                  v-model="selectedTeachers" 
+                  class="form-checkbox h-4 w-4 text-purple-600"
+                />
+                <span class="ml-2 text-sm">{{ teacher.name }}</span>
+              </label>
+            </div>
+          </div>
+          <div class="mt-1 text-xs text-slate-500">
+            Selected: {{ selectedTeachers.length }} of {{ teachers.length }}
+          </div>
+        </div>
+        
+        <!-- Categories Filter -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-sm font-medium text-slate-700">Categories</label>
+            <div class="flex space-x-2">
+              <button 
+                @click="selectAllCategories" 
+                class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200"
+              >
+                Select All
+              </button>
+              <button 
+                @click="clearCategorySelection" 
+                class="text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded hover:bg-slate-200"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+          <div class="border border-slate-300 rounded-lg p-2 bg-white max-h-40 overflow-y-auto">
+            <div v-if="loading.categories" class="text-center py-2 text-sm text-slate-500">
+              Loading categories...
+            </div>
+            <div v-else-if="categories.length === 0" class="text-center py-2 text-sm text-slate-500">
+              No categories available
+            </div>
+            <div v-else class="space-y-1">
+              <label v-for="category in categories" :key="category.id" class="flex items-center p-1 rounded hover:bg-slate-50">
+                <input 
+                  type="checkbox" 
+                  :value="category.id" 
+                  v-model="selectedCategories" 
+                  class="form-checkbox h-4 w-4 text-purple-600"
+                />
+                <span class="ml-2 text-sm">{{ category.name }}</span>
+              </label>
+            </div>
+          </div>
+          <div class="mt-1 text-xs text-slate-500">
+            Selected: {{ selectedCategories.length }} of {{ categories.length }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificate Search -->
+    <Combobox v-model="selectedCertificate">
+      <ComboboxLabel>Search for the certificate:</ComboboxLabel>
+      <div class="relative mt-1">
+        <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-purple-300 sm:text-sm z-10 ">
+          <ComboboxInput
+            class="w-full border border-b-4 border-slate-600 rounded-xl py-4 pl-5 pr-10 text-xl leading-5 text-slate-900 focus:ring-0 focus:border-purple-500"
+            :displayValue="(certificate) => certificate?.title"
+            @change="query = $event.target.value"
+            placeholder="Enter the certificate name here"
+          />
+          <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+            <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+          </ComboboxButton>
+        </div>
+        <div class="absolute max-h-96 w-full overflow-auto border border-t-4 border-b-4 mt-[-10px] border-slate-500 rounded-b-lg bg-slate-100 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-0 pt-4">
+          <div
+            v-if="filteredCertificates.length === 0"
+            class="relative cursor-default select-none py-2 px-4 text-gray-700"
+          >
+            Nothing found.
+          </div>
+
+          <ComboboxOption
+            v-for="certificate in filteredCertificates"
+            :key="certificate.id"
+            :value="certificate"
+            as="template"
+            v-slot="{ selected, active }"
+          >
+            <li
+              class="relative cursor-default select-none py-2 px-4 list-none text-xl"
+              :class="{
+                'bg-purple-500 text-white': active,
+                'text-gray-900': !active,
+              }"
+            >
+              <div class="flex justify-between items-center">
+                <span class="block truncate">
+                  <button @click.stop="viewCertificate(certificate)">
+                    {{ certificate.title }}
+                  </button> 
+                </span>
+                <div class="flex items-center">
+                  <!-- Certificate metadata -->
+                  <div class="mr-4 text-sm">
+                    <span v-if="certificate.teachers && certificate.teachers.length" class="px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs mr-1">
+                      {{ certificate.teachers.length }} teacher(s)
+                    </span>
+                    <span v-if="certificate.categories && certificate.categories.length" class="px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs">
+                      {{ certificate.categories.length }} category(s)
+                    </span>
+                  </div>
+                  <!-- Action buttons -->
                   <div class="flex space-x-2">
                     <button
                       @click.stop="viewCertificate(certificate)"
@@ -66,80 +171,160 @@
                     </button>
                   </div>
                 </div>
-              </li>
-            </ComboboxOption>
-          </div>
+              </div>
+            </li>
+          </ComboboxOption>
         </div>
-      </Combobox>
-    </div>
-  </template>
-  
-  <script>
-  import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxLabel } from '@headlessui/vue'
-  import { ChevronUpDownIcon } from '@heroicons/vue/20/solid'
-  import { PhFiles, PhTrash, PhPencil } from "@phosphor-icons/vue";
+      </div>
+    </Combobox>
+  </div>
+</template>
 
-  import axios from 'axios'
-  
-  export default {
-    components: {
-      Combobox,
-      ComboboxLabel,
-      ComboboxInput,
-      ComboboxButton,
-      ComboboxOption,
-      ChevronUpDownIcon,
-      PhFiles,
-      PhPencil,
-      PhTrash
-    },
-    props: {
-      certificates: {
-        type: Array,
-        required: true
+<script>
+import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxLabel } from '@headlessui/vue'
+import { ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+import { PhFiles, PhTrash, PhPencil } from "@phosphor-icons/vue";
+
+import axios from 'axios'
+
+export default {
+  components: {
+    Combobox,
+    ComboboxLabel,
+    ComboboxInput,
+    ComboboxButton,
+    ComboboxOption,
+    ChevronUpDownIcon,
+    PhFiles,
+    PhPencil,
+    PhTrash
+  },
+  props: {
+    certificates: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      selectedCertificate: null,
+      query: '',
+      teachers: [],
+      categories: [],
+      selectedTeachers: [],
+      selectedCategories: [],
+      loading: {
+        teachers: false,
+        categories: false
       }
-    },
-    data() {
-      return {
-        selectedCertificate: null,
-        query: ''
-      }
-    },
-    computed: {
-      filteredCertificates() {
-        return this.query === ''
-          ? this.certificates
-          : this.certificates.filter((certificate) =>
-              certificate.title
-                .toLowerCase()
-                .replace(/\s+/g, '')
-                .includes(this.query.toLowerCase().replace(/\s+/g, ''))
-            )
-      }
-    },
-    methods: {
-      viewCertificate(certificate) {
-        window.location.href = `/certificates/${certificate.id}`
-      },
-      editCertificate(certificate) {
-        window.location.href = `/certificates/${certificate.id}/edit`
-      },
-      async deleteCertificate(certificate) {
-        if (confirm(`Are you sure you want to delete "${certificate.title}"?`)) {
-          try {
-            await axios.delete(`/certificates/${certificate.id}`, {
-              headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-              }
-            })
-            // Recarrega a página após a exclusão bem-sucedida
-            window.location.reload()
-          } catch (error) {
-            console.error('Error deleting certificate:', error)
-            alert('Failed to delete certificate. Please try again.')
+    }
+  },
+  computed: {
+    filteredCertificates() {
+      // Start with title filter
+      let filtered = this.query === ''
+        ? this.certificates
+        : this.certificates.filter((certificate) =>
+            certificate.title
+              .toLowerCase()
+              .replace(/\s+/g, '')
+              .includes(this.query.toLowerCase().replace(/\s+/g, ''))
+          );
+      
+      // Then filter by selected teachers if needed
+      if (this.selectedTeachers.length > 0) {
+        filtered = filtered.filter(certificate => {
+          // If certificate has no teachers property or it's empty, skip if we're filtering by teachers
+          if (!certificate.teachers || certificate.teachers.length === 0) {
+            return false;
           }
+          
+          // Check if any of the certificate's teachers match the selected teachers
+          return certificate.teachers.some(teacher => 
+            this.selectedTeachers.includes(teacher.id)
+          );
+        });
+      }
+      
+      // Then filter by selected categories if needed
+      if (this.selectedCategories.length > 0) {
+        filtered = filtered.filter(certificate => {
+          // If certificate has no categories property or it's empty, skip if we're filtering by categories
+          if (!certificate.categories || certificate.categories.length === 0) {
+            return false;
+          }
+          
+          // Check if any of the certificate's categories match the selected categories
+          return certificate.categories.some(category => 
+            this.selectedCategories.includes(category.id)
+          );
+        });
+      }
+      
+      return filtered;
+    }
+  },
+  created() {
+    this.fetchTeachers();
+    this.fetchCategories();
+  },
+  methods: {
+    async fetchTeachers() {
+      this.loading.teachers = true;
+      try {
+        const response = await axios.get('/api/teachers');
+        this.teachers = response.data;
+      } catch (error) {
+        console.error('Error fetching teachers:', error);
+      } finally {
+        this.loading.teachers = false;
+      }
+    },
+    async fetchCategories() {
+      this.loading.categories = true;
+      try {
+        const response = await axios.get('/api/categories');
+        this.categories = response.data;
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        this.loading.categories = false;
+      }
+    },
+    selectAllTeachers() {
+      this.selectedTeachers = this.teachers.map(teacher => teacher.id);
+    },
+    clearTeacherSelection() {
+      this.selectedTeachers = [];
+    },
+    selectAllCategories() {
+      this.selectedCategories = this.categories.map(category => category.id);
+    },
+    clearCategorySelection() {
+      this.selectedCategories = [];
+    },
+    viewCertificate(certificate) {
+      window.location.href = `/certificates/${certificate.id}`;
+    },
+    editCertificate(certificate) {
+      window.location.href = `/certificates/${certificate.id}/edit`;
+    },
+    async deleteCertificate(certificate) {
+      if (confirm(`Are you sure you want to delete "${certificate.title}"?`)) {
+        try {
+          await axios.delete(`/certificates/${certificate.id}`, {
+            headers: {
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+          });
+          // Reload the page after successful deletion
+          window.location.reload();
+        } catch (error) {
+          console.error('Error deleting certificate:', error);
+          alert('Failed to delete certificate. Please try again.');
         }
       }
     }
   }
-  </script>
+}
+</script>

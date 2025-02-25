@@ -10,7 +10,7 @@ class CertificateController extends Controller
 {
     public function index()
     {
-        $certificates = Certificate::all();
+        $certificates = Certificate::with(['teachers', 'categories'])->get();
         return view('certificates.index', compact('certificates'));
     }
 
