@@ -18,13 +18,21 @@ export default {
     pages: {
       type: Array,
       required: true
+    },
+    width: {
+      type: Number,
+      default: 303.02 // Default landscape width in mm
+    },
+    height: {
+      type: Number,
+      default: 215.98 // Default landscape height in mm
     }
   },
   data() {
     return {
       ctx: null,
-      canvasWidth: 303.02 * UNITS.MM_TO_PX,
-      canvasHeight: 215.98 * UNITS.MM_TO_PX,
+      canvasWidth: this.width * UNITS.MM_TO_PX,
+      canvasHeight: this.height * UNITS.MM_TO_PX,
       fontsLoaded: false
     }
   },
@@ -43,7 +51,17 @@ export default {
       handler() {
         this.redrawCanvas()
       }
+    },
+    width: {
+    handler(newWidth) {
+      this.resizeCanvas(newWidth, this.height);
     }
+  },
+  height: {
+    handler(newHeight) {
+      this.resizeCanvas(this.width, newHeight);
+    }
+  }
   },
   methods: {
     async initCanvas() {
@@ -164,7 +182,19 @@ export default {
       });
 
       this.ctx.fillText(text, adjustedX, y);
-    }
+    },
+    resizeCanvas(width, height) {
+  this.canvasWidth = width * UNITS.MM_TO_PX;
+  this.canvasHeight = height * UNITS.MM_TO_PX;
+  
+  const canvas = this.$refs.canvas;
+  if (canvas) {
+    canvas.width = this.canvasWidth;
+    canvas.height = this.canvasHeight;
+    this.ctx = canvas.getContext('2d');
+    this.redrawCanvas();
+  }
+},
   }
 }
 </script>
