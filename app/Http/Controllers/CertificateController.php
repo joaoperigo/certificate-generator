@@ -58,24 +58,27 @@ class CertificateController extends Controller
     }
 
     public function edit(Certificate $certificate)
-{
-    // Load the relationships
-    $certificate->load(['teachers', 'categories']);
-
-    $certificateData = json_decode($certificate->data, true);
-    if (json_last_error() === JSON_ERROR_NONE) {
-        $certificate->pages = $certificateData['pages'] ?? [];
-    } else {
-        $certificate->pages = [
-            [
-                'backgroundImage' => null,
-                'objects' => []
-            ]
-        ];
+    {
+        // Load the relationships
+        $certificate->load(['teachers', 'categories']);
+    
+        $certificateData = json_decode($certificate->data, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $certificate->pages = $certificateData['pages'] ?? [];
+            // Also extract orientation if present
+            $certificate->orientation = $certificateData['orientation'] ?? 'landscape';
+            $certificate->dimensions = $certificateData['dimensions'] ?? [
+                'width' => 303.02,
+                'height' => 215.98
+            ];
+        } else {
+            $certificate->pages = [['backgroundImage' => null, 'objects' => []]];
+            $certificate->orientation = 'landscape';
+            $certificate->dimensions = ['width' => 303.02, 'height' => 215.98];
+        }
+    
+        return view('certificates.edit', compact('certificate'));
     }
-
-    return view('certificates.edit', compact('certificate'));
-}
 
     public function update(Request $request, Certificate $certificate)
     {
@@ -105,34 +108,34 @@ class CertificateController extends Controller
 
     // Category and teacher relations
     public function updateCategories(Request $request, Certificate $certificate)
-    {
-        try {
-            $validated = $request->validate([
-                'categories' => 'required|array',
-                'categories.*' => 'exists:categories,id'
-            ]);
+{
+    try {
+        $validated = $request->validate([
+            'categories' => 'present|array',
+            'categories.*' => 'exists:categories,id'
+        ]);
 
-            $certificate->categories()->sync($validated['categories']);
-            return response()->json(['message' => 'Categories updated successfully']);
-        } catch (\Exception $e) {
-            Log::error('Error updating certificate categories: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to update categories'], 500);
-        }
+        $certificate->categories()->sync($validated['categories']);
+        return response()->json(['message' => 'Categories updated successfully']);
+    } catch (\Exception $e) {
+        \Log::error('Error updating certificate categories: ' . $e->getMessage());
+        return response()->json(['error' => 'Failed to update categories'], 500);
     }
+}
 
-    public function updateTeachers(Request $request, Certificate $certificate)
-    {
-        try {
-            $validated = $request->validate([
-                'teachers' => 'required|array',
-                'teachers.*' => 'exists:teachers,id'
-            ]);
+public function updateTeachers(Request $request, Certificate $certificate)
+{
+    try {
+        $validated = $request->validate([
+            'teachers' => 'present|array',
+            'teachers.*' => 'exists:teachers,id'
+        ]);
 
-            $certificate->teachers()->sync($validated['teachers']);
-            return response()->json(['message' => 'Teachers updated successfully']);
-        } catch (\Exception $e) {
-            Log::error('Error updating certificate teachers: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to update teachers'], 500);
-        }
+        $certificate->teachers()->sync($validated['teachers']);
+        return response()->json(['message' => 'Teachers updated successfully']);
+    } catch (\Exception $e) {
+        \Log::error('Error updating certificate teachers: ' . $e->getMessage());
+        return response()->json(['error' => 'Failed to update teachers'], 500);
     }
+}
 }

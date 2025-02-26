@@ -8,6 +8,11 @@
                 'data' => $certificate->data,
                 'quantity_hours' => $certificate->quantity_hours,
                 'pages' => $certificate->pages,
+                'orientation' => $certificate->orientation ?? 'landscape',
+                'dimensions' => $certificate->dimensions ?? [
+                    'width' => 303.02,
+                    'height' => 215.98
+                ],
                 'categories' => $certificate->categories,
                 'teachers' => $certificate->teachers
             ]) }}"
