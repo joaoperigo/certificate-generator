@@ -20,7 +20,7 @@
     <body class="font-sans antialiased">
         <x-banner />
 
-        <div class="bg-gray-100  w-full {{ request()->routeIs('certificates.show') || request()->routeIs('certificates.create') || request()->routeIs('certificates.edit') ? 'min-h-screen fixed' : '' }}">
+        <div class="bg-gray-100  w-full {{ request()->routeIs('certificates.show') || request()->routeIs('certificates.create') || request()->routeIs('certificates.edit') || request()->routeIs('certificates.index') ? 'min-h-screen fixed' : '' }}">
             @livewire('navigation-menu')
 
             <!-- Page Heading -->
