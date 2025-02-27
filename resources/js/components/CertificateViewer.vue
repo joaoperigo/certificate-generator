@@ -45,11 +45,13 @@
 
        
         <canvas-editor
-          :current-page="currentPage"
-          :pages="processedPages"
-          class="h-full w-full"
-          ref="canvasEditor"
-        ></canvas-editor>
+  :current-page="currentPage"
+  :pages="processedPages"
+  :width="currentDimensions.width"
+  :height="currentDimensions.height"
+  class="h-full w-full"
+  ref="canvasEditor"
+></canvas-editor>
         </div>
    
         
@@ -115,44 +117,65 @@ export default {
     }
   },
   data() {
-    return {
-      certificate: JSON.parse(JSON.stringify(this.initialCertificate)),
-      currentPage: 0,
-      loadedImages: new Map(),
-      currentStudent: null,
-      isLeftSidebarCollapsed: false,
-      isRightSidebarCollapsed: false,
+  return {
+    certificate: JSON.parse(JSON.stringify(this.initialCertificate)),
+    currentPage: 0,
+    loadedImages: new Map(),
+    currentStudent: null,
+    isLeftSidebarCollapsed: false,
+    isRightSidebarCollapsed: false,
+    orientation: this.initialCertificate.orientation || 'landscape',
+    landscapeDimensions: {
+      width: 303.02, // mm
+      height: 215.98 // mm
+    },
+    portraitDimensions: {
+      width: 215.98, // mm
+      height: 303.02 // mm
     }
+  }
+},
+computed: {
+  pages() {
+    return this.certificate.pages || []
   },
-  computed: {
-    pages() {
-      return this.certificate.pages || []
-    },
-    currentPageObjects() {
-      return this.pages[this.currentPage]?.objects || []
-    },
-    processedPages() {
-      return this.pages.map(page => ({
-        ...page,
-        backgroundImage: this.loadedImages.get(page.backgroundImage) || page.backgroundImage,
-        objects: page.objects.map(obj => ({
-          ...obj,
-          text: this.replaceStudentData(obj.text)
-        }))
+  currentPageObjects() {
+    return this.pages[this.currentPage]?.objects || []
+  },
+  processedPages() {
+    return this.pages.map(page => ({
+      ...page,
+      backgroundImage: this.loadedImages.get(page.backgroundImage) || page.backgroundImage,
+      objects: page.objects.map(obj => ({
+        ...obj,
+        text: this.replaceStudentData(obj.text)
       }))
-    },
-    processedCertificateData() {
+    }))
+  },
+  processedCertificateData() {
     return {
       ...this.certificate,
+      orientation: this.orientation,
+      dimensions: this.currentDimensions,
       pages: this.processedPages
     };
-    },
-    mainContentClass() {
-      let marginLeft = this.isLeftSidebarCollapsed ? 'ml-12' : 'ml-[300px]'
-      let marginRight = this.isRightSidebarCollapsed ? 'mr-12' : 'mr-[300px]'
-      return `${marginLeft} ${marginRight}`
-    },
   },
+  mainContentClass() {
+    let marginLeft = this.isLeftSidebarCollapsed ? 'ml-12' : 'ml-[300px]'
+    let marginRight = this.isRightSidebarCollapsed ? 'mr-12' : 'mr-[300px]'
+    return `${marginLeft} ${marginRight}`
+  },
+  currentDimensions() {
+    // Use certificate dimensions if available, otherwise use defaults based on orientation
+    if (this.certificate.dimensions) {
+      return this.certificate.dimensions;
+    }
+    
+    return this.orientation === 'landscape' 
+      ? this.landscapeDimensions 
+      : this.portraitDimensions;
+  }
+},
   methods: {
     replaceStudentData(text) {
       if (!this.currentStudent) return text;
