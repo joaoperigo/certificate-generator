@@ -8,6 +8,7 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\PublicCertificateController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,11 @@ Route::middleware([
     // Update certificate relationships
     Route::post('/certificates/{certificate}/categories', [CertificateController::class, 'updateCategories']);
     Route::post('/certificates/{certificate}/teachers', [CertificateController::class, 'updateTeachers']);
+
+    // Units
+    Route::get('/api/units', [UnitController::class, 'index']);
+    Route::post('/api/units', [UnitController::class, 'store']);
+    Route::delete('/api/units/{unit}', [UnitController::class, 'destroy']);
 });
 
 

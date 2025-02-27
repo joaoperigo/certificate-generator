@@ -49,7 +49,13 @@
           <input v-model="form.document" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
           </label>
         </div>
-        
+        <div class="mb-4">
+  <label class="block text-sm font-medium text-gray-700">Unit</label>
+  <unit-selector 
+    :initial-unit-id="form.unit_id"
+    @update:unit="updateUnit"
+  ></unit-selector>
+</div>
         <div>
     <label class="block text-sm font-medium text-gray-700">Code *
     <div class="flex gap-2">
@@ -74,7 +80,8 @@
         
         <div>
           <label class="block text-sm font-medium text-gray-700">Unit
-          <input v-model="form.unit" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+          <!-- <input v-model="form.unit" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"> -->
+          <input type="hidden" v-model="form.unit">
           </label>
         </div>
 
@@ -214,6 +221,7 @@
 <script>
 import axios from 'axios'
 import { PhShuffle, PhPencilLine, PhEraser, PhStack, PhStackPlus, PhUserCircle } from '@phosphor-icons/vue';
+import UnitSelector from './UnitSelector.vue';
 
 export default {
   components: {
@@ -222,7 +230,8 @@ export default {
     PhShuffle,
     PhStack,
     PhStackPlus,
-    PhUserCircle
+    PhUserCircle,
+    UnitSelector
   },
   props: {
     certificate: {
@@ -296,7 +305,15 @@ export default {
         this.notification.show = false;
       }, 3000);
     },
-
+    updateUnit(unit) {
+      if (unit) {
+        this.form.unit_id = unit.id;
+        this.form.unit = unit.name; // For backward compatibility
+      } else {
+        this.form.unit_id = null;
+        this.form.unit = '';
+      }
+    },
     getEmptyForm() {
       return {
         name: '',
@@ -304,8 +321,9 @@ export default {
         document: '',
         code: '',
         unit: '',
-        course: this.certificate.title || '', // Preenche com o título do certificado
-        quantity_hours: this.certificate.quantity_hours || null, // Preenche com as horas do certificado
+        unit_id: null, // Add this line
+        course: this.certificate.title || '', 
+        quantity_hours: this.certificate.quantity_hours || null,
         start_date: '',
         end_date: ''
       }
