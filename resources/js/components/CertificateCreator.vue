@@ -456,45 +456,65 @@ export default {
     },
     
     async saveCertificate() {
-  try {
-    this.generateJSON();
-    let response;
-    const certificateData = {
-      title: this.certificate.title,
-      data: this.certificate.data,
-      quantity_hours: this.certificate.quantity_hours
-    };
-    
-    if (this.certificate.id) {
-      response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
-      
-      // Use Promise.all to wait for both updates to complete
-      await Promise.all([
-        this.updateCategories(this.selectedCategories),
-        this.updateTeachers(this.selectedTeachers)
-      ]);
-      
-      console.log('Certificate updated:', response.data);
-      alert('Certificate saved successfully!');
-    } else {
-      response = await axios.post('/certificates', certificateData);
-      this.certificate.id = Number(response.data.id);
-      
-      // Now that we have an ID, update relationships
-      await Promise.all([
-        this.updateCategories(this.selectedCategories),
-        this.updateTeachers(this.selectedTeachers)
-      ]);
-      
-      console.log('Certificate created:', response.data);
-      alert('Certificate created successfully!');
-      window.location.href = `/certificates/${response.data.id}/edit`;
-    }
-  } catch (error) {
-    console.error('Error saving certificate:', error);
-    alert('Error saving certificate. Please try again.');
-  }
-},
+      if (!this.certificate.title.trim()) {
+        alert('Certificate title is required.');
+        return;
+      }
+      try {
+        this.generateJSON();
+        let response;
+        const certificateData = {
+          title: this.certificate.title,
+          data: this.certificate.data,
+          quantity_hours: this.certificate.quantity_hours
+        };
+        
+        if (this.certificate.id) {
+          response = await axios.put(`/certificates/${this.certificate.id}`, certificateData);
+          
+          // Use Promise.all to wait for both updates to complete
+          await Promise.all([
+            this.updateCategories(this.selectedCategories),
+            this.updateTeachers(this.selectedTeachers)
+          ]);
+          
+          console.log('Certificate updated:', response.data);
+          alert('Certificate saved successfully!');
+        } else {
+          response = await axios.post('/certificates', certificateData);
+          this.certificate.id = Number(response.data.id);
+          
+          // Now that we have an ID, update relationships
+          await Promise.all([
+            this.updateCategories(this.selectedCategories),
+            this.updateTeachers(this.selectedTeachers)
+          ]);
+          
+          console.log('Certificate created:', response.data);
+          alert('Certificate created successfully!');
+          window.location.href = `/certificates/${response.data.id}/edit`;
+        }
+      } catch (error) {
+        console.error('Error saving certificate:', error);
+        
+        // Improved error handling for validation errors
+        if (error.response && error.response.status === 422) {
+          // Get validation errors
+          const validationErrors = error.response.data.errors;
+          let errorMessage = 'Please fix the following errors:';
+          
+          // Format error messages
+          for (const field in validationErrors) {
+            errorMessage += `\n- ${validationErrors[field].join(', ')}`;
+          }
+          
+          alert(errorMessage);
+        } else {
+          // Generic error
+          alert('Error saving certificate. Please try again.');
+        }
+      }
+    },
     
     updateCertificateData() {
       // Clear any existing timeout

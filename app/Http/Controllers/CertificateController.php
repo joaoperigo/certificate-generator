@@ -15,16 +15,26 @@ class CertificateController extends Controller
     }
 
     public function show(Certificate $certificate)
-    {
-        $certificateData = json_decode($certificate->data, true);
-        if (json_last_error() === JSON_ERROR_NONE) {
-            $certificate->pages = $certificateData['pages'] ?? [];
-        } else {
-            $certificate->pages = [];
-        }
-    
-        return view('certificates.show', compact('certificate'));
+{
+    $certificateData = json_decode($certificate->data, true);
+    if (json_last_error() === JSON_ERROR_NONE) {
+        $certificate->pages = $certificateData['pages'] ?? [];
+        $certificate->orientation = $certificateData['orientation'] ?? 'landscape';
+        $certificate->dimensions = $certificateData['dimensions'] ?? [
+            'width' => 303.02,
+            'height' => 215.98
+        ];
+    } else {
+        $certificate->pages = [];
+        $certificate->orientation = 'landscape';
+        $certificate->dimensions = [
+            'width' => 303.02,
+            'height' => 215.98
+        ];
     }
+
+    return view('certificates.show', compact('certificate'));
+}
 
     public function updateTexts(Request $request, Certificate $certificate)
     {
