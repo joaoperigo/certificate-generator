@@ -27,11 +27,12 @@ class CertificateStudentController extends Controller
     {
         try {
             $validated = $request->validate([
-                'name' => 'required|string|max:255',  // trocar para nullable depois
+                'name' => 'required|string|max:255',
                 'cpf' => 'nullable|string|max:14',
                 'document' => 'nullable|string|max:255',
                 'code' => 'required|string|unique:certificate_students,code|not_in:null',
                 'unit' => 'nullable|string|max:255',
+                'unit_id' => 'nullable|exists:units,id', // Add this line
                 'course' => 'nullable|string|max:255',
                 'quantity_hours' => 'nullable|integer|min:1',
                 'start_date' => 'required|date',
@@ -56,7 +57,7 @@ class CertificateStudentController extends Controller
             ]);
 
             $validated = $request->validate([
-                'name' => 'required|string|max:255', // trocar para nullable depois
+                'name' => 'required|string|max:255',
                 'cpf' => 'nullable|string|max:14',
                 'document' => 'nullable|string|max:255',
                 'code' => [
@@ -66,6 +67,7 @@ class CertificateStudentController extends Controller
                     Rule::unique('certificate_students', 'code')->ignore($certificateStudent->id)
                 ],
                 'unit' => 'nullable|string|max:255',
+                'unit_id' => 'nullable|exists:units,id', // Add this line
                 'course' => 'nullable|string|max:255',
                 'quantity_hours' => 'nullable|integer|min:1',
                 'start_date' => 'required|date',
@@ -73,6 +75,10 @@ class CertificateStudentController extends Controller
             ]);
 
             $certificateStudent->update($validated);
+            // Load the unit relationship if unit_id was provided
+            if ($certificateStudent->unit_id) {
+                $certificateStudent->load('unit');
+            }
             return response()->json($certificateStudent);
         } catch (\Exception $e) {
             Log::error('Error updating certificate student: ' . $e->getMessage(), [

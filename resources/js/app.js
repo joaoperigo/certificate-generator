@@ -15,6 +15,7 @@ import TemplateSelector from './components/TemplateSelector.vue'
 import QuickObjectCreator from './components/QuickObjectCreator.vue';
 import CertificateStudentForm from './components/CertificateStudentForm.vue';
 import CertificateMetadata from './components/CertificateMetadata.vue';
+import UnitSelector from './components/UnitSelector.vue';
 
 import axios from 'axios';
 
@@ -45,5 +46,6 @@ app.component('template-selector', TemplateSelector)
 app.component('quick-object-creator', QuickObjectCreator)
 app.component('certificate-student-form', CertificateStudentForm)
 app.component('certificate-metadata', CertificateMetadata);
+app.component('unit-selector', UnitSelector);
 
 app.mount('#app');

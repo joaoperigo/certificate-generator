@@ -16,7 +16,8 @@ class CertificateStudent extends Model
         'code',
         'cpf',
         'document',
-        'unit',
+        'unit_id',  // Added unit_id
+        'unit',     // Keep for backward compatibility
         'course',
         'quantity_hours',
         'start_date',
@@ -32,5 +33,13 @@ class CertificateStudent extends Model
     public function certificate(): BelongsTo
     {
         return $this->belongsTo(Certificate::class);
+    }
+    
+    /**
+     * Get the unit that owns the certificate student.
+     */
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(Unit::class);
     }
 }
