@@ -1,9 +1,12 @@
-<div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-    <x-application-logo class="block h-12 w-auto" />
+<div class="p-6 lg:p-8 bg-white border-b border-gray-200 text-center">
+    <div class="flex justify-center">
+        <x-application-logo />
+    </div>
 
-    <h1 class="mt-8 text-2xl font-medium text-gray-900">
-        Códigos que podem ser usados
+    <h1 class="mt-8 text-2xl font-medium text-gray-900 mb-4 text-start">
+        List of Codes that can be used at Certificate text content
     </h1>
+    <p class=" text-start">Each code will load respectively the select student data at Student Certificate Download and Preview</p>
 
     <ul class="mt-6 text-gray-500 leading-relaxed">
         <li>[name]</li>
@@ -18,7 +21,7 @@
     </ul>
 </div>
 
-<div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
+<!-- <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
     <div>
         <div class="flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="size-6 stroke-gray-400">
@@ -97,5 +100,5 @@
         <p class="mt-4 text-gray-500 text-sm leading-relaxed">
             Authentication and registration views are included with Laravel Jetstream, as well as support for user email verification and resetting forgotten passwords. So, you're free to get started with what matters most: building your application.
         </p>
-    </div>
+    </div> -->
 </div>
