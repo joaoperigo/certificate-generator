@@ -15,7 +15,8 @@ class CertificateStudentController extends Controller
     public function index(Certificate $certificate)
     {
         try {
-            $students = $certificate->certificateStudents()->get();
+            // Eager load the unit relationship
+            $students = $certificate->certificateStudents()->with('unit')->get();
             return response()->json($students);
         } catch (\Exception $e) {
             Log::error('Error fetching certificate students: ' . $e->getMessage());
@@ -76,9 +77,9 @@ class CertificateStudentController extends Controller
 
             $certificateStudent->update($validated);
             // Load the unit relationship if unit_id was provided
-            if ($certificateStudent->unit_id) {
+            // if ($certificateStudent->unit_id) {
                 $certificateStudent->load('unit');
-            }
+            // }
             return response()->json($certificateStudent);
         } catch (\Exception $e) {
             Log::error('Error updating certificate student: ' . $e->getMessage(), [

@@ -50,39 +50,40 @@
           </label>
         </div>
         <div class="mb-4">
-  <label class="block text-sm font-medium text-gray-700">Unit</label>
-  <unit-selector 
-    :initial-unit-id="form.unit_id"
-    @update:unit="updateUnit"
-  ></unit-selector>
-</div>
+          <!-- <label class="block text-sm font-medium text-gray-700">Unit</label> -->
+          <unit-selector 
+            :key="unitSelectorKey"
+            :initial-unit-id="form.unit_id"
+            @update:unit="updateUnit"
+          ></unit-selector>
+        </div>
         <div>
-    <label class="block text-sm font-medium text-gray-700">Code *
-    <div class="flex gap-2">
-      <input 
-        v-model="form.code" 
-        type="text" 
-        required
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-      >
-      <button 
-        type="button"
-        @click="generateCode"
-        class="mt-1 bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 flex items-center"
-      >
-        <PhShuffle :size="20" class="mr-1" />
-        Generate
-      </button>
-    </div>
-  </label>
-    <p v-if="codeError" class="mt-1 text-sm text-red-600">{{ codeError }}</p>
-  </div>
+          <label class="block text-sm font-medium text-gray-700">Code *
+            <div class="flex gap-2">
+              <input 
+                v-model="form.code" 
+                type="text" 
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              >
+              <button 
+                type="button"
+                @click="generateCode"
+                class="mt-1 bg-purple-500 text-white px-3 py-2 rounded-md hover:bg-purple-600 flex items-center"
+              >
+                <PhShuffle :size="20" class="mr-1" />
+                Generate
+              </button>
+            </div>
+          </label>
+            <p v-if="codeError" class="mt-1 text-sm text-red-600">{{ codeError }}</p>
+        </div>
         
         <div>
-          <label class="block text-sm font-medium text-gray-700">Unit
+          <!-- <label class="block text-sm font-medium text-gray-700">Unit -->
           <!-- <input v-model="form.unit" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"> -->
           <input type="hidden" v-model="form.unit">
-          </label>
+          <!-- </label> -->
         </div>
 
         <div>
@@ -261,7 +262,8 @@ export default {
         term: '',
         startDate: '',
         endDate: ''
-      }
+      },
+      unitSelectorKey: 0  // Add this line
     }
   },
   
@@ -368,12 +370,19 @@ export default {
   },
   
   editStudent(student) {
-    this.form = { ...student };
+    // Create a deep copy of the student object to avoid modifying the original
+    this.form = { 
+      ...student,
+      // Make sure unit_id is properly set for UnitSelector
+      unit_id: student.unit_id || null
+    };
     this.form.start_date = this.formatDateForInput(student.start_date);
     this.form.end_date = this.formatDateForInput(student.end_date);
     this.isEditing = true;
     this.editingId = student.id;
     this.selectedStudentMessage = `Editing: ${student.name}`;
+    // Reset the UnitSelector component by using a unique key
+    this.unitSelectorKey = Date.now();
     this.scrollToForm();
   },
 
