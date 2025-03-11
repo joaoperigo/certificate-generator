@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('unit')->nullable()->change();
             
             // Add the new unit_id column
-            $table->foreignId('unit_id')->nullable()->after('document')->constrained()->nullOnDelete();
+            $table->foreignId('unit_id')->nullable()->after('certificate_id')->constrained()->nullOnDelete();
         });
     }
 
