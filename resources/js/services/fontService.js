@@ -6,10 +6,28 @@ import { mangueiraMedium } from '@/fonts/mangueiraMedium.js'
 import { mangueiraSemiBold } from '@/fonts/mangueiraSemiBold.js'
 
 // URLs para arquivos TTF
+// const FONT_URLS = {
+//   'Mangueira-Regular': '/fonts/mangueira-regular.ttf',
+//   'Mangueira-Medium': '/fonts/mangueira-medium.ttf',
+//   'Mangueira-SemiBold': '/fonts/mangueira-semibold.ttf'
+// }
+
+// // Adjust base URL based on environment
+// const baseUrl = process.env.NODE_ENV === 'production' 
+//   ? 'https://phplaravel-586388-5271634.cloudwaysapps.com'
+//   : '';
+
+// // URLs para arquivos TTF
+// const FONT_URLS = {
+//   'Mangueira-Regular': `${baseUrl}/fonts/mangueira-regular.ttf`,
+//   'Mangueira-Medium': `${baseUrl}/fonts/mangueira-medium.ttf`,
+//   'Mangueira-SemiBold': `${baseUrl}/fonts/mangueira-semibold.ttf`
+// }
+
 const FONT_URLS = {
-  'Mangueira-Regular': '/fonts/mangueira-regular.ttf',
-  'Mangueira-Medium': '/fonts/mangueira-medium.ttf',
-  'Mangueira-SemiBold': '/fonts/mangueira-semibold.ttf'
+  'Mangueira-Regular': window.location.origin + '/fonts/mangueira-regular.ttf',
+  'Mangueira-Medium': window.location.origin + '/fonts/mangueira-medium.ttf',
+  'Mangueira-SemiBold': window.location.origin + '/fonts/mangueira-semibold.ttf'
 }
 
 // Configuração das fontes

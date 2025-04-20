@@ -105,12 +105,16 @@
                         </x-dropdown>
                     </div>
                 @endif
-                <!-- Logo -->
+                <!-- Help -->
                 <div class="shrink-0 flex items-center me-2 pointer-events-auto">
-                    <a href="{{ route('dashboard') }}" class="text-slate-700 underline">
-                        {{-- <x-application-mark class="block h-9 w-auto" /> --}}
-                        Help?
-                    </a>
+                    @if(request()->routeIs('certificates.edit') || request()->routeIs('certificates.create'))
+                        <a href="{{ route('dashboard') }}" class="text-slate-100 underline">
+                    @else
+                        <a href="{{ route('dashboard') }}" class="text-slate-600 underline">
+                    @endif
+                            {{-- <x-application-mark class="block h-9 w-auto" /> --}}
+                            Help?
+                        </a>
                 </div>
                 <!-- Settings Dropdown -->
                 <div class="ms-3 relative pointer-events-auto border border-b-4 border-slate-400 rounded-lg">

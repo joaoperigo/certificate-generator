@@ -46,7 +46,6 @@ class CertificateStudentSeeder extends Seeder
             ]);
         }
 
-
         echo "Seeders concluídos com sucesso!";
     }
 

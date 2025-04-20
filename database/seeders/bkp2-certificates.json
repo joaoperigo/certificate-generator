@@ -174,7 +174,7 @@
         "id": "23",
         "certificate_code": "ad3a058",
         "student_name": "Ludmilla da Cunha Cardoso",
-        "course_name": "Lift&Up - Bioestimuladores Avançados",
+        "course_name": "Lift&Up - Bioestimuladores Avançado",
         "course_hours": "20",
         "dob": "08\/21\/2021",
         "award_date": "08\/22\/2021"
@@ -183,7 +183,7 @@
         "id": "24",
         "certificate_code": "50affba",
         "student_name": "Sarah Vieira Rabello Brega",
-        "course_name": "Lift&Up - Bioestimuladores Avançados",
+        "course_name": "Lift&Up - Bioestimuladores Avançado",
         "course_hours": "20",
         "dob": "08\/21\/2021",
         "award_date": "08\/22\/2021"
@@ -2116,7 +2116,7 @@
     },
     {
         "id": "242",
-        "certificate_code": "230e288",
+        "certificate_code": "230e288\t",
         "student_name": "Flávia Vignoli Alves",
         "course_name": "MasterClass & Hands on em Toxina Botulínica",
         "course_hours": "20",
@@ -3639,7 +3639,7 @@
         "id": "413",
         "certificate_code": "3940183",
         "student_name": "Fernanda Larrubia",
-        "course_name": "Bioestimuladores Avançados",
+        "course_name": "Bioestimuladores\u2028Avançados",
         "course_hours": "20",
         "dob": "05\/09\/2024",
         "award_date": "05\/09\/2024"
@@ -3648,7 +3648,7 @@
         "id": "414",
         "certificate_code": "b45ad17",
         "student_name": "Michele de Lima Mikula Duarte",
-        "course_name": "Bioestimuladores Avançados",
+        "course_name": "Bioestimuladores\u2028Avançados",
         "course_hours": "20",
         "dob": "05\/09\/2024",
         "award_date": "05\/09\/2024"
@@ -3657,7 +3657,7 @@
         "id": "415",
         "certificate_code": "0bc561e",
         "student_name": "Maria Pessoa Sobrinha",
-        "course_name": "Bioestimuladores Avançados",
+        "course_name": "Bioestimuladores\u2028Avançados",
         "course_hours": "20",
         "dob": "05\/09\/2024",
         "award_date": "05\/09\/2024"
@@ -3666,7 +3666,7 @@
         "id": "416",
         "certificate_code": "3ff146e",
         "student_name": "Carmen Lúcia Gonçalves Araújo Bello",
-        "course_name": "Bioestimuladores Avançados",
+        "course_name": "Bioestimuladores\u2028Avançados",
         "course_hours": "20",
         "dob": "05\/09\/2024",
         "award_date": "05\/09\/2024"
@@ -3675,7 +3675,7 @@
         "id": "417",
         "certificate_code": "739a7d1",
         "student_name": "Kethleen Castilho",
-        "course_name": "Bioestimuladores Avançados",
+        "course_name": "Bioestimuladores\u2028Avançados",
         "course_hours": "20",
         "dob": "05\/09\/2024",
         "award_date": "05\/09\/2024"
@@ -3918,7 +3918,7 @@
         "id": "446",
         "certificate_code": "9faf96c",
         "student_name": "Paula Peralva",
-        "course_name": "Bioestimuladores Avançados",
+        "course_name": "Bioestimuladores\u2028Avançados",
         "course_hours": "20",
         "dob": "06\/19\/2024",
         "award_date": "06\/19\/2024"
@@ -4296,7 +4296,7 @@
         "id": "488",
         "certificate_code": "85695ee",
         "student_name": "Karina Laurindo de Oliveira",
-        "course_name": "Bioestimuladores Avançados",
+        "course_name": "Bioestimuladores\u2028Avançados",
         "course_hours": "20",
         "dob": "08\/15\/2024",
         "award_date": "08\/15\/2024"
@@ -4305,7 +4305,7 @@
         "id": "489",
         "certificate_code": "8207f2b",
         "student_name": "Jordana Bueno Teixeira",
-        "course_name": "Bioestimuladores Avançados",
+        "course_name": "Bioestimuladores\u2028Avançados",
         "course_hours": "20",
         "dob": "08\/15\/2024",
         "award_date": "08\/15\/2024"
@@ -5025,7 +5025,7 @@
         "id": "569",
         "certificate_code": "3f36c2e",
         "student_name": "Luciene Alves de Brito",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclínic Preenchimento Básico",
         "course_hours": "20",
         "dob": "01\/10\/2025",
         "award_date": "01\/10\/2025"
@@ -5034,7 +5034,7 @@
         "id": "570",
         "certificate_code": "6ea93e5",
         "student_name": "Kathleen Ramos da Silva",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclínic Preenchimento Básico",
         "course_hours": "20",
         "dob": "01\/10\/2025",
         "award_date": "01\/10\/2025"
@@ -5043,7 +5043,7 @@
         "id": "571",
         "certificate_code": "3fdbf4c",
         "student_name": "Thainara Martins de Souza",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclínic Preenchimento Básico",
         "course_hours": "20",
         "dob": "01\/10\/2025",
         "award_date": "01\/10\/2025"
@@ -5052,7 +5052,7 @@
         "id": "572",
         "certificate_code": "611c3d1",
         "student_name": "Suzana de Sousa Sudré",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclínic Preenchimento Básico",
         "course_hours": "20",
         "dob": "01\/10\/2025",
         "award_date": "01\/10\/2025"
@@ -5061,7 +5061,7 @@
         "id": "573",
         "certificate_code": "a598fed",
         "student_name": "Anna Arielle Ferreira Nisio",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclínic Preenchimento Básico",
         "course_hours": "20",
         "dob": "01\/10\/2025",
         "award_date": "01\/10\/2025"
@@ -5070,7 +5070,7 @@
         "id": "574",
         "certificate_code": "32ba919",
         "student_name": "Patrícia Bispo de Sousa Ramalho",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclínic Preenchimento Básico",
         "course_hours": "20",
         "dob": "01\/10\/2025",
         "award_date": "01\/10\/2025"
@@ -5079,7 +5079,7 @@
         "id": "575",
         "certificate_code": "bceb456",
         "student_name": "Natalle Natal de Araújo Dias",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclínic Endolaser",
         "course_hours": "12",
         "dob": "01\/15\/2025",
         "award_date": "01\/15\/2025"
@@ -5088,7 +5088,7 @@
         "id": "576",
         "certificate_code": "b1c9938",
         "student_name": "Giselle Pereira de Araújo Lourenço Debossam",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclínic Endolaser",
         "course_hours": "12",
         "dob": "01\/15\/2025",
         "award_date": "01\/15\/2025"
@@ -5097,7 +5097,7 @@
         "id": "577",
         "certificate_code": "bc630ea",
         "student_name": "Tatiane Leite de Oliveira Camaz",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclínic Endolaser",
         "course_hours": "12",
         "dob": "01\/15\/2025",
         "award_date": "01\/15\/2025"
@@ -5106,7 +5106,7 @@
         "id": "578",
         "certificate_code": "712a5ed",
         "student_name": "Janira Nascimento Simões de Souza",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclínic Endolaser",
         "course_hours": "12",
         "dob": "01\/15\/2025",
         "award_date": "01\/15\/2025"
@@ -5115,7 +5115,7 @@
         "id": "579",
         "certificate_code": "bc81309",
         "student_name": "Fabiana Andrade Mendonça Rodrigues",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclínic Endolaser",
         "course_hours": "12",
         "dob": "01\/15\/2025",
         "award_date": "01\/15\/2025"
@@ -5124,7 +5124,7 @@
         "id": "580",
         "certificate_code": "24dab2e",
         "student_name": "Amanda Torres Nunes",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclínic Endolaser",
         "course_hours": "12",
         "dob": "01\/15\/2025",
         "award_date": "01\/15\/2025"
@@ -5133,7 +5133,7 @@
         "id": "581",
         "certificate_code": "43b4aaa",
         "student_name": "Michelle Guedes da Gama",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclínic Endolaser",
         "course_hours": "12",
         "dob": "01\/15\/2025",
         "award_date": "01\/15\/2025"
@@ -5673,7 +5673,7 @@
         "id": "641",
         "certificate_code": "0418d17",
         "student_name": "Nathalia Cordeiro Affonso",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclínic Preenchimento Básico",
         "course_hours": "10",
         "dob": "02\/16\/2025",
         "award_date": "02\/16\/2025"
@@ -5682,7 +5682,7 @@
         "id": "642",
         "certificate_code": "29a22e3",
         "student_name": "Janaína de Aguiar Moraes Machado",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclínic Preenchimento Básico",
         "course_hours": "20",
         "dob": "02\/16\/2025",
         "award_date": "02\/16\/2025"
@@ -5691,7 +5691,7 @@
         "id": "643",
         "certificate_code": "72a6e07",
         "student_name": "Cristina Lourenço da Silva",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclínic Preenchimento Básico",
         "course_hours": "20",
         "dob": "02\/16\/2025",
         "award_date": "02\/16\/2025"
@@ -5853,7 +5853,7 @@
         "id": "661",
         "certificate_code": "3be8eb4",
         "student_name": "Doménica Cárdenas Montaño",
-        "course_name": "Mini Residência em Harmonização Facial",
+        "course_name": "Mini Residência Harmonização Facial",
         "course_hours": "260",
         "dob": "12\/02\/2023",
         "award_date": "12\/03\/2023"
@@ -5880,7 +5880,7 @@
         "id": "664",
         "certificate_code": "1daaf3e",
         "student_name": "Patrícia Oliveira Santiago",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclinic: Endolaser",
         "course_hours": "12",
         "dob": "03\/19\/2025",
         "award_date": "03\/19\/2025"
@@ -5889,7 +5889,7 @@
         "id": "665",
         "certificate_code": "fba2c9d",
         "student_name": "Priscila Cavalcanti Franco",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclinic: Endolaser",
         "course_hours": "12",
         "dob": "03\/19\/2025",
         "award_date": "03\/19\/2025"
@@ -5898,7 +5898,7 @@
         "id": "666",
         "certificate_code": "b25a8e5",
         "student_name": "Ana Carolina Ramos Rodrigues",
-        "course_name": "Evoluclínic: Endolaser",
+        "course_name": "Evoluclinic: Endolaser",
         "course_hours": "12",
         "dob": "03\/19\/2025",
         "award_date": "03\/19\/2025"
@@ -5907,7 +5907,7 @@
         "id": "667",
         "certificate_code": "55a500f",
         "student_name": "Vanessa Angélica Oliveira dos Santos",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclinic: Preenchimento Básico",
         "course_hours": "10",
         "dob": "03\/20\/2025",
         "award_date": "03\/20\/2025"
@@ -5916,7 +5916,7 @@
         "id": "668",
         "certificate_code": "ec504b7",
         "student_name": "Taiana dos Santos Ponte",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclinic: Preenchimento Básico",
         "course_hours": "10",
         "dob": "03\/20\/2025",
         "award_date": "03\/20\/2025"
@@ -5925,7 +5925,7 @@
         "id": "669",
         "certificate_code": "01524cf",
         "student_name": "Thais do Nascimento Assumpcao",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclinic: Preenchimento Básico",
         "course_hours": "10",
         "dob": "03\/20\/2025",
         "award_date": "03\/20\/2025"
@@ -5934,7 +5934,7 @@
         "id": "670",
         "certificate_code": "e8b7577",
         "student_name": "Larissa dos Santos Xavier Gomes",
-        "course_name": "Evoluclínic: Preenchimento Básico",
+        "course_name": "Evoluclinic: Preenchimento Básico",
         "course_hours": "10",
         "dob": "03\/20\/2025",
         "award_date": "03\/20\/2025"
@@ -5988,7 +5988,7 @@
         "id": "676",
         "certificate_code": "f97024b",
         "student_name": "Tamara da Silva arruda",
-        "course_name": "Evoluclínic: Módulo Preenchimento Labial",
+        "course_name": "Evoluclinic: Módulo Preenchimento Labial",
         "course_hours": "10",
         "dob": "03\/22\/2025",
         "award_date": "03\/22\/2025"
@@ -6006,7 +6006,7 @@
         "id": "678",
         "certificate_code": "c9557be",
         "student_name": "Fernanda Conceição de Siqueira",
-        "course_name": "Evoluclínic: Toxina Botulínica",
+        "course_name": "Evoluclinic: Toxina Botulínica",
         "course_hours": "10",
         "dob": "03\/26\/2025",
         "award_date": "03\/26\/2025"
@@ -6015,7 +6015,7 @@
         "id": "679",
         "certificate_code": "079d951",
         "student_name": "Tamara da Silva arruda",
-        "course_name": "Evoluclínic: Toxina Botulínica",
+        "course_name": "Evoluclinic: Toxina Botulínica",
         "course_hours": "10",
         "dob": "03\/26\/2025",
         "award_date": "03\/26\/2025"
@@ -6024,7 +6024,7 @@
         "id": "680",
         "certificate_code": "6a25de8",
         "student_name": "Fabiana França de Sousa Rosa dos Santos",
-        "course_name": "Evoluclínic: Toxina Botulínica",
+        "course_name": "Evoluclinic: Toxina Botulínica",
         "course_hours": "10",
         "dob": "03\/26\/2025",
         "award_date": "03\/26\/2025"
@@ -6033,7 +6033,7 @@
         "id": "681",
         "certificate_code": "96ce9a4",
         "student_name": "Franciene Batista Reis",
-        "course_name": "Evoluclínic: Bioestimuladores",
+        "course_name": "Evoluclinic: Bioestimuladores",
         "course_hours": "10",
         "dob": "03\/27\/2025",
         "award_date": "03\/27\/2025"
@@ -6042,7 +6042,7 @@
         "id": "682",
         "certificate_code": "ab49aa3",
         "student_name": "Marcia Carvalho da Costa Hungria",
-        "course_name": "Evoluclínic: Bioestimuladores",
+        "course_name": "Evoluclinic: Bioestimuladores",
         "course_hours": "10",
         "dob": "03\/27\/2025",
         "award_date": "03\/27\/2025"
@@ -6051,7 +6051,7 @@
         "id": "683",
         "certificate_code": "7358221",
         "student_name": "Yohana Paula Machado Rosa",
-        "course_name": "Lift&Up - Fios de Sustentação Avançado",
+        "course_name": "Fios de Sustentação",
         "course_hours": "20",
         "dob": "03\/27\/2025",
         "award_date": "03\/28\/2025"
@@ -6282,10 +6282,19 @@
         "award_date": "04\/10\/2025"
     },
     {
+        "id": "710",
+        "certificate_code": "f6e397c",
+        "student_name": "Simone Gaspar Pereira De Souza",
+        "course_name": "Endolaser Facial e Corporal",
+        "course_hours": "20",
+        "dob": "04\/11\/2025",
+        "award_date": "04\/11\/2025"
+    },
+    {
         "id": "711",
         "certificate_code": "f6e397c",
         "student_name": "Simone Gaspar Pereira De Souza",
-        "course_name": "Evoluclínic: Endolaser Paulo",
+        "course_name": "Evoluclínic Endolaser Paulo",
         "course_hours": "12",
         "dob": "04\/11\/2025",
         "award_date": "04\/11\/2025"
@@ -6294,7 +6303,7 @@
         "id": "712",
         "certificate_code": "2d7ed34",
         "student_name": "Aline Damasio Arantes dos Santos",
-        "course_name": "Evoluclínic: Endolaser Paulo",
+        "course_name": "Evoluclínic Endolaser Paulo",
         "course_hours": "12",
         "dob": "04\/11\/2025",
         "award_date": "04\/11\/2025"
@@ -6303,7 +6312,7 @@
         "id": "713",
         "certificate_code": "691aa81",
         "student_name": "Cinthya Pereira do Carmo Nascimento",
-        "course_name": "Evoluclínic: Endolaser Paulo",
+        "course_name": "Evoluclínic Endolaser Paulo",
         "course_hours": "12",
         "dob": "04\/11\/2025",
         "award_date": "04\/11\/2025"
@@ -6312,7 +6321,7 @@
         "id": "714",
         "certificate_code": "6dbcb12",
         "student_name": "Renata Alves de Lima Nunes Barbosa",
-        "course_name": "Evoluclínic: Endolaser Paulo",
+        "course_name": "Evoluclínic Endolaser Paulo",
         "course_hours": "12",
         "dob": "04\/11\/2025",
         "award_date": "04\/11\/2025"
@@ -6321,7 +6330,7 @@
         "id": "715",
         "certificate_code": "424802b",
         "student_name": "Jairo Lima Cardoso",
-        "course_name": "Evoluclínic: Endolaser Paulo",
+        "course_name": "Evoluclínic Endolaser Paulo",
         "course_hours": "12",
         "dob": "04\/11\/2025",
         "award_date": "04\/11\/2025"
@@ -6330,7 +6339,7 @@
         "id": "716",
         "certificate_code": "14ee65a",
         "student_name": "Daiany Cristina da Silva Machado Naves",
-        "course_name": "Evoluclínic: Harmonização Glútea",
+        "course_name": "Evoluclínic Harmonização Glútea",
         "course_hours": "10",
         "dob": "04\/11\/2025",
         "award_date": "04\/11\/2025"
@@ -6339,7 +6348,7 @@
         "id": "717",
         "certificate_code": "4ccad0a",
         "student_name": "Higor Pereira De Azevedo",
-        "course_name": "Evoluclínic: Harmonização Glútea",
+        "course_name": "Evoluclínic Harmonização Glútea",
         "course_hours": "10",
         "dob": "04\/11\/2025",
         "award_date": "04\/11\/2025"
@@ -6348,7 +6357,7 @@
         "id": "718",
         "certificate_code": "28d95ff",
         "student_name": "Claudia Sicilia",
-        "course_name": "Evoluclínic: Harmonização Glútea",
+        "course_name": "Evoluclínic Harmonização Glútea",
         "course_hours": "10",
         "dob": "04\/11\/2025",
         "award_date": "04\/11\/2025"
@@ -6357,7 +6366,7 @@
         "id": "719",
         "certificate_code": "608be33",
         "student_name": "Andréia Carla Diamante",
-        "course_name": "Evoluclínic: Harmonização Glútea",
+        "course_name": "Evoluclínic Harmonização Glútea",
         "course_hours": "10",
         "dob": "04\/11\/2025",
         "award_date": "04\/11\/2025"
@@ -6411,7 +6420,7 @@
         "id": "725",
         "certificate_code": "529e762",
         "student_name": "Raquel Severo de Lima Porto",
-        "course_name": "Evoluclínic: Toxina Botulínica (Aline)",
+        "course_name": "Evoluclinic: Toxina Botulínica (Aline)",
         "course_hours": "10",
         "dob": "04\/12\/2025",
         "award_date": "04\/12\/2025"
@@ -6420,7 +6429,7 @@
         "id": "726",
         "certificate_code": "3f2c7f1",
         "student_name": "Liliane Cristina Bonioli Cugola",
-        "course_name": "Evoluclínic: Toxina Botulínica (Aline)",
+        "course_name": "Evoluclinic: Toxina Botulínica (Aline)",
         "course_hours": "10",
         "dob": "04\/12\/2025",
         "award_date": "04\/12\/2025"
@@ -6429,7 +6438,7 @@
         "id": "727",
         "certificate_code": "87ba06d",
         "student_name": "Kellya Lima Santos",
-        "course_name": "Evoluclínic: Toxina Botulínica (Aline)",
+        "course_name": "Evoluclinic: Toxina Botulínica (Aline)",
         "course_hours": "10",
         "dob": "04\/12\/2025",
         "award_date": "04\/12\/2025"
@@ -6438,7 +6447,7 @@
         "id": "728",
         "certificate_code": "3ba3b81",
         "student_name": "Mirian Fernandes Pedrosa",
-        "course_name": "Evoluclínic: Toxina Botulínica (Aline)",
+        "course_name": "Evoluclinic: Toxina Botulínica (Aline)",
         "course_hours": "10",
         "dob": "04\/12\/2025",
         "award_date": "04\/12\/2025"
@@ -6447,7 +6456,7 @@
         "id": "729",
         "certificate_code": "f86be09",
         "student_name": "Gabriella Alves de Sá Santos",
-        "course_name": "Evoluclínic: Toxina Botulínica (Aline)",
+        "course_name": "Evoluclinic: Toxina Botulínica (Aline)",
         "course_hours": "10",
         "dob": "04\/12\/2025",
         "award_date": "04\/12\/2025"
