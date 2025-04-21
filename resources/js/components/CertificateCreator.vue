@@ -1,6 +1,17 @@
 <!-- CertificateCreator.vue -->
 <template>
   <div class="certificate-creator h-screen flex relative overflow-hidden w-full bg-stone-900">
+    <!-- Overlay de carregamento -->
+    <div v-if="isSaving" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <svg class="animate-spin h-10 w-10 text-purple-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="text-lg font-semibold text-gray-800">Salvando certificado...</p>
+        <p class="text-sm text-gray-600 mt-2">Por favor, aguarde.</p>
+      </div>
+    </div>
     <sidebar-toggle 
       position="right" 
       :is-collapsed="isRightSidebarCollapsed" 
@@ -21,7 +32,7 @@
         <!-- Left sidebar content -->
         <div>
           <div class="mt-8 mb-0 p-4 border-b border-b-stone-600 pt-20">
-            <label for="title" class="block text-stone-200 text-base font-bold mb-2">Certificate title:</label>
+            <label for="title" class="block text-stone-200 text-base font-bold mb-2">Certificatsse title:</label>
             <input 
               v-model="certificate.title" 
               type="text" 
@@ -96,6 +107,9 @@
             :currentImageUrl="currentPageBackgroundImage"
             :certificate-id="Number(certificate.id)"
             :page-number="Number(currentPage)"
+            :is-loading="isLoading"
+            @loading-start="isLoading = true"
+            @loading-end="isLoading = false"
             @image-selected="setBackgroundImage"
             @remove-image="removeBackgroundImage"
             class="p-4 border-b border-stone-600"
@@ -103,10 +117,11 @@
                 
           <button 
             @click="saveCertificate" 
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-3 rounded-full fixed w-64 bottom-4 start-4 flex content-center items-center gap-4 bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 border border-b-4 border-stone-300"
+            :disabled="isSaving"
+            :class="['bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-3 rounded-full fixed w-64 bottom-4 start-4 flex content-center items-center gap-4 bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 border border-b-4 border-stone-300', {'opacity-50 cursor-not-allowed': isSaving}]"
           >
             <BookmarkIcon class="w-7 h-7 ms-2"/>
-            <div class="text-xl">Save Certificate</div>
+            <div class="text-xl">{{ isSaving ? 'Salvando...' : 'Save Certificate' }}</div>
           </button>
 
           <div class="columns-2 pb-4 px-4">
@@ -269,7 +284,9 @@ export default {
         teachers: null
       },
       categories: [],
-      teachers: []
+      teachers: [],
+      isSaving: false,
+      isLoading: false,
     }
   },
   created() {
@@ -375,13 +392,21 @@ export default {
     
     deletePage(index) {
       if (this.pages.length > 1) {
+        // Verificar se a página tem uma imagem de fundo
+        const pageToDelete = this.pages[index];
+        
+        if (pageToDelete.backgroundImage) {
+          alert('Esta página possui uma imagem de fundo. Por favor, remova a imagem primeiro antes de excluir a página.');
+          return;
+        }
+        
         if (confirm(`Tem certeza que deseja excluir a página ${index + 1}?`)) {
-          this.pages.splice(index, 1)
-          this.currentPage = Math.max(0, this.currentPage - 1)
-          this.updateCertificateData()
+          this.pages.splice(index, 1);
+          this.currentPage = Math.max(0, this.currentPage - 1);
+          this.updateCertificateData();
         }
       } else {
-        alert('Não é possível deletar a última página.')
+        alert('Não é possível deletar a última página.');
       }
     },
     
@@ -409,11 +434,13 @@ export default {
         try {
           // Extrai o ID da imagem da URL
           const imageUrl = this.pages[this.currentPage].backgroundImage;
-          if (imageUrl) {
-            const imageId = imageUrl.split('/').pop();
-            
-            // Chama a API para deletar a imagem
-            await axios.delete(`/api/images/${imageId}`);
+          if (confirm(`Tem certeza que deseja excluir a imagem?`)) {
+            if (imageUrl) {
+              const imageId = imageUrl.split('/').pop();
+              
+              // Chama a API para deletar a imagem
+              await axios.delete(`/api/images/${imageId}`);
+            }
           }
           // Atualiza o estado local
           this.pages[this.currentPage].backgroundImage = null;
@@ -462,6 +489,10 @@ export default {
         alert('Certificate title is required.');
         return;
       }
+      
+      // Ativar o indicador de carregamento
+      this.isSaving = true;
+      
       try {
         this.generateJSON();
         let response;
@@ -515,6 +546,9 @@ export default {
           // Generic error
           alert('Error saving certificate. Please try again.');
         }
+      } finally {
+        // Desativar o indicador de carregamento, independentemente do resultado
+        this.isSaving = false;
       }
     },
     
