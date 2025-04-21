@@ -3,7 +3,7 @@
     <div v-if="!isReady" class="text-stone-200 p-4">
       Certificado precisa ser salvo antes de fazer upload de imagens.
     </div>
-    <div v-else class="upload-area" :class="{ 'drag-over': isDragging }">
+    <div v-else class="upload-area min-h-[191px]" :class="{ 'drag-over': isDragging }">
       <div v-if="!previewUrl && !currentImageUrl" class="upload-prompt">
         <PhotoIcon class="h-9 w-9 text-stone-400"/>
         <p class="text-stone-200 text-sm font-normal mt-1 mb-2">Image size must be <br> <b>303.02mm</b> by <b>215.98mm</b></p>
