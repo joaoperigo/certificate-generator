@@ -6,6 +6,8 @@ use App\Models\Certificate;
 use App\Models\Image;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Storage;
+
 class CertificateController extends Controller
 {
     public function index()
@@ -112,40 +114,64 @@ class CertificateController extends Controller
     // }
     public function destroy(Certificate $certificate)
     {
-        $certificate->delete();
-        return response()->json(['message' => 'Certificate deleted successfully']);
+        try {
+            // Obter todas as imagens associadas ao certificado
+            $images = $certificate->images;
+    
+            // Deletar cada arquivo de imagem
+            foreach ($images as $image) {
+                if (Storage::disk('private')->exists($image->path)) {
+                    Storage::disk('private')->delete($image->path);
+                    \Log::info('Image file deleted during certificate deletion', [
+                        'image_id' => $image->id,
+                        'path' => $image->path
+                    ]);
+                }
+            }
+    
+            // Deletar o certificado (e por cascata, as imagens no banco)
+            $certificate->delete();
+    
+            return response()->json(['message' => 'Certificate deleted successfully']);
+        } catch (\Exception $e) {
+            \Log::error('Failed to delete certificate', [
+                'certificate_id' => $certificate->id,
+                'error' => $e->getMessage()
+            ]);
+            return response()->json(['error' => 'Failed to delete certificate'], 500);
+        }
     }
 
     // Category and teacher relations
     public function updateCategories(Request $request, Certificate $certificate)
-{
-    try {
-        $validated = $request->validate([
-            'categories' => 'present|array',
-            'categories.*' => 'exists:categories,id'
-        ]);
+    {
+        try {
+            $validated = $request->validate([
+                'categories' => 'present|array',
+                'categories.*' => 'exists:categories,id'
+            ]);
 
-        $certificate->categories()->sync($validated['categories']);
-        return response()->json(['message' => 'Categories updated successfully']);
-    } catch (\Exception $e) {
-        \Log::error('Error updating certificate categories: ' . $e->getMessage());
-        return response()->json(['error' => 'Failed to update categories'], 500);
+            $certificate->categories()->sync($validated['categories']);
+            return response()->json(['message' => 'Categories updated successfully']);
+        } catch (\Exception $e) {
+            \Log::error('Error updating certificate categories: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update categories'], 500);
+        }
     }
-}
 
-public function updateTeachers(Request $request, Certificate $certificate)
-{
-    try {
-        $validated = $request->validate([
-            'teachers' => 'present|array',
-            'teachers.*' => 'exists:teachers,id'
-        ]);
+    public function updateTeachers(Request $request, Certificate $certificate)
+    {
+        try {
+            $validated = $request->validate([
+                'teachers' => 'present|array',
+                'teachers.*' => 'exists:teachers,id'
+            ]);
 
-        $certificate->teachers()->sync($validated['teachers']);
-        return response()->json(['message' => 'Teachers updated successfully']);
-    } catch (\Exception $e) {
-        \Log::error('Error updating certificate teachers: ' . $e->getMessage());
-        return response()->json(['error' => 'Failed to update teachers'], 500);
+            $certificate->teachers()->sync($validated['teachers']);
+            return response()->json(['message' => 'Teachers updated successfully']);
+        } catch (\Exception $e) {
+            \Log::error('Error updating certificate teachers: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update teachers'], 500);
+        }
     }
-}
 }

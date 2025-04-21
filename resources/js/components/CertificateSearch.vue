@@ -379,6 +379,7 @@ export default {
               'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
           });
+          alert('Certificate deleted successfully');
           // Reload the page after successful deletion
           window.location.reload();
         } catch (error) {

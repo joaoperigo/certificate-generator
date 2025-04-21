@@ -375,9 +375,11 @@ export default {
     
     deletePage(index) {
       if (this.pages.length > 1) {
-        this.pages.splice(index, 1)
-        this.currentPage = Math.max(0, this.currentPage - 1)
-        this.updateCertificateData()
+        if (confirm(`Tem certeza que deseja excluir a página ${index + 1}?`)) {
+          this.pages.splice(index, 1)
+          this.currentPage = Math.max(0, this.currentPage - 1)
+          this.updateCertificateData()
+        }
       } else {
         alert('Não é possível deletar a última página.')
       }
