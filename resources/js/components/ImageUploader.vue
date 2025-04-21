@@ -50,6 +50,10 @@ export default {
     currentImageUrl: {
       type: String,
       default: null
+    },
+    isLoading: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -89,7 +93,8 @@ export default {
       this.uploadProgress = 0;
     },
     onFileSelected(event) {
-      this.handleFile(event.target.files[0])
+      this.$emit('loading-start');
+      this.handleFile(event.target.files[0]);
     },
     onDrop(event) {
       this.isDragging = false
@@ -156,8 +161,9 @@ export default {
         } else {
           throw new Error(response.data.message || 'Upload failed');
         }
-
+        this.$emit('loading-end');
       } catch (error) {
+        this.$emit('loading-end');
         console.error('Upload failed:', {
           message: error.message,
           response: error.response?.data,
