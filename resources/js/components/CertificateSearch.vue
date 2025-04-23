@@ -175,10 +175,16 @@
               }"
             >
               <div class="flex justify-between items-center">
-                <span class="block truncate">
-                  <button @click.stop="viewCertificate(certificate)">
+                <span class="flex items-center">
+                  <button @click.stop="viewCertificate(certificate)" class="truncate font-semibold me-8 w-64 text-start">
                     {{ certificate.title }}
-                  </button> 
+                  </button>
+                  <span v-if="certificate.teachers && certificate.teachers.length" class="ml-2 px-2 py-1 rounded-full bg-blue-100 text-slate-900 text-sm">
+                     {{ certificate.teachers.map(t => t.name).join(', ') }}
+                  </span>
+                  <span v-if="certificate.categories && certificate.categories.length" class="ml-2 px-2 py-1 rounded-full bg-green-100 text-slate-900 text-sm">
+                     {{ certificate.categories.map(c => c.name).join(', ') }}
+                  </span>
                 </span>
                 <div class="flex items-center">
                   <!-- Certificate metadata -->
