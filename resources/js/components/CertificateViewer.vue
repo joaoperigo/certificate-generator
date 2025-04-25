@@ -193,9 +193,33 @@ computed: {
     .replace(/\[course\]/g, this.currentStudent.course || '')
     .replace(/\[quantity_hours\]/g, this.currentStudent.quantity_hours || '')
     .replace(/\[start_date\]/g, this.formatDate(this.currentStudent.start_date) || '')
-    .replace(/\[end_date\]/g, this.formatDate(this.currentStudent.end_date) || '');
+    .replace(/\[end_date\]/g, this.formatDate(this.currentStudent.end_date) || '')
+    .replace(/\[start_day\]/g, this.onlyDay(this.currentStudent.start_date) || '')
+    .replace(/\[end_day\]/g, this.onlyDay(this.currentStudent.end_date) || '')
+    .replace(/\[start_month\]/g, this.onlyMonth(this.currentStudent.start_date) || '')
+    .replace(/\[end_month\]/g, this.onlyMonth(this.currentStudent.end_date) || '')
+    .replace(/\[start_year\]/g, this.onlyYear(this.currentStudent.start_date) || '')
+    .replace(/\[end_year\]/g, this.onlyYear(this.currentStudent.end_date) || '');
 },
-
+    onlyDay(dateString) {
+      const date = new Date(dateString);
+      const day = date.getDate();
+      return `${day}`;
+    },
+    onlyMonth(dateString) {
+      const date = new Date(dateString);
+      const months = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      ];
+      const month = months[date.getMonth()];
+      return `${month}`;
+    },
+    onlyYear(dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      return `${year}`;
+    },
     formatDate(dateString) {
       if (!dateString) return '';
       
