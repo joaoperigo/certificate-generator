@@ -66,29 +66,29 @@ export default {
     },
 
     replaceStudentData(text) {
-  if (!this.currentStudent) return text;
-  
-  const unitName = this.currentStudent.unit_id 
-    ? (this.currentStudent.unit?.name || this.currentStudent.unit) 
-    : (this.currentStudent.unit || '');
-  
-  return text
-    .replace(/\[name\]/g, this.currentStudent.name || '')
-    .replace(/\[cpf\]/g, this.currentStudent.cpf || '')
-    .replace(/\[document\]/g, this.currentStudent.document || '')
-    .replace(/\[code\]/g, this.currentStudent.code || '')
-    .replace(/\[unit\]/g, unitName)
-    .replace(/\[course\]/g, this.currentStudent.course || '')
-    .replace(/\[quantity_hours\]/g, this.currentStudent.quantity_hours || '')
-    .replace(/\[start_date\]/g, this.formatDate(this.currentStudent.start_date) || '')
-    .replace(/\[end_date\]/g, this.formatDate(this.currentStudent.end_date) || '')
-    .replace(/\[start_day\]/g, this.onlyDay(this.currentStudent.start_date) || '')
-    .replace(/\[end_day\]/g, this.onlyDay(this.currentStudent.end_date) || '')
-    .replace(/\[start_month\]/g, this.onlyMonth(this.currentStudent.start_date) || '')
-    .replace(/\[end_month\]/g, this.onlyMonth(this.currentStudent.end_date) || '')
-    .replace(/\[start_year\]/g, this.onlyYear(this.currentStudent.start_date) || '')
-    .replace(/\[end_year\]/g, this.onlyYear(this.currentStudent.end_date) || '')
-},
+      if (!this.currentStudent) return text;
+      
+      const unitName = this.currentStudent.unit_id 
+        ? (this.currentStudent.unit?.name || this.currentStudent.unit) 
+        : (this.currentStudent.unit || '');
+      
+      return text
+        .replace(/\[name\]/g, this.currentStudent.name || '')
+        .replace(/\[cpf\]/g, this.currentStudent.cpf || '')
+        .replace(/\[document\]/g, this.currentStudent.document || '')
+        .replace(/\[code\]/g, this.currentStudent.code || '')
+        .replace(/\[unit\]/g, unitName)
+        .replace(/\[course\]/g, this.currentStudent.course || '')
+        .replace(/\[quantity_hours\]/g, this.currentStudent.quantity_hours || '')
+        .replace(/\[start_date\]/g, this.formatDate(this.currentStudent.start_date) || '')
+        .replace(/\[end_date\]/g, this.formatDate(this.currentStudent.end_date) || '')
+        .replace(/\[start_day\]/g, this.onlyDay(this.currentStudent.start_date) || '')
+        .replace(/\[end_day\]/g, this.onlyDay(this.currentStudent.end_date) || '')
+        .replace(/\[start_month\]/g, this.onlyMonth(this.currentStudent.start_date) || '')
+        .replace(/\[end_month\]/g, this.onlyMonth(this.currentStudent.end_date) || '')
+        .replace(/\[start_year\]/g, this.onlyYear(this.currentStudent.start_date) || '')
+        .replace(/\[end_year\]/g, this.onlyYear(this.currentStudent.end_date) || '');
+    },
 
     async downloadCertificate() {
   // Get orientation and dimensions from certificate data
