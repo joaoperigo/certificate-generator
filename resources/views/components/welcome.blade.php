@@ -16,8 +16,16 @@
         <li>[unit]</li>
         <li>[course]</li>
         <li>[quantity_hours]</li>
+        <li>[quantity_hours_online]</li>
+        <li>[quantity_hours_presencial]</li>
         <li>[start_date]</li>
         <li>[end_date]</li>
+        <li>[start_day]</li>
+        <li>[end_day]</li>
+        <li>[start_month]</li>
+        <li>[end_month]</li>
+        <li>[start_year]</li>
+        <li>[end_year]</li>
     </ul>
 </div>
 
