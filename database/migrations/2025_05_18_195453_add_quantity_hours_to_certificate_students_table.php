@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('certificate_students', function (Blueprint $table) {
-            $table->integer('quantity_hours_online')->nullable()->after('description');
+            $table->integer('quantity_hours_online')->nullable()->after('quantity_hours');
             $table->integer('quantity_hours_presential')->nullable()->after('quantity_hours_online');
         });
     }

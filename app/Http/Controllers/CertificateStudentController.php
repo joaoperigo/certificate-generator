@@ -36,6 +36,8 @@ class CertificateStudentController extends Controller
                 'unit_id' => 'nullable|exists:units,id', // Add this line
                 'course' => 'nullable|string|max:255',
                 'quantity_hours' => 'nullable|integer|min:1',
+                'quantity_hours_online' => 'nullable|integer|min:1',
+                'quantity_hours_presential' => 'nullable|integer|min:1',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date'
             ]);
@@ -71,6 +73,8 @@ class CertificateStudentController extends Controller
                 'unit_id' => 'nullable|exists:units,id', // Add this line
                 'course' => 'nullable|string|max:255',
                 'quantity_hours' => 'nullable|integer|min:1',
+                'quantity_hours_online' => 'nullable|integer|min:1',
+                'quantity_hours_presential' => 'nullable|integer|min:1',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date'
             ]);

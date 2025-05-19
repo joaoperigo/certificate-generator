@@ -16,12 +16,10 @@
         <li>[unit]</li>
         <li>[course]</li>
         <li>[quantity_hours]</li>
-<<<<<<< HEAD
         <li>[start_date]</li>
         <li>[end_date]</li>
-=======
         <li>[quantity_hours_online]</li>
-        <li>[quantity_hours_presencial]</li>
+        <li>[quantity_hours_presential]</li>
         <li>[start_date]</li>
         <li>[end_date]</li>
         <li>[start_day]</li>
@@ -30,7 +28,6 @@
         <li>[end_month]</li>
         <li>[start_year]</li>
         <li>[end_year]</li>
->>>>>>> 4d8c745f633b3429fb605f2ec497fe6d7656ff20
     </ul>
 </div>
 

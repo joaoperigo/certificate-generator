@@ -20,6 +20,8 @@ class CertificateStudent extends Model
         'unit',     // Keep for backward compatibility
         'course',
         'quantity_hours',
+         'quantity_hours_presential', 
+         'quantity_hours_online',
         'start_date',
         'end_date'
     ];

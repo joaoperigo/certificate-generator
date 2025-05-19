@@ -49,6 +49,22 @@
               class="shadow appearance-none rounded w-full py-2 px-3 text-stone-900 bg-stone-100 border-b-4 border-stone-600 leading-tight focus:outline-none focus:shadow-outline text-xl"
               placeholder="Course hours:"
             >
+            <label for="quantity_hours_presential" class="block text-stone-200 text-base font-bold mb-2">Course Hours Presencial:</label>
+            <input 
+              v-model.number="certificate.quantity_hours_presential" 
+              type="number" 
+              id="quantity_hours_presential"
+              class="shadow appearance-none rounded w-full py-2 px-3 text-stone-900 bg-stone-100 border-b-4 border-stone-600 leading-tight focus:outline-none focus:shadow-outline text-xl"
+              placeholder="Course hours presencial:"
+            >
+            <label for="quantity_hours_online" class="block text-stone-200 text-base font-bold mb-2">Course Hours Online:</label>
+            <input 
+              v-model.number="certificate.quantity_hours_online" 
+              type="number" 
+              id="quantity_hours_online"
+              class="shadow appearance-none rounded w-full py-2 px-3 text-stone-900 bg-stone-100 border-b-4 border-stone-600 leading-tight focus:outline-none focus:shadow-outline text-xl"
+              placeholder="Course hours online:"
+            >
           </div>
           
           <div class="pt-4 px-4">
@@ -255,7 +271,9 @@ export default {
         id: this.initialCertificate?.id ? Number(this.initialCertificate.id) : null,
         title: this.initialCertificate?.title || '',
         data: this.initialCertificate?.data || '',
-        quantity_hours: this.initialCertificate?.quantity_hours || ''
+        quantity_hours: this.initialCertificate?.quantity_hours || '',
+        quantity_hours_online: this.initialCertificate?.quantity_hours_online || '',
+        quantity_hours_presential: this.initialCertificate?.quantity_hours_presential || ''
       },
       pages: this.initialCertificate?.pages || [{
         backgroundImage: null,
@@ -499,7 +517,9 @@ export default {
         const certificateData = {
           title: this.certificate.title,
           data: this.certificate.data,
-          quantity_hours: this.certificate.quantity_hours
+          quantity_hours: this.certificate.quantity_hours,
+          quantity_hours_online: this.certificate.quantity_hours_online,
+          quantity_hours_presential: this.certificate.quantity_hours_presential
         };
         
         if (this.certificate.id) {

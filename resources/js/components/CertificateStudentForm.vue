@@ -97,6 +97,18 @@
           <input v-model.number="form.quantity_hours" type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
         </label>
         </div>
+
+                <div>
+          <label class="block text-sm font-medium text-gray-700">Course Hours Online
+          <input v-model.number="form.quantity_hours_online" type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        </label>
+        </div>
+
+                <div>
+          <label class="block text-sm font-medium text-gray-700">Course Hours Presential
+          <input v-model.number="form.quantity_hours_presential" type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        </label>
+        </div>
         
         <div>
           <label class="block text-sm font-medium text-gray-700">Start Date
@@ -326,6 +338,8 @@ export default {
         unit_id: null, // Add this line
         course: this.certificate.title || '', 
         quantity_hours: this.certificate.quantity_hours || null,
+        quantity_hours_online: this.certificate.quantity_hours_online || null,
+        quantity_hours_presential: this.certificate.quantity_hours_presential || null,
         start_date: '',
         end_date: ''
       }

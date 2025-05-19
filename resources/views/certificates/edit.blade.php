@@ -7,6 +7,8 @@
                 'title' => $certificate->title,
                 'data' => $certificate->data,
                 'quantity_hours' => $certificate->quantity_hours,
+                'quantity_hours_online' => $certificate->quantity_hours_online,
+                'quantity_hours_presential' => $certificate->quantity_hours_presential,
                 'pages' => $certificate->pages,
                 'orientation' => $certificate->orientation ?? 'landscape',
                 'dimensions' => $certificate->dimensions ?? [

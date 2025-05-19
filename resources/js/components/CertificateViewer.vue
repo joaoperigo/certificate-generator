@@ -192,6 +192,8 @@ computed: {
     .replace(/\[unit\]/g, unitName)
     .replace(/\[course\]/g, this.currentStudent.course || '')
     .replace(/\[quantity_hours\]/g, this.currentStudent.quantity_hours || '')
+       .replace(/\[quantity_hours_online\]/g, this.currentStudent.quantity_hours_online || '')
+    .replace(/\[quantity_hours_presential\]/g, this.currentStudent.quantity_hours_presential || '')
     .replace(/\[start_date\]/g, this.formatDate(this.currentStudent.start_date) || '')
     .replace(/\[end_date\]/g, this.formatDate(this.currentStudent.end_date) || '')
     .replace(/\[start_day\]/g, this.onlyDay(this.currentStudent.start_date) || '')

@@ -10,7 +10,7 @@ class Certificate extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'data', 'quantity_hours'];
+    protected $fillable = ['title', 'data', 'quantity_hours', 'quantity_hours_presential', 'quantity_hours_online'];
 
     protected $casts = [
         'data' => 'json',
