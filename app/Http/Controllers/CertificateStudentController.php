@@ -33,11 +33,11 @@ class CertificateStudentController extends Controller
                 'document' => 'nullable|string|max:255',
                 'code' => 'required|string|unique:certificate_students,code|not_in:null',
                 'unit' => 'nullable|string|max:255',
-                'unit_id' => 'nullable|exists:units,id', // Add this line
+                'unit_id' => 'nullable|exists:units,id',
+                 'quantity_hours_online' => 'nullable|integer|min:1',
+                'quantity_hours_presential' => 'nullable|integer|min:1',
                 'course' => 'nullable|string|max:255',
                 'quantity_hours' => 'nullable|integer|min:1',
-                'quantity_hours_online' => 'nullable|integer|min:1',
-                'quantity_hours_presential' => 'nullable|integer|min:1',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date'
             ]);
@@ -59,7 +59,18 @@ class CertificateStudentController extends Controller
                 'data' => $request->all()
             ]);
 
-            $validated = $request->validate([
+            // Clean the request data before validation
+            $requestData = $request->all();
+            
+            // If unit is an object (from frontend), extract the name or set to null
+            if (isset($requestData['unit']) && is_array($requestData['unit'])) {
+                $requestData['unit'] = $requestData['unit']['name'] ?? null;
+            }
+
+            // Create a new request instance with cleaned data
+            $cleanedRequest = new Request($requestData);
+            
+            $validated = $cleanedRequest->validate([
                 'name' => 'required|string|max:255',
                 'cpf' => 'nullable|string|max:14',
                 'document' => 'nullable|string|max:255',
@@ -70,20 +81,20 @@ class CertificateStudentController extends Controller
                     Rule::unique('certificate_students', 'code')->ignore($certificateStudent->id)
                 ],
                 'unit' => 'nullable|string|max:255',
-                'unit_id' => 'nullable|exists:units,id', // Add this line
+                'unit_id' => 'nullable|exists:units,id',
+                 'quantity_hours_online' => 'nullable|integer|min:1',
+                'quantity_hours_presential' => 'nullable|integer|min:1',
                 'course' => 'nullable|string|max:255',
                 'quantity_hours' => 'nullable|integer|min:1',
-                'quantity_hours_online' => 'nullable|integer|min:1',
-                'quantity_hours_presential' => 'nullable|integer|min:1',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date'
             ]);
 
             $certificateStudent->update($validated);
-            // Load the unit relationship if unit_id was provided
-            // if ($certificateStudent->unit_id) {
-                $certificateStudent->load('unit');
-            // }
+            
+            // Load the unit relationship for the response
+            $certificateStudent->load('unit');
+            
             return response()->json($certificateStudent);
         } catch (\Exception $e) {
             Log::error('Error updating certificate student: ' . $e->getMessage(), [
@@ -137,5 +148,4 @@ class CertificateStudentController extends Controller
         
         return response()->json(['error' => 'Unable to generate unique code'], 500);
     }
-
 }
