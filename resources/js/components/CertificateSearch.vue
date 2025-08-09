@@ -168,7 +168,7 @@
             v-slot="{ selected, active }"
           >
             <li
-              class="relative cursor-default select-none py-2 px-4 list-none text-xl"
+              class="relative cursor-default select-none py-2 px-4 list-none"
               :class="{
                 'bg-purple-500 text-white': active,
                 'text-gray-900': !active,

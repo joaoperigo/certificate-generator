@@ -82,3 +82,7 @@ Route::middleware([
 // Route::get('/test', function () {
 //     return '{"file_path": "12354123"}';
 // });
+
+Route::get('/api-test', function () {
+    return view('api-test');
+});
