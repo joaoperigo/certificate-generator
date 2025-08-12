@@ -86,3 +86,7 @@ Route::middleware([
 Route::get('/api-test', function () {
     return view('api-test');
 });
+
+Route::get('/student-api-test', function () {
+    return view('student-api-test');
+});
