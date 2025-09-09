@@ -14,6 +14,29 @@ use Illuminate\Support\Facades\DB;
 class CertificateStudentApiController extends Controller
 {
     /**
+     * Gerar código único
+     */
+    public function generateCode(Certificate $certificate)
+    {
+        try {
+            $code = $this->generateUniqueCode();
+            
+            return response()->json([
+                'success' => true,
+                'code' => $code,
+                'certificate_id' => $certificate->id,
+                'certificate_title' => $certificate->title
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to generate unique code',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Listar estudantes de um certificado
      */
     public function index(Certificate $certificate)
@@ -52,7 +75,7 @@ class CertificateStudentApiController extends Controller
                 'name' => 'required|string|max:255',
                 'cpf' => 'nullable|string|max:20',
                 'document' => 'nullable|string|max:50',
-                'code' => 'required|string|unique:certificate_students,code',
+                'code' => 'nullable|string',
                 'unit' => 'nullable|string|max:255',
                 'unit_id' => 'nullable|exists:units,id',
                 'course' => 'nullable|string|max:255',
@@ -61,13 +84,31 @@ class CertificateStudentApiController extends Controller
                 'end_date' => 'required|date|after_or_equal:start_date',
             ]);
 
-            // Se não tem unit_id mas tem unit nome, tentar encontrar ou criar
-            if (!$validated['unit_id'] && !empty($validated['unit'])) {
+            // Gerar código se não fornecido
+            if (empty($validated['code'])) {
+                $validated['code'] = $this->generateUniqueCode();
+            } else {
+                // Verificar se o código já existe
+                if (CertificateStudent::where('code', $validated['code'])->exists()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Code already exists',
+                        'errors' => ['code' => ['This code is already in use']]
+                    ], 422);
+                }
+            }
+
+            // Processar unidade CORRIGIDO
+            if (!isset($validated['unit_id']) && !empty($validated['unit'])) {
+                // Se tem nome da unidade mas não tem ID, criar ou encontrar
                 $unit = Unit::firstOrCreate(
                     ['name' => $validated['unit']],
                     ['description' => 'Created automatically via API']
                 );
                 $validated['unit_id'] = $unit->id;
+            } elseif (!isset($validated['unit_id'])) {
+                // Se não tem nem unit_id nem unit, setar como null
+                $validated['unit_id'] = null;
             }
 
             // Preencher campos padrão se não fornecidos
@@ -76,7 +117,11 @@ class CertificateStudentApiController extends Controller
 
             // Criar o estudante
             $student = $certificate->certificateStudents()->create($validated);
-            $student->load('unit');
+            
+            // Carregar relacionamento unit se existir
+            if ($student->unit_id) {
+                $student->load('unit');
+            }
 
             return response()->json([
                 'success' => true,
@@ -106,11 +151,11 @@ class CertificateStudentApiController extends Controller
     {
         try {
             $request->validate([
-                'students' => 'required|array|min:1|max:100', // Limite de 100 por vez
+                'students' => 'required|array|min:1|max:100',
                 'students.*.name' => 'required|string|max:255',
                 'students.*.cpf' => 'nullable|string|max:20',
                 'students.*.document' => 'nullable|string|max:50',
-                'students.*.code' => 'nullable|string', // Será gerado se não fornecido
+                'students.*.code' => 'nullable|string',
                 'students.*.unit' => 'nullable|string|max:255',
                 'students.*.unit_id' => 'nullable|exists:units,id',
                 'students.*.course' => 'nullable|string|max:255',
@@ -137,13 +182,15 @@ class CertificateStudentApiController extends Controller
                         $studentData['code'] = $this->generateUniqueCode();
                     }
 
-                    // Processar unidade
-                    if (!empty($studentData['unit']) && empty($studentData['unit_id'])) {
+                    // Processar unidade CORRIGIDO
+                    if (!isset($studentData['unit_id']) && !empty($studentData['unit'])) {
                         $unit = Unit::firstOrCreate(
                             ['name' => $studentData['unit']],
                             ['description' => 'Created automatically via batch API']
                         );
                         $studentData['unit_id'] = $unit->id;
+                    } elseif (!isset($studentData['unit_id'])) {
+                        $studentData['unit_id'] = null;
                     }
 
                     // Preencher campos padrão
@@ -152,7 +199,11 @@ class CertificateStudentApiController extends Controller
 
                     // Criar estudante
                     $student = $certificate->certificateStudents()->create($studentData);
-                    $student->load('unit');
+                    
+                    // Carregar unit se existir
+                    if ($student->unit_id) {
+                        $student->load('unit');
+                    }
                     
                     $created[] = $student;
 
@@ -166,7 +217,6 @@ class CertificateStudentApiController extends Controller
             }
 
             if (count($errors) > 0 && count($created) === 0) {
-                // Se todos falharam, rollback
                 DB::rollBack();
                 return response()->json([
                     'success' => false,
@@ -180,6 +230,8 @@ class CertificateStudentApiController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Batch operation completed',
+                'certificate_id' => $certificate->id,
+                'certificate_title' => $certificate->title,
                 'created_count' => count($created),
                 'error_count' => count($errors),
                 'data' => $created,
@@ -204,27 +256,6 @@ class CertificateStudentApiController extends Controller
     }
 
     /**
-     * Gerar código único
-     */
-    public function generateCode(Certificate $certificate)
-    {
-        try {
-            $code = $this->generateUniqueCode();
-            
-            return response()->json([
-                'success' => true,
-                'code' => $code
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unable to generate unique code',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
      * Gerar código único (método privado)
      */
     private function generateUniqueCode()
@@ -233,10 +264,7 @@ class CertificateStudentApiController extends Controller
         $maxAttempts = 100;
 
         do {
-            // Gera código com 8 caracteres: 4 letras + 4 números
             $code = strtoupper(Str::random(4)) . rand(1000, 9999);
-            
-            // Verifica se já existe
             $exists = CertificateStudent::where('code', $code)->exists();
             $attempts++;
             

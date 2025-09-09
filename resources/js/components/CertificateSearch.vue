@@ -176,7 +176,7 @@
             >
               <div class="flex justify-between items-center">
                 <span class="flex items-center">
-                  <button @click.stop="viewCertificate(certificate)" class="truncate font-semibold me-8 w-64 text-start">
+                  <button @click.stop="viewCertificate(certificate)" class="font-semibold me-8 text-start">
                     {{ certificate.title }}
                   </button>
                   <span v-if="certificate.teachers && certificate.teachers.length" class="ml-2 px-2 py-1 rounded-full bg-blue-100 text-slate-900 text-sm">

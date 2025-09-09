@@ -118,7 +118,15 @@
         
         <div>
           <label class="block text-sm font-medium text-gray-700">End Date
-            <input v-model="form.end_date" type="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            <div class="flex gap-2">
+              <input v-model="form.end_date" type="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+              <button 
+                type="button"
+                @click="form.end_date = form.start_date"
+                class="bg-gray-300 px-2 py-1 rounded hover:bg-gray-400"
+                title="Copiar data de início"
+              >Copiar</button>
+            </div>
           </label>
         </div>
       </div>
@@ -177,6 +185,7 @@
               class="w-full px-3 py-2 border rounded-md"
             />
           </div>
+          
         </div>
       </div>
 
@@ -228,6 +237,20 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal de aviso de unidade não selecionada -->
+    <div v-if="showUnitWarning" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+      <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+        <div class="text-lg font-semibold mb-2 text-gray-800">Atenção</div>
+        <div class="mb-4 text-gray-700">
+          Nenhuma unidade foi selecionada. Deseja continuar mesmo assim?
+        </div>
+        <div class="flex justify-end gap-2">
+          <button @click="showUnitWarning = false" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
+          <button @click="proceedWithoutUnit" class="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700">Continuar</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -275,7 +298,9 @@ export default {
         startDate: '',
         endDate: ''
       },
-      unitSelectorKey: 0  // Add this line
+      unitSelectorKey: 0,  // Add this line
+      showUnitWarning: false,
+      pendingSubmitType: null, // 'create' ou 'update'
     }
   },
   
@@ -413,56 +438,63 @@ export default {
   },
 
   async submitForm() {
-    try {
       this.codeError = '';
-      
       if (!this.form.code) {
         this.codeError = 'Code is required';
         return;
       }
 
-      let response;
-      if (this.isEditing) {
-        response = await axios.put(
-          `/certificates/${this.certificate.id}/certificate-students/${this.editingId}`,
-          this.form
-        );
-        await this.loadCertificateStudents();
-      
-        // Se o usuário que está sendo editado é o mesmo que está selecionado,
-        // precisamos reemitir o evento de seleção com os dados atualizados
-        if (this.currentStudent?.id === this.editingId) {
-          this.$emit('update:currentStudent', response.data);
-        }
+      // Se unidade não selecionada, mostrar modal de aviso
+      if (!this.form.unit_id) {
+        this.showUnitWarning = true;
+        this.pendingSubmitType = this.isEditing ? 'update' : 'create';
+        return;
+      }
 
-        if (response.data.id) {
-          this.scrollToStudent(response.data.id);
-        }
-      } else {
-        response = await axios.post(
-          `/certificates/${this.certificate.id}/certificate-students`,
-          this.form
-        );
-        await this.loadCertificateStudents();
-      
-        // Scroll para o estudante após salvar
-        if (response.data.id) {
-          setTimeout(() => {
+      await this._doSubmit();
+    },
+
+    async proceedWithoutUnit() {
+      this.showUnitWarning = false;
+      await this._doSubmit();
+    },
+
+    async _doSubmit() {
+      try {
+        let response;
+        if (this.isEditing) {
+          response = await axios.put(
+            `/certificates/${this.certificate.id}/certificate-students/${this.editingId}`,
+            this.form
+          );
+          await this.loadCertificateStudents();
+          if (this.currentStudent?.id === this.editingId) {
+            this.$emit('update:currentStudent', response.data);
+          }
+          if (response.data.id) {
             this.scrollToStudent(response.data.id);
-          }, 100);
+          }
+        } else {
+          response = await axios.post(
+            `/certificates/${this.certificate.id}/certificate-students`,
+            this.form
+          );
+          await this.loadCertificateStudents();
+          if (response.data.id) {
+            setTimeout(() => {
+              this.scrollToStudent(response.data.id);
+            }, 100);
+          }
+        }
+        this.resetForm();
+      } catch (error) {
+        if (error.response?.data?.errors?.code) {
+          this.codeError = error.response.data.errors.code[0];
+        } else {
+          this.showNotification('Error: ' + this.getErrorMessage(error), 'error');
         }
       }
-            
-      this.resetForm();
-    } catch (error) {
-      if (error.response?.data?.errors?.code) {
-        this.codeError = error.response.data.errors.code[0];
-      } else {
-        this.showNotification('Error: ' + this.getErrorMessage(error), 'error');
-      }
-    }
-  },
-    
+    },
     formatDate(date) {
       if (!date) return '';
       const d = new Date(date);
@@ -507,6 +539,13 @@ export default {
 
     getErrorMessage(error) {
       return error.response?.data?.error || error.message || 'An unexpected error occurred';
+    }
+  },
+  watch: {
+    'form.start_date'(newVal) {
+      if (!this.form.end_date && newVal) {
+        this.form.end_date = newVal;
+      }
     }
   }
 }

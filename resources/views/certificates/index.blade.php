@@ -29,7 +29,7 @@
 @endif
             <div id="app">
                 <div class="flex justify-between mb-4 xl:container fex-row h-screen">
-                    <div class="w-full px-40 mt-[100px]">
+                    <div class="w-full lg:px-40 mt-[100px]">
                         <certificate-search 
                             :certificates="{{ $certificates->toJson() }}"
                         ></certificate-search>
