@@ -238,12 +238,15 @@
       </div>
     </div>
 
-    <!-- Modal de aviso de unidade não selecionada -->
+    <!-- Modal de aviso de unidade não selecionada e cpf -->
     <div v-if="showUnitWarning" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
       <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
         <div class="text-lg font-semibold mb-2 text-gray-800">Atenção</div>
         <div class="mb-4 text-gray-700">
-          Nenhuma unidade foi selecionada. Deseja continuar mesmo assim?
+          <span v-if="missingFields.length">
+            Os seguintes campos não foram preenchidos: <b>{{ missingFields.join(', ') }}</b>.<br>
+            Deseja continuar mesmo assim?
+          </span>
         </div>
         <div class="flex justify-end gap-2">
           <button @click="showUnitWarning = false" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
@@ -300,6 +303,7 @@ export default {
       },
       unitSelectorKey: 0,  // Add this line
       showUnitWarning: false,
+      missingFields: [],
       pendingSubmitType: null, // 'create' ou 'update'
     }
   },
@@ -438,21 +442,25 @@ export default {
   },
 
   async submitForm() {
-      this.codeError = '';
-      if (!this.form.code) {
-        this.codeError = 'Code is required';
-        return;
-      }
+  this.codeError = '';
+  this.missingFields = [];
 
-      // Se unidade não selecionada, mostrar modal de aviso
-      if (!this.form.unit_id) {
-        this.showUnitWarning = true;
-        this.pendingSubmitType = this.isEditing ? 'update' : 'create';
-        return;
-      }
+  if (!this.form.code) {
+    this.codeError = 'Code is required';
+    return;
+  }
 
-      await this._doSubmit();
-    },
+  // Verifica campos obrigatórios para aviso
+  if (!this.form.unit_id || !this.form.cpf) {
+    if (!this.form.unit_id) this.missingFields.push('unidade');
+    if (!this.form.cpf) this.missingFields.push('CPF');
+    this.showUnitWarning = true;
+    this.pendingSubmitType = this.isEditing ? 'update' : 'create';
+    return;
+  }
+
+  await this._doSubmit();
+},
 
     async proceedWithoutUnit() {
       this.showUnitWarning = false;
